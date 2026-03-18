@@ -2,10 +2,10 @@ import Link from "next/link";
 
 const navItems = [
   { id: "dashboard", label: "Dashboard", href: "/dashboard" },
-  { id: "path", label: "Learning Path", href: "/content" },
-  { id: "stats", label: "Stats", href: "/stats" },
-  { id: "practice", label: "Practice", href: "/dashboard" },
-  { id: "achievements", label: "Achievements", href: "/dashboard" },
+  { id: "path", label: "Road Map", href: "/content" },
+  { id: "stats", label: "Progress", href: "/stats" },
+  { id: "practice", label: "Simulator", href: "/dashboard" },
+  { id: "achievements", label: "Badges", href: "/dashboard" },
   { id: "settings", label: "Settings", href: "/settings" },
 ];
 
@@ -16,7 +16,7 @@ export default function Sidebar({ active = "dashboard" }) {
         <div className="brand-mark">G</div>
         <div>
           <div className="brand-title">GoDomain</div>
-          <div className="brand-subtitle">Learning Hub</div>
+          <div className="brand-subtitle">Driving School</div>
         </div>
       </div>
 
@@ -24,7 +24,7 @@ export default function Sidebar({ active = "dashboard" }) {
         <div className="profile-avatar">AR</div>
         <div>
           <div className="profile-name">Ari Rowe</div>
-          <div className="profile-meta">Section 2 · Unit 2</div>
+          <div className="profile-meta">Module 2 · Lesson 2</div>
         </div>
       </div>
 
@@ -48,9 +48,13 @@ export default function Sidebar({ active = "dashboard" }) {
       <div className="sidebar-footer">
         <div className="streak-card">
           <div className="streak-value">8-day streak</div>
-          <div className="streak-meta">Keep it going to unlock bonuses.</div>
+          <div className="streak-meta">
+            Keep it going to unlock the next road badge.
+          </div>
         </div>
-        <button className="cta-button">Start daily session</button>
+        <button className="cta-button" type="button">
+          Start driving session
+        </button>
       </div>
     </aside>
   );

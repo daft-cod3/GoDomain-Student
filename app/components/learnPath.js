@@ -4,7 +4,7 @@ export default function LearnPath() {
       <header className="learn-top">
         <div className="metric-chip">
           <span className="metric-flag" />
-          Spanish
+          Driving
         </div>
         <div className="metric-chip">
           <span className="metric-flame" />
@@ -22,10 +22,10 @@ export default function LearnPath() {
 
       <section className="unit-card">
         <div>
-          <div className="unit-eyebrow">SECTION 2, UNIT 2</div>
-          <h1 className="unit-title">Express travel needs</h1>
+          <div className="unit-eyebrow">MODULE 2, LESSON 2</div>
+          <h1 className="unit-title">Read the road and react</h1>
           <div className="unit-subtitle">
-            Practice asking for directions, tickets, and timing.
+            Practice signs, spacing, mirrors, and timing.
           </div>
         </div>
         <button className="unit-action" type="button">
@@ -36,8 +36,10 @@ export default function LearnPath() {
       <section className="path-area card">
         <div className="path-header">
           <div>
-            <div className="path-title">Learning Path</div>
-            <div className="path-subtitle">Complete each step to unlock the chest.</div>
+            <div className="path-title">Learning Route</div>
+            <div className="path-subtitle">
+              Complete each stop to unlock the next bay.
+            </div>
           </div>
           <div className="path-progress">68% complete</div>
         </div>
@@ -56,7 +58,7 @@ export default function LearnPath() {
               </svg>
             </div>
             <div className="path-step-card">
-              <div className="path-step-title">Warm-up drills</div>
+              <div className="path-step-title">Cabin warm-up</div>
               <div className="path-step-meta">Completed - 3 stars</div>
               <div className="star-row">
                 <span className="star active" />
@@ -83,7 +85,7 @@ export default function LearnPath() {
               </svg>
             </div>
             <div className="path-step-card">
-              <div className="path-step-title">Ticket booking</div>
+              <div className="path-step-title">Road sign scan</div>
               <div className="path-step-meta">Completed - 2 stars</div>
               <div className="star-row">
                 <span className="star active" />
@@ -99,8 +101,20 @@ export default function LearnPath() {
           <div className="path-step left">
             <div className="path-node completed">
               <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
-                <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="7"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M12 8V12L15 15"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
               </svg>
             </div>
             <div className="path-step-card">
@@ -121,11 +135,15 @@ export default function LearnPath() {
                   stroke="currentColor"
                   strokeWidth="2"
                 />
-                <path d="M9 16V19H13V16" stroke="currentColor" strokeWidth="2" />
+                <path
+                  d="M9 16V19H13V16"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
               </svg>
             </div>
             <div className="path-step-card">
-              <div className="path-step-title">Live roleplay</div>
+              <div className="path-step-title">Live road run</div>
               <div className="path-step-meta">Next up - 20 min</div>
               <div className="star-row">
                 <span className="star active" />
@@ -148,11 +166,19 @@ export default function LearnPath() {
                   strokeWidth="2"
                 />
                 <path d="M4 10H20" stroke="currentColor" strokeWidth="2" />
-                <rect x="10" y="12" width="4" height="4" rx="1" stroke="currentColor" strokeWidth="2" />
+                <rect
+                  x="10"
+                  y="12"
+                  width="4"
+                  height="4"
+                  rx="1"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
               </svg>
             </div>
             <div className="path-step-card">
-              <div className="path-step-title">Chest reward</div>
+              <div className="path-step-title">License reward</div>
               <div className="path-step-meta">Bonus unlock available</div>
               <button className="path-step-action" type="button">
                 Claim
@@ -174,8 +200,12 @@ export default function LearnPath() {
             </div>
             <div className="path-step-card locked">
               <div className="path-step-title">Checkpoint quiz</div>
-              <div className="path-step-meta">Unlock after chest</div>
-              <button className="path-step-action locked" type="button" disabled>
+              <div className="path-step-meta">Unlock after reward</div>
+              <button
+                className="path-step-action locked"
+                type="button"
+                disabled
+              >
                 Locked
               </button>
             </div>
@@ -190,13 +220,21 @@ export default function LearnPath() {
                   stroke="currentColor"
                   strokeWidth="2"
                 />
-                <path d="M9 17V20H15V17" stroke="currentColor" strokeWidth="2" />
+                <path
+                  d="M9 17V20H15V17"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
               </svg>
             </div>
             <div className="path-step-card locked">
-              <div className="path-step-title">Conversation lab</div>
+              <div className="path-step-title">Traffic dialogue lab</div>
               <div className="path-step-meta">Unlock after quiz</div>
-              <button className="path-step-action locked" type="button" disabled>
+              <button
+                className="path-step-action locked"
+                type="button"
+                disabled
+              >
                 Locked
               </button>
             </div>
@@ -216,9 +254,13 @@ export default function LearnPath() {
               </svg>
             </div>
             <div className="path-step-card locked">
-              <div className="path-step-title">Final checkpoint</div>
+              <div className="path-step-title">Final road test</div>
               <div className="path-step-meta">Complete all steps</div>
-              <button className="path-step-action locked" type="button" disabled>
+              <button
+                className="path-step-action locked"
+                type="button"
+                disabled
+              >
                 Locked
               </button>
             </div>
