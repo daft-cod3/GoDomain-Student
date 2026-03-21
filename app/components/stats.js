@@ -1,326 +1,342 @@
-export default function Stats() {
-  const leaderboardMaxPoints = 1500;
-  const leaderboard = [
-    { name: "Amira K.", initials: "AM", points: 1420, variant: "" },
-    { name: "Jules R.", initials: "JR", points: 1280, variant: "alt" },
-    { name: "Lena S.", initials: "LS", points: 1210, variant: "mint" },
-    { name: "Ari Rowe", initials: "AR", points: 1140, variant: "peach" },
-  ];
-  const currentLevel = 8;
-  const currentLevelProgress = 62;
-  const levels = Array.from({ length: currentLevel }, (_, index) => {
-    const level = index + 1;
-    const isCurrent = level === currentLevel;
+"use client";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { learningUnits } from "../learn";
+import { hydrateLearningProgress } from "../learn/progress-store";
+
+function createAvatar(seed, background, accent) {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+      <rect width="120" height="120" rx="28" fill="${background}" />
+      <circle cx="60" cy="46" r="22" fill="${accent}" />
+      <path d="M26 106C30 78 44 66 60 66C76 66 90 78 94 106" fill="${accent}" />
+      <path d="M48 46C50 42 54 40 60 40C66 40 70 42 72 46" stroke="#071018" stroke-width="4" stroke-linecap="round" />
+      <circle cx="52" cy="50" r="3.5" fill="#071018" />
+      <circle cx="68" cy="50" r="3.5" fill="#071018" />
+      <path d="M55 60C57 62 59 63 60 63C61 63 63 62 65 60" stroke="#071018" stroke-width="4" stroke-linecap="round" />
+      <text x="14" y="24" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#071018">${seed}</text>
+    </svg>
+  `;
+
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+const leaderboard = [
+  {
+    id: "01",
+    avatar: createAvatar("01", "#e4f0ff", "#52a2ff"),
+    hp: 98,
+    energy: 86,
+    lessonsDone: 18,
+  },
+  {
+    id: "02",
+    avatar: createAvatar("02", "#e8faef", "#44c06b"),
+    hp: 94,
+    energy: 81,
+    lessonsDone: 16,
+  },
+  {
+    id: "03",
+    avatar: createAvatar("03", "#eff6ff", "#7dc6ff"),
+    hp: 91,
+    energy: 77,
+    lessonsDone: 15,
+  },
+  {
+    id: "04",
+    avatar: createAvatar("04", "#eef8f2", "#58d17a"),
+    hp: 87,
+    energy: 72,
+    lessonsDone: 13,
+  },
+];
+
+const performanceCards = [
+  {
+    label: "Accuracy",
+    value: "92%",
+    meta: "Quiz precision this week",
+  },
+  {
+    label: "Live hours",
+    value: "14.5h",
+    meta: "Session time logged",
+  },
+  {
+    label: "Focus rate",
+    value: "81%",
+    meta: "Study blocks completed",
+  },
+  {
+    label: "Badges",
+    value: "12",
+    meta: "Milestones unlocked",
+  },
+];
+
+const streakViews = {
+  week: {
+    label: "This week",
+    value: 8,
+    note: "You held a clean run across the last 8 study days.",
+    days: ["M", "T", "W", "T", "F", "S", "S"].map((day, index) => ({
+      day,
+      active: index !== 5,
+    })),
+  },
+  month: {
+    label: "This month",
+    value: 21,
+    note: "Three rest days. No breaks in the last two weeks.",
+    days: Array.from({ length: 28 }, (_, index) => ({
+      day: String(index + 1).padStart(2, "0"),
+      active: ![4, 10, 16, 22].includes(index),
+    })),
+  },
+};
+
+function getUnitProgressRows(units) {
+  return units.map((unit) => {
+    const completedSubLessons = unit.lessons.reduce(
+      (sum, lesson) =>
+        sum + lesson.lessons.filter((entry) => entry.completed).length,
+      0,
+    );
+    const totalSubLessons = unit.lessons.reduce(
+      (sum, lesson) => sum + lesson.lessons.length,
+      0,
+    );
+
     return {
-      level,
-      progress: isCurrent ? currentLevelProgress : 100,
-      status: isCurrent ? "current" : "passed",
+      id: unit.id,
+      label: unit.label,
+      title: unit.title,
+      progress: totalSubLessons
+        ? Math.round((completedSubLessons / totalSubLessons) * 100)
+        : 0,
+      completedLessons: unit.lessons.filter((lesson) =>
+        lesson.lessons.every((entry) => entry.completed),
+      ).length,
+      totalLessons: unit.lessons.length,
+      unlocked: unit.unlocked,
     };
   });
-  const formatPoints = (value) => value.toLocaleString("en-US");
+}
+
+export default function Stats() {
+  const [followedIds, setFollowedIds] = useState(["02"]);
+  const [streakView, setStreakView] = useState("week");
+  const [unitProgress, setUnitProgress] = useState(() =>
+    getUnitProgressRows(learningUnits),
+  );
+  const activeStreak = streakViews[streakView];
+
+  useEffect(() => {
+    setUnitProgress(
+      getUnitProgressRows(hydrateLearningProgress(learningUnits)),
+    );
+  }, []);
+
+  function toggleFollow(studentId) {
+    setFollowedIds((current) =>
+      current.includes(studentId)
+        ? current.filter((entry) => entry !== studentId)
+        : [...current, studentId],
+    );
+  }
 
   return (
-    <div className="stats-shell">
-      <header className="stats-header">
+    <div className="stats-shell brutal-stats">
+      <header className="stats-hero-block">
         <div>
           <div className="stats-eyebrow">Student analytics</div>
-          <h1 className="stats-title">Progress and performance</h1>
+          <h1 className="stats-title">Minimal, direct, live progress.</h1>
           <p className="stats-subtitle">
-            Track leaderboards, learning trends, achievements, and streaks.
+            Four responsive panels. Hard edges, bold metrics, and faster scan
+            paths for rankings, progress, milestones, and streaks.
           </p>
         </div>
-        <button className="stats-action" type="button">
-          Export report
-        </button>
+        <div className="stats-hero-chip">Live cohort view</div>
       </header>
 
-      <section className="stats-section">
-        <div className="stats-section-head">
-          <div className="stats-section-title">Leaderboard</div>
-          <div className="stats-section-subtitle">Top learners this week</div>
-        </div>
-        <ol className="leaderboard-grid">
-          {leaderboard.map((student, index) => {
-            const progress = Math.min(
-              100,
-              Math.round((student.points / leaderboardMaxPoints) * 100),
-            );
-            const avatarClass = ["student-avatar", student.variant]
-              .filter(Boolean)
-              .join(" ");
-            return (
-              <li
-                key={student.name}
-                className="student-card"
-                style={{ "--progress": `${progress}%` }}
-                aria-label={`${student.name} ${formatPoints(
-                  student.points,
-                )} out of ${formatPoints(leaderboardMaxPoints)} points`}
-              >
-                <div className={avatarClass}>{student.initials}</div>
-                <div className="student-body">
-                  <div className="student-row">
-                    <div className="student-name">{student.name}</div>
-                    <div className="student-rank">#{index + 1}</div>
+      <div className="stats-brutal-grid">
+        <section className="stats-panel leaderboard-panel">
+          <div className="stats-section-head">
+            <div className="stats-section-title">Leaderboard</div>
+            <div className="stats-section-subtitle">
+              Profile pic, index, HP, energy, and lessons done.
+            </div>
+          </div>
+
+          <ol className="stats-rank-list compact">
+            {leaderboard.map((student, index) => {
+              const isFollowing = followedIds.includes(student.id);
+              const lessonProgress = Math.round(
+                (student.lessonsDone / 20) * 100,
+              );
+
+              return (
+                <li key={student.id} className="stats-rank-card compact">
+                  <div className="stats-rank-head compact">
+                    <span className="stats-rank-index">#{index + 1}</span>
+                    <Image
+                      className="stats-rank-avatar"
+                      src={student.avatar}
+                      alt={`Student ${student.id} avatar`}
+                      width={48}
+                      height={48}
+                      unoptimized
+                    />
+                    <div className="stats-rank-metrics compact">
+                      <div className="stats-rank-stat compact">
+                        <span>HP</span>
+                        <strong>{student.hp}</strong>
+                      </div>
+                      <div className="stats-rank-stat compact">
+                        <span>Energy</span>
+                        <strong>{student.energy}</strong>
+                      </div>
+                      <div className="stats-rank-stat compact">
+                        <span>Lessons</span>
+                        <strong>{student.lessonsDone}/20</strong>
+                      </div>
+                    </div>
+                    <button
+                      className={`stats-follow-button compact ${
+                        isFollowing ? "active" : ""
+                      }`}
+                      type="button"
+                      onClick={() => toggleFollow(student.id)}
+                      aria-pressed={isFollowing}
+                    >
+                      {isFollowing ? "Following" : "Follow"}
+                    </button>
                   </div>
-                  <div className="student-meta">
-                    {formatPoints(student.points)} /{" "}
-                    {formatPoints(leaderboardMaxPoints)} pts
+
+                  <div className="stats-rank-bar compact" aria-hidden="true">
+                    <span style={{ width: `${lessonProgress}%` }} />
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+
+        <section className="stats-panel progress-panel">
+          <div className="stats-section-head">
+            <div className="stats-section-title">Learning progress</div>
+            <div className="stats-section-subtitle">
+              Progress bars replace circles and align with the new unit model.
+            </div>
+          </div>
+
+          <div className="stats-progress-stack">
+            {unitProgress.map((unit) => (
+              <article key={unit.id} className="stats-progress-row-card">
+                <div className="stats-progress-row-head">
+                  <div>
+                    <strong>{unit.label}</strong>
+                    <span>{unit.title}</span>
                   </div>
                   <div
-                    className="student-progress"
-                    role="progressbar"
-                    aria-valuenow={student.points}
-                    aria-valuemin={0}
-                    aria-valuemax={leaderboardMaxPoints}
+                    className={`stats-progress-lock ${
+                      unit.unlocked ? "open" : "locked"
+                    }`}
                   >
-                    <span />
+                    {unit.unlocked ? "Open" : "Locked"}
                   </div>
                 </div>
-              </li>
-            );
-          })}
-        </ol>
-      </section>
-
-      <section className="stats-section">
-        <div className="stats-section-head">
-          <div className="stats-section-title">
-            Learning progress infographs
+                <div className="stats-progress-row-meta">
+                  <span>
+                    {unit.completedLessons}/{unit.totalLessons} lessons complete
+                  </span>
+                  <strong>{unit.progress}%</strong>
+                </div>
+                <div className="stats-progress-row-bar" aria-hidden="true">
+                  <span style={{ width: `${unit.progress}%` }} />
+                </div>
+              </article>
+            ))}
           </div>
-          <div className="stats-section-subtitle">
-            Current level and all levels passed
-          </div>
-        </div>
-        <ol className="infograph-grid">
-          {levels.map((level) => (
-            <li
-              key={level.level}
-              className={`infograph-card ${level.status}`}
-            >
-              <div
-                className="progress-ring"
-                style={{ "--progress": `${level.progress}%` }}
-              >
-                <span>L{level.level}</span>
-              </div>
-              <div className="infograph-label">
-                Level {level.level}
-                <span className={`infograph-tag ${level.status}`}>
-                  {level.status === "current" ? "Current" : "Passed"}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
+        </section>
 
-      <section className="stats-section">
-        <div className="stats-section-head">
-          <div className="stats-section-title">Achievements</div>
-          <div className="stats-section-subtitle">
-            Recent badges earned by your cohort
+        <section className="stats-panel performance-panel">
+          <div className="stats-section-head">
+            <div className="stats-section-title">Performance pulse</div>
+            <div className="stats-section-subtitle">
+              Fast-read metrics with minimal visual noise.
+            </div>
           </div>
-        </div>
-        <ol className="achievement-grid">
-          <li className="achievement-card">
-            <div className="achievement-badge">A+</div>
-            <div className="achievement-title">Consistency</div>
-            <div className="achievement-meta">5 study days in a row</div>
-          </li>
-          <li className="achievement-card">
-            <div className="achievement-badge">XP</div>
-            <div className="achievement-title">Fast learner</div>
-            <div className="achievement-meta">1000 points in a week</div>
-          </li>
-          <li className="achievement-card">
-            <div className="achievement-badge">Pro</div>
-            <div className="achievement-title">Quiz master</div>
-            <div className="achievement-meta">90% on 3 quizzes</div>
-          </li>
-        </ol>
-      </section>
 
-      <section className="stats-section">
-        <div className="stats-section-head">
-          <div className="stats-section-title">Streak</div>
-          <div className="stats-section-subtitle">Based on your practice log</div>
-        </div>
-        <div className="stats-streak-card">
-          <div className="stats-streak-top">
+          <div className="stats-performance-grid">
+            {performanceCards.map((card) => (
+              <article key={card.label} className="stats-performance-card">
+                <span>{card.label}</span>
+                <strong>{card.value}</strong>
+                <p>{card.meta}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="stats-panel streak-panel brutal-streak">
+          <div className="stats-section-head">
+            <div className="stats-section-title">Streak</div>
+            <div className="stats-section-subtitle">
+              Brutal, flatter, and still aligned to the site palette.
+            </div>
+          </div>
+
+          <div className="stats-streak-switch">
             <button
-              className="stats-streak-icon close"
+              className={streakView === "week" ? "active" : ""}
               type="button"
-              aria-label="Close streak"
+              onClick={() => setStreakView("week")}
             >
-              +
+              Week
             </button>
-            <div className="stats-streak-title">Streak</div>
             <button
-              className="stats-streak-icon share"
+              className={streakView === "month" ? "active" : ""}
               type="button"
-              aria-label="Share streak"
+              onClick={() => setStreakView("month")}
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M14 4H20V10"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M20 4L12 12"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M20 14V20H4V4H10"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
+              Month
             </button>
           </div>
 
-          <div className="stats-streak-tabs">
-            <button className="stats-streak-tab active" type="button">
-              Personal
-            </button>
-            <button className="stats-streak-tab" type="button">
-              Friends
-            </button>
-          </div>
-
-          <div className="stats-streak-hero">
-            <div className="stats-streak-hero-copy">
-              <span className="stats-streak-badge">Streak Society</span>
-              <div className="stats-streak-count">1095</div>
-              <div className="stats-streak-text">day streak!</div>
-            </div>
-            <div className="stats-streak-mascot" aria-hidden="true">
-              <svg viewBox="0 0 120 120" aria-hidden="true">
-                <defs>
-                  <linearGradient id="streakGlow" x1="0" x2="1">
-                    <stop offset="0%" stopColor="#ffe08a" />
-                    <stop offset="100%" stopColor="#ffc14d" />
-                  </linearGradient>
-                </defs>
-                <circle cx="60" cy="60" r="40" fill="url(#streakGlow)" />
-                <path
-                  d="M34 50C40 40 50 34 60 34C70 34 80 40 86 50"
-                  stroke="#8a4d00"
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M40 72C46 78 53 82 60 82C67 82 74 78 80 72"
-                  stroke="#8a4d00"
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                />
-                <circle cx="46" cy="56" r="6" fill="#8a4d00" />
-                <circle cx="74" cy="56" r="6" fill="#8a4d00" />
-              </svg>
+          <div className="stats-streak-block">
+            <div className="stats-streak-count">{activeStreak.value}</div>
+            <div className="stats-streak-copy">
+              <strong>{activeStreak.label}</strong>
+              <p>{activeStreak.note}</p>
             </div>
           </div>
 
-          <div className="stats-streak-callout">
-            <span className="stats-streak-callout-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M12 3C9 6 7 9 7 12C7 16 9.5 19 12 19C14.5 19 17 16 17 12C17 9 15 6 12 3Z"
-                  fill="#ffcf66"
-                />
-              </svg>
-            </span>
-            <div className="stats-streak-callout-text">
-              Keep your <strong>Perfect Streak</strong> flame by doing a lesson
-              every day!
-            </div>
-          </div>
-
-          <div className="stats-streak-month">
-            <div className="stats-streak-month-title">July 2025</div>
-            <div className="stats-streak-month-actions">
-              <button
-                className="stats-streak-nav"
-                type="button"
-                aria-label="Previous month"
+          <div className={`stats-streak-days ${streakView}`}>
+            {activeStreak.days.map((entry) => (
+              <span
+                key={`${streakView}-${entry.day}`}
+                className={entry.active ? "active" : ""}
               >
-                {"<"}
-              </button>
-              <button
-                className="stats-streak-nav"
-                type="button"
-                aria-label="Next month"
-              >
-                {">"}
-              </button>
-            </div>
+                {entry.day}
+              </span>
+            ))}
           </div>
 
-          <div className="stats-streak-stats">
-            <div className="stats-streak-stat active">
-              <span className="stats-streak-stat-icon flame" />
-              <div>
-                <div className="stats-streak-stat-value">8</div>
-                <div className="stats-streak-stat-label">Days practiced</div>
-              </div>
-              <span className="stats-streak-chip">Perfect</span>
+          <div className="stats-streak-footer">
+            <div>
+              <span>Longest run</span>
+              <strong>28 days</strong>
             </div>
-            <div className="stats-streak-stat">
-              <span className="stats-streak-stat-icon snow" />
-              <div>
-                <div className="stats-streak-stat-value">0</div>
-                <div className="stats-streak-stat-label">Freezes used</div>
-              </div>
+            <div>
+              <span>Freeze credits</span>
+              <strong>02 left</strong>
             </div>
           </div>
-
-          <div className="stats-streak-calendar">
-            <div className="stats-streak-weekdays">
-              <span>Su</span>
-              <span>Mo</span>
-              <span>Tu</span>
-              <span>We</span>
-              <span>Th</span>
-              <span>Fr</span>
-              <span>Sa</span>
-            </div>
-            <div className="stats-streak-days">
-              <span className="stats-streak-day active">1</span>
-              <span className="stats-streak-day active">2</span>
-              <span className="stats-streak-day active">3</span>
-              <span className="stats-streak-day active">4</span>
-              <span className="stats-streak-day active">5</span>
-              <span className="stats-streak-day active">6</span>
-              <span className="stats-streak-day active">7</span>
-              <span className="stats-streak-day active">8</span>
-              <span className="stats-streak-day">9</span>
-              <span className="stats-streak-day">10</span>
-              <span className="stats-streak-day">11</span>
-              <span className="stats-streak-day">12</span>
-              <span className="stats-streak-day">13</span>
-              <span className="stats-streak-day">14</span>
-              <span className="stats-streak-day">15</span>
-              <span className="stats-streak-day">16</span>
-              <span className="stats-streak-day">17</span>
-              <span className="stats-streak-day">18</span>
-              <span className="stats-streak-day">19</span>
-              <span className="stats-streak-day">20</span>
-              <span className="stats-streak-day">21</span>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   );
 }

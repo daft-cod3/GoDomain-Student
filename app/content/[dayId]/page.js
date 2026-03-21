@@ -4,6 +4,7 @@ import Sidebar from "../../components/sidebar";
 import {
   getLearningDay,
   getLearningDayHref,
+  getLearningUnit,
   learningDayIds,
   learningDays,
 } from "../../learn";
@@ -31,18 +32,21 @@ export function generateStaticParams() {
 
 export default async function LearningDayPage({ params }) {
   const { dayId } = await params;
-  const day = getLearningDay(dayId);
+  const lesson = getLearningDay(dayId);
 
-  if (!day) {
+  if (!lesson) {
     notFound();
   }
 
-  const dayIndex = learningDays.findIndex((entry) => entry.id === day.id);
+  const dayIndex = learningDays.findIndex((entry) => entry.id === lesson.id);
   const previousDay = dayIndex > 0 ? learningDays[dayIndex - 1] : null;
   const nextDay =
     dayIndex < learningDays.length - 1 ? learningDays[dayIndex + 1] : null;
-  const completedLessons = day.lessons.filter((lesson) => lesson.completed).length;
-  const totalLessons = day.lessons.length;
+  const unit = getLearningUnit(lesson.unitId);
+  const completedLessons = lesson.lessons.filter(
+    (entry) => entry.completed,
+  ).length;
+  const totalLessons = lesson.lessons.length;
   const progress = totalLessons
     ? Math.round((completedLessons / totalLessons) * 100)
     : 0;
@@ -58,32 +62,32 @@ export default async function LearningDayPage({ params }) {
                 Back to learning path
               </Link>
               <span className="lesson-hero-pill">
-                {day.label} • {progress}% complete
+                {lesson.unitLabel} / {lesson.label} / {progress}% complete
               </span>
-              <h1 className="lesson-page-title">{day.title}</h1>
-              <p className="lesson-page-subtitle">{day.subtitle}</p>
+              <h1 className="lesson-page-title">{lesson.title}</h1>
+              <p className="lesson-page-subtitle">{lesson.subtitle}</p>
               <div className="lesson-hero-actions">
-                {previousDay ? (
-                  <Link
-                    className="lesson-secondary-link"
-                    href={getLearningDayHref(previousDay.id)}
-                  >
-                    Previous day
-                  </Link>
-                ) : null}
-                {nextDay ? (
-                  <Link
-                    className="lesson-primary-link"
-                    href={getLearningDayHref(nextDay.id)}
-                  >
-                    Next day
-                  </Link>
-                ) : null}
+                {previousDay
+                  ? <Link
+                      className="lesson-secondary-link"
+                      href={getLearningDayHref(previousDay.id)}
+                    >
+                      Previous lesson
+                    </Link>
+                  : null}
+                {nextDay
+                  ? <Link
+                      className="lesson-primary-link"
+                      href={getLearningDayHref(nextDay.id)}
+                    >
+                      Next lesson
+                    </Link>
+                  : null}
               </div>
             </div>
 
             <div className="lesson-hero-icon">
-              <JourneyIcon name={day.icon} />
+              <JourneyIcon name={lesson.icon} />
             </div>
           </div>
 
@@ -93,10 +97,10 @@ export default async function LearningDayPage({ params }) {
                 <div className="lesson-page-head">
                   <div>
                     <div className="lesson-page-section-title">
-                      Lesson checklist
+                      Sub-lesson checklist
                     </div>
                     <div className="lesson-page-section-subtitle">
-                      Open each item and complete the work for {day.label}.
+                      Complete all four steps for {lesson.label}.
                     </div>
                   </div>
                   <span className="lesson-page-chip">
@@ -105,26 +109,26 @@ export default async function LearningDayPage({ params }) {
                 </div>
 
                 <div className="lesson-step-list">
-                  {day.lessons.map((lesson, index) => (
+                  {lesson.lessons.map((entry, index) => (
                     <article
-                      key={lesson.id}
-                      className={`lesson-step ${lesson.completed ? "done" : ""}`}
+                      key={entry.id}
+                      className={`lesson-step ${entry.completed ? "done" : ""}`}
                     >
                       <div className="lesson-step-number">
                         {String(index + 1).padStart(2, "0")}
                       </div>
                       <div className="lesson-step-icon">
-                        <LessonIcon kind={lesson.kind} />
+                        <LessonIcon kind={entry.kind} />
                       </div>
                       <div className="lesson-step-copy">
-                        <strong>{lesson.title}</strong>
+                        <strong>{entry.title}</strong>
                         <span>
-                          {getLessonLabel(lesson.kind)} • {lesson.duration}
+                          {getLessonLabel(entry.kind)} / {entry.duration}
                         </span>
-                        <p>{lesson.detail}</p>
+                        <p>{entry.detail}</p>
                       </div>
                       <span className="lesson-step-state">
-                        {lesson.completed ? "Completed" : "Pending"}
+                        {entry.completed ? "Completed" : "Pending"}
                       </span>
                     </article>
                   ))}
@@ -146,7 +150,7 @@ export default async function LearningDayPage({ params }) {
                 <div className="lesson-support-grid">
                   <Link className="lesson-support-card" href="/live">
                     <strong>Live class room</strong>
-                    <span>Join today&apos;s session or waiting room.</span>
+                    <span>Join today's session or waiting room.</span>
                   </Link>
                   <Link className="lesson-support-card" href="/messages">
                     <strong>Message teacher</strong>
@@ -162,7 +166,9 @@ export default async function LearningDayPage({ params }) {
 
             <aside className="lesson-page-aside">
               <section className="lesson-page-card">
-                <div className="lesson-page-section-title">Progress snapshot</div>
+                <div className="lesson-page-section-title">
+                  Progress snapshot
+                </div>
                 <div className="lesson-progress-panel">
                   <div
                     className="lesson-progress-ring"
@@ -171,8 +177,28 @@ export default async function LearningDayPage({ params }) {
                     <span>{progress}%</span>
                   </div>
                   <div className="lesson-progress-meta">
-                    <strong>{completedLessons} lessons complete</strong>
-                    <span>{totalLessons - completedLessons} lessons remaining</span>
+                    <strong>{completedLessons} steps complete</strong>
+                    <span>
+                      {totalLessons - completedLessons} steps remaining
+                    </span>
+                  </div>
+                </div>
+              </section>
+
+              <section className="lesson-page-card">
+                <div className="lesson-page-section-title">Lesson meta</div>
+                <div className="lesson-support-grid">
+                  <div className="lesson-support-card">
+                    <strong>{unit?.title ?? lesson.unitLabel}</strong>
+                    <span>Current unit container for this lesson.</span>
+                  </div>
+                  <div className="lesson-support-card">
+                    <strong>{lesson.isLocked ? "Locked" : "Live"}</strong>
+                    <span>
+                      {lesson.isLocked
+                        ? "Unlock this lesson by finishing the earlier unit."
+                        : "This lesson is available from the path now."}
+                    </span>
                   </div>
                 </div>
               </section>

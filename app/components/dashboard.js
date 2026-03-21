@@ -1,114 +1,120 @@
 import Link from "next/link";
+import { getLearningDayHref } from "../learn";
+import ContentReview from "../learn/components/contReview";
 
 const teacherUploads = [
   {
+    id: "image-upload",
+    type: "Image set",
+    title: "Road markings photo wall",
+    meta: "Ms. Diaz / 16 images / Updated today",
+    summary:
+      "Quick visual references for lane edges, center lines, and turn bays.",
+    action: "View images",
+    href: getLearningDayHref("unit-1-lesson-3"),
+    icon: "image",
+    accent: "mint",
+  },
+  {
     id: "video-upload",
     type: "Video",
-    title: "Roundabout masterclass",
-    meta: "Ms. Diaz • 12 min • Uploaded 2 hours ago",
-    summary: "A new walkthrough on hazard checks, entry timing, and exit cues.",
+    title: "Junction decisions breakdown",
+    meta: "Mr. Chen / 12 min / Uploaded 2 hours ago",
+    summary:
+      "A clean replay of priority calls, blind checks, and entry timing.",
     action: "Play lesson",
-    href: "/content/day-03",
+    href: getLearningDayHref("unit-1-lesson-4"),
     icon: "video",
     accent: "violet",
   },
   {
-    id: "image-upload",
-    type: "Image set",
-    title: "Priority sign flash cards",
-    meta: "Mr. Chen • 14 images • Uploaded today",
-    summary: "Fresh revision cards for warnings, orders, and lane control signs.",
-    action: "View gallery",
-    href: "/content/day-02",
-    icon: "image",
-    accent: "rose",
-  },
-  {
     id: "quiz-upload",
     type: "Quiz link",
-    title: "Traffic flow checkpoint",
-    meta: "Ms. Omar • 10 questions • Due in 2 days",
-    summary: "A graded quiz on yielding, merging, and safe stopping distance.",
+    title: "Hazard scan checkpoint",
+    meta: "Ms. Omar / 10 questions / Due in 2 days",
+    summary:
+      "Measure how early you are spotting movement, risk, and blind zones.",
     action: "Start quiz",
-    href: "/content/day-04",
+    href: getLearningDayHref("unit-1-lesson-5"),
     icon: "quiz",
     accent: "gold",
   },
   {
     id: "resource-upload",
     type: "Resource link",
-    title: "Night driving checklist",
-    meta: "Ms. Bello • Resource pack • Updated today",
-    summary: "A printable guide covering headlights, glare control, and spacing.",
-    action: "Open resource",
-    href: "/content/day-05",
+    title: "Traffic sign revision pack",
+    meta: "Ms. Bello / Notes + visuals / Updated today",
+    summary:
+      "Compact notes and visual prompts for warning, order, and direction signs.",
+    action: "Open pack",
+    href: getLearningDayHref("unit-1-lesson-2"),
     icon: "link",
-    accent: "mint",
+    accent: "rose",
   },
 ];
 
 const popularLessons = [
   {
-    id: "travel-basics",
-    title: "Travel basics",
-    meta: "12 lessons • 4.8 rating",
+    id: "controls",
+    title: "Vehicle controls",
+    meta: "4 sub-lessons / Foundation setup",
     tag: "Hot",
-    href: "/content/day-01",
+    href: getLearningDayHref("unit-1-lesson-1"),
     art: "art-lilac",
   },
   {
-    id: "sign-recall",
-    title: "Sign recall",
-    meta: "9 lessons • Fast memory drills",
+    id: "signs",
+    title: "Traffic signs",
+    meta: "4 sub-lessons / Fast recall drill",
     tag: "Trending",
-    href: "/content/day-02",
+    href: getLearningDayHref("unit-1-lesson-2"),
     art: "art-peach",
   },
   {
-    id: "junction-calls",
-    title: "Junction calls",
-    meta: "6 lessons • Teacher favorite",
+    id: "junctions",
+    title: "Junction rules",
+    meta: "4 sub-lessons / Risk-heavy topic",
     tag: "Popular",
-    href: "/content/day-03",
+    href: getLearningDayHref("unit-1-lesson-4"),
     art: "art-mint",
   },
   {
-    id: "hazard-lab",
-    title: "Hazard listening",
-    meta: "7 lessons • Final recap",
+    id: "hazard",
+    title: "Hazard awareness",
+    meta: "4 sub-lessons / Scan discipline",
     tag: "Top pick",
-    href: "/content/day-06",
+    href: getLearningDayHref("unit-1-lesson-5"),
     art: "art-sky",
   },
 ];
 
 const ongoingLessons = [
   {
-    id: "grammar-drills",
-    title: "Grammar drills",
-    meta: "Lesson 5 • 36 min left",
-    href: "/content/day-04",
+    id: "road-markings",
+    title: "Road markings",
+    meta: "Lesson 03 / Visual lane reading",
+    href: getLearningDayHref("unit-1-lesson-3"),
     art: "art-violet",
   },
   {
-    id: "listening-lab",
-    title: "Listening lab",
-    meta: "Lesson 3 • 22 min left",
-    href: "/content/day-06",
+    id: "junction-rules",
+    title: "Junction rules",
+    meta: "Lesson 04 / Decision timing",
+    href: getLearningDayHref("unit-1-lesson-4"),
     art: "art-rose",
   },
   {
-    id: "vocabulary-pack",
-    title: "Vocabulary pack",
-    meta: "Lesson 8 • 41 min left",
-    href: "/content/day-02",
+    id: "hazard-awareness",
+    title: "Hazard awareness",
+    meta: "Lesson 05 / Risk scanning",
+    href: getLearningDayHref("unit-1-lesson-5"),
     art: "art-amber",
   },
   {
-    id: "roleplay-practice",
-    title: "Roleplay practice",
-    meta: "Lesson 2 • 18 min left",
-    href: "/messages",
+    id: "live-coaching",
+    title: "Live coaching",
+    meta: "Direct instructor session / Starts now",
+    href: "/live",
     art: "art-aqua",
   },
 ];
@@ -118,19 +124,19 @@ const mentors = [
     id: "mentor-gina",
     initials: "GM",
     name: "Gina Moore",
-    specialty: "Conversation • 4.9",
+    specialty: "Hazard reading / 4.9",
   },
   {
     id: "mentor-priya",
     initials: "PS",
     name: "Priya Singh",
-    specialty: "Grammar • 4.8",
+    specialty: "Theory recall / 4.8",
   },
   {
     id: "mentor-jun",
     initials: "JW",
     name: "Jun Wei",
-    specialty: "Pronunciation • 4.7",
+    specialty: "Road signs / 4.7",
   },
 ];
 
@@ -147,7 +153,13 @@ export default function Dashboard() {
               fill="none"
               aria-hidden="true"
             >
-              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
               <path
                 d="M20 20L17 17"
                 stroke="currentColor"
@@ -155,7 +167,10 @@ export default function Dashboard() {
                 strokeLinecap="round"
               />
             </svg>
-            <input type="text" placeholder="Search classes, uploads, topics" />
+            <input
+              type="text"
+              placeholder="Search reviews, uploads, or lessons"
+            />
           </div>
           <div className="dash-top-actions">
             <Link className="dash-live" href="/live">
@@ -209,13 +224,13 @@ export default function Dashboard() {
 
         <section className="dash-hero">
           <div className="dash-hero-content">
-            <div className="dash-hero-tag">Library</div>
+            <div className="dash-hero-tag">Review unlocks</div>
             <h1 className="dash-hero-title">
-              Hi Ari, your teacher has new material waiting.
+              Fully complete a lesson and it drops into content review.
             </h1>
             <p className="dash-hero-subtitle">
-              The next sequence in Section 2 is live. Move between uploaded
-              cards, jump into a live lesson, or message your teacher directly.
+              Work through notes, boards, signs, and quizzes on the learning
+              path. Every finished lesson unlocks a reusable review card here.
             </p>
             <Link className="dash-hero-button" href="/content">
               Open learning path
@@ -243,7 +258,7 @@ export default function Dashboard() {
                 <div>
                   <div className="dash-section-title">Teacher uploads</div>
                   <div className="dash-section-subtitle">
-                    Latest videos, images, quiz links, and extra resources.
+                    Latest videos, image packs, quiz links, and extra resources.
                   </div>
                 </div>
                 <Link className="dash-link" href="/content">
@@ -266,7 +281,9 @@ export default function Dashboard() {
                     <div className="teacher-meta">{upload.meta}</div>
                     <p className="teacher-summary">{upload.summary}</p>
                     <div className="teacher-card-footer">
-                      <span className="teacher-card-status">Teacher shared</span>
+                      <span className="teacher-card-status">
+                        Teacher shared
+                      </span>
                       <span className="teacher-action">{upload.action}</span>
                     </div>
                   </Link>
@@ -274,12 +291,14 @@ export default function Dashboard() {
               </div>
             </section>
 
+            <ContentReview />
+
             <section className="dash-section">
               <div className="dash-section-head">
                 <div>
                   <div className="dash-section-title">Popular</div>
                   <div className="dash-section-subtitle">
-                    Most-visited lessons and revision packs this week.
+                    Most-revisited lessons and revision packs this week.
                   </div>
                 </div>
                 <Link className="dash-link" href="/content">
@@ -336,27 +355,31 @@ export default function Dashboard() {
             <div className="dash-rail-card">
               <div className="dash-rail-head">
                 <div>
-                  <div className="dash-rail-title">Unlocks achievement</div>
+                  <div className="dash-rail-title">Review unlock target</div>
                   <div className="dash-rail-subtitle">
-                    Complete 3 sessions to unlock.
+                    Finish one full lesson to create a new review card.
                   </div>
                 </div>
-                <button className="dash-toggle" type="button" aria-label="Toggle">
+                <button
+                  className="dash-toggle"
+                  type="button"
+                  aria-label="Toggle"
+                >
                   <span />
                 </button>
               </div>
               <div className="dash-rail-progress">
                 <div className="dash-progress-row">
-                  <span>Daily streak</span>
-                  <span>2/3</span>
+                  <span>Current lesson</span>
+                  <span>3/4</span>
                 </div>
                 <div className="dash-progress">
-                  <span style={{ width: "66%" }} />
+                  <span style={{ width: "75%" }} />
                 </div>
                 <div className="dash-badge-row">
-                  <span className="dash-mini-avatar">LP</span>
-                  <span className="dash-mini-avatar">JS</span>
-                  <span className="dash-mini-avatar">AK</span>
+                  <span className="dash-mini-avatar">NT</span>
+                  <span className="dash-mini-avatar">VD</span>
+                  <span className="dash-mini-avatar">IM</span>
                 </div>
               </div>
             </div>

@@ -2,18 +2,21 @@
 
 :root {
   color-scheme: light;
-  --bg: #f4f7f2;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --surface-2: #eef7e9;
-  --text: #1c2a1d;
-  --muted: #6a7b6a;
-  --accent: #63c315;
-  --accent-strong: #4ca712;
-  --accent-soft: #ddf4c7;
-  --stroke: #dbe6d7;
-  --shadow: 0 24px 50px rgba(17, 41, 17, 0.12);
-  --glow-1: rgba(99, 195, 21, 0.15);
-  --glow-2: rgba(110, 210, 110, 0.18);
+  --surface-2: #f2f8ff;
+  --text: #071018;
+  --muted: #506272;
+  --accent: #44c06b;
+  --accent-strong: #1f9f57;
+  --accent-soft: #dff6e7;
+  --accent-blue: #267cff;
+  --accent-blue-strong: #145dcf;
+  --accent-blue-soft: #e2edff;
+  --stroke: #d7e4ef;
+  --shadow: 0 24px 50px rgba(7, 16, 24, 0.12);
+  --glow-1: rgba(38, 124, 255, 0.14);
+  --glow-2: rgba(68, 192, 107, 0.14);
   --radius-lg: 26px;
   --radius-md: 18px;
   --radius-sm: 12px;
@@ -21,18 +24,21 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0f1411;
-  --surface: #141b16;
-  --surface-2: #1b241d;
-  --text: #e9f4ea;
-  --muted: #9fb19f;
-  --accent: #7be12f;
-  --accent-strong: #4fb919;
-  --accent-soft: #20341e;
-  --stroke: #273329;
+  --bg: #050505;
+  --surface: #0d1116;
+  --surface-2: #121820;
+  --text: #f4fbff;
+  --muted: #94a7b6;
+  --accent: #58d17a;
+  --accent-strong: #2ea95c;
+  --accent-soft: #102319;
+  --accent-blue: #53a2ff;
+  --accent-blue-strong: #2d7fe0;
+  --accent-blue-soft: #112233;
+  --stroke: #1d2835;
   --shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
-  --glow-1: rgba(99, 195, 21, 0.12);
-  --glow-2: rgba(79, 185, 25, 0.08);
+  --glow-1: rgba(83, 162, 255, 0.18);
+  --glow-2: rgba(88, 209, 122, 0.1);
 }
 
 *,
@@ -4761,5 +4767,1432 @@ button:focus-visible,
 
   .lesson-step-state {
     margin-left: 0;
+  }
+}
+
+.brutal-stats {
+  display: grid;
+  gap: 22px;
+}
+
+.stats-hero-block,
+.stats-panel,
+.lp-hero,
+.lp-unit-pill,
+.lp-board,
+.lp-lesson-card,
+.lp-detail-card,
+.lp-step-card {
+  background: var(--surface);
+  border: 2px solid var(--text);
+  box-shadow: 8px 8px 0 rgba(99, 195, 21, 0.16);
+}
+
+[data-theme="dark"] .stats-hero-block,
+[data-theme="dark"] .stats-panel,
+[data-theme="dark"] .lp-hero,
+[data-theme="dark"] .lp-unit-pill,
+[data-theme="dark"] .lp-board,
+[data-theme="dark"] .lp-lesson-card,
+[data-theme="dark"] .lp-detail-card,
+[data-theme="dark"] .lp-step-card {
+  box-shadow: 8px 8px 0 rgba(255, 209, 102, 0.14);
+}
+
+.stats-hero-block {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 24px;
+  border-radius: 30px;
+  background:
+    linear-gradient(135deg, rgba(99, 195, 21, 0.12), transparent 58%),
+    var(--surface);
+}
+
+.stats-hero-chip {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--text);
+  background: #ffd166;
+  color: #173313;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.stats-brutal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.stats-panel {
+  min-height: clamp(340px, 43vh, 470px);
+  padding: 20px;
+  border-radius: 28px;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.leaderboard-panel {
+  background:
+    linear-gradient(135deg, rgba(99, 195, 21, 0.08), transparent 48%),
+    var(--surface);
+}
+
+.progress-panel {
+  background:
+    linear-gradient(135deg, rgba(255, 209, 102, 0.12), transparent 48%),
+    var(--surface);
+}
+
+.performance-panel {
+  background:
+    linear-gradient(135deg, rgba(99, 195, 21, 0.08), rgba(255, 209, 102, 0.05)),
+    var(--surface);
+}
+
+.brutal-streak {
+  background:
+    linear-gradient(135deg, rgba(255, 209, 102, 0.2), rgba(99, 195, 21, 0.12)),
+    var(--surface);
+}
+
+.stats-rank-list,
+.stats-progress-stack {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.stats-rank-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 2px solid rgba(28, 42, 29, 0.18);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+[data-theme="dark"] .stats-rank-card {
+  background: rgba(20, 27, 22, 0.88);
+}
+
+.stats-rank-head {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.stats-rank-index {
+  min-width: 52px;
+  padding: 8px 10px;
+  border-radius: 16px;
+  border: 2px solid var(--text);
+  background: var(--accent-soft);
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.stats-rank-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  border: 2px solid var(--text);
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+.stats-follow-button,
+.lp-hero-action,
+.lp-primary-action {
+  min-height: 42px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--text);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.stats-follow-button {
+  justify-self: end;
+}
+
+.stats-follow-button.active,
+.lp-primary-action,
+.lp-hero-action {
+  background: var(--accent);
+  color: #173313;
+}
+
+.stats-rank-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.stats-rank-stat,
+.stats-performance-card {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 18px;
+  border: 2px solid rgba(28, 42, 29, 0.16);
+  background: rgba(255, 255, 255, 0.66);
+}
+
+[data-theme="dark"] .stats-rank-stat,
+[data-theme="dark"] .stats-performance-card {
+  background: rgba(20, 27, 22, 0.9);
+}
+
+.stats-rank-stat span,
+.stats-progress-row-head span,
+.stats-progress-row-meta span,
+.stats-performance-card span,
+.stats-streak-copy p,
+.stats-streak-footer span,
+.lp-hero-text,
+.lp-unit-pill-meta,
+.lp-lesson-copy span,
+.lp-lesson-stats span,
+.lp-detail-summary,
+.lp-step-copy span,
+.lp-detail-note {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.stats-rank-stat strong,
+.stats-performance-card strong,
+.stats-progress-row-head strong,
+.stats-progress-row-meta strong,
+.stats-streak-copy strong,
+.stats-streak-footer strong,
+.lp-hero-metric strong,
+.lp-board-progress strong,
+.lp-lesson-copy strong,
+.lp-detail-title,
+.lp-step-copy strong {
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.stats-rank-bar,
+.stats-progress-row-bar,
+.lp-unit-pill-track,
+.lp-detail-progress-bar {
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(28, 42, 29, 0.08);
+  border: 1px solid rgba(28, 42, 29, 0.14);
+}
+
+.stats-rank-bar span,
+.stats-progress-row-bar span,
+.lp-unit-pill-track span,
+.lp-detail-progress-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), #ffd166);
+}
+
+.stats-progress-row-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 22px;
+  border: 2px solid rgba(28, 42, 29, 0.14);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+[data-theme="dark"] .stats-progress-row-card {
+  background: rgba(20, 27, 22, 0.88);
+}
+
+.stats-progress-row-head,
+.stats-progress-row-meta,
+.lp-board-head,
+.lp-lesson-head,
+.lp-detail-top,
+.lp-detail-progress-row,
+.stats-streak-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stats-progress-row-head > div,
+.stats-progress-row-meta,
+.stats-streak-copy,
+.lp-board-head > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+.stats-progress-lock,
+.lp-detail-lock,
+.lp-lesson-state {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 2px solid var(--text);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.stats-progress-lock.open,
+.lp-detail-lock.open,
+.lp-lesson-state {
+  background: var(--accent-soft);
+}
+
+.stats-progress-lock.locked,
+.lp-detail-lock.locked {
+  background: rgba(255, 209, 102, 0.28);
+}
+
+.stats-performance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stats-performance-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.stats-streak-switch {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 6px;
+  border-radius: 18px;
+  border: 2px solid var(--text);
+  background: rgba(255, 255, 255, 0.52);
+}
+
+[data-theme="dark"] .stats-streak-switch {
+  background: rgba(20, 27, 22, 0.82);
+}
+
+.stats-streak-switch button {
+  min-height: 38px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.stats-streak-switch button.active {
+  background: var(--accent);
+}
+
+.stats-streak-block {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: end;
+}
+
+.stats-streak-count {
+  font-size: clamp(56px, 8vw, 96px);
+  line-height: 0.9;
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+  font-weight: 800;
+}
+
+.stats-streak-copy p {
+  margin: 6px 0 0;
+}
+
+.stats-streak-days {
+  display: grid;
+  gap: 8px;
+}
+
+.stats-streak-days.week {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.stats-streak-days.month {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.stats-streak-days span {
+  min-height: 42px;
+  border-radius: 14px;
+  border: 2px solid rgba(28, 42, 29, 0.16);
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+[data-theme="dark"] .stats-streak-days span {
+  background: rgba(20, 27, 22, 0.82);
+}
+
+.stats-streak-days span.active {
+  background: var(--accent);
+  color: #173313;
+}
+
+.stats-streak-footer {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stats-streak-footer > div {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 18px;
+  border: 2px solid rgba(28, 42, 29, 0.14);
+  background: rgba(255, 255, 255, 0.44);
+}
+
+[data-theme="dark"] .stats-streak-footer > div {
+  background: rgba(20, 27, 22, 0.82);
+}
+
+.lp-shell {
+  display: grid;
+  gap: 18px;
+}
+
+.lp-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 18px;
+  padding: 24px;
+  border-radius: 30px;
+  background:
+    linear-gradient(135deg, rgba(99, 195, 21, 0.16), rgba(255, 209, 102, 0.12)),
+    var(--surface);
+}
+
+.lp-kicker,
+.lp-board-kicker,
+.lp-detail-eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.lp-hero-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.lp-hero-title {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 42px);
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.lp-hero-text {
+  margin: 0;
+  max-width: 62ch;
+}
+
+.lp-hero-meta {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.lp-hero-metric,
+.lp-board-progress {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 22px;
+  border: 2px solid rgba(28, 42, 29, 0.16);
+  background: rgba(255, 255, 255, 0.56);
+}
+
+[data-theme="dark"] .lp-hero-metric,
+[data-theme="dark"] .lp-board-progress {
+  background: rgba(20, 27, 22, 0.9);
+}
+
+.lp-unit-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.lp-unit-pill {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 24px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lp-unit-pill.active {
+  transform: translate(-3px, -3px);
+  box-shadow: 12px 12px 0 rgba(255, 209, 102, 0.2);
+}
+
+.lp-unit-pill-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.lp-unit-pill-top em {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.lp-unit-pill-title,
+.lp-board-title {
+  margin: 0;
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+  font-weight: 700;
+}
+
+.lp-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.8fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.lp-board,
+.lp-detail-card {
+  padding: 20px;
+  border-radius: 30px;
+}
+
+.lp-board {
+  display: grid;
+  gap: 18px;
+}
+
+.lp-board-title {
+  font-size: 22px;
+}
+
+.lp-lesson-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.lp-lesson-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 24px;
+}
+
+.lp-lesson-card.locked {
+  opacity: 0.78;
+}
+
+.lp-lesson-hit {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lp-lesson-index,
+.lp-step-index {
+  min-width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 2px solid var(--text);
+  background: var(--accent-soft);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.lp-lesson-icon,
+.lp-step-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 2px solid rgba(28, 42, 29, 0.16);
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.74);
+}
+
+[data-theme="dark"] .lp-lesson-icon,
+[data-theme="dark"] .lp-step-icon {
+  background: rgba(20, 27, 22, 0.9);
+}
+
+.lp-lesson-copy,
+.lp-step-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.lp-lesson-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lp-lesson-segments {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.lp-lesson-segments i {
+  height: 8px;
+  border-radius: 999px;
+  display: block;
+  background: rgba(28, 42, 29, 0.08);
+}
+
+.lp-lesson-segments i.done {
+  background: linear-gradient(90deg, var(--accent), #ffd166);
+}
+
+.lp-lesson-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--text);
+  background: rgba(255, 209, 102, 0.3);
+  font-weight: 800;
+}
+
+.lp-lesson-link.disabled,
+.lp-primary-action.disabled {
+  background: rgba(28, 42, 29, 0.08);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.lp-detail-card {
+  position: sticky;
+  top: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.lp-detail-title {
+  margin: 4px 0 0;
+  font-size: 24px;
+}
+
+.lp-detail-summary {
+  margin: 0;
+}
+
+.lp-step-list {
+  display: grid;
+  gap: 12px;
+}
+
+.lp-step-card {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 20px;
+  color: inherit;
+  cursor: pointer;
+}
+
+.lp-step-card.done {
+  background: rgba(99, 195, 21, 0.12);
+}
+
+.lp-step-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.lp-step-state {
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 2px solid rgba(28, 42, 29, 0.16);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.lp-detail-actions {
+  display: grid;
+  gap: 10px;
+}
+
+@media (hover: hover) {
+  .stats-panel:hover,
+  .lp-hero:hover,
+  .lp-board:hover,
+  .lp-detail-card:hover {
+    transform: translate(-3px, -3px);
+  }
+
+  .stats-rank-card:hover,
+  .stats-progress-row-card:hover,
+  .stats-performance-card:hover,
+  .lp-unit-pill:hover,
+  .lp-lesson-card:hover,
+  .lp-step-card:hover {
+    transform: translate(-2px, -2px);
+  }
+}
+
+@media (max-width: 1200px) {
+  .stats-brutal-grid,
+  .lp-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-detail-card {
+    position: static;
+  }
+}
+
+@media (max-width: 980px) {
+  .lp-unit-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lp-lesson-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .stats-hero-block,
+  .lp-hero {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .stats-performance-grid,
+  .lp-unit-strip,
+  .stats-brutal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-panel {
+    min-height: auto;
+  }
+
+  .stats-rank-metrics,
+  .stats-streak-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-step-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .lp-step-state {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-left: 56px;
+  }
+}
+
+@media (max-width: 560px) {
+  .stats-rank-head,
+  .stats-progress-row-head,
+  .stats-progress-row-meta,
+  .lp-board-head,
+  .lp-lesson-head,
+  .lp-detail-top,
+  .lp-detail-progress-row,
+  .lp-lesson-stats {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-rank-head {
+    grid-template-columns: auto 1fr;
+  }
+
+  .stats-follow-button {
+    justify-self: start;
+  }
+
+  .stats-streak-block {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-step-card {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-step-state {
+    margin-left: 0;
+  }
+}
+
+.brand-mark {
+  background: linear-gradient(
+    135deg,
+    var(--accent-blue) 0%,
+    var(--accent) 100%
+  );
+  box-shadow: 0 10px 18px rgba(38, 124, 255, 0.28);
+}
+
+.profile-avatar,
+.dash-avatar,
+.dash-mini-avatar,
+.dash-rail-avatar {
+  background: linear-gradient(
+    135deg,
+    var(--accent-blue) 0%,
+    var(--accent) 100%
+  );
+  color: #f8fcff;
+}
+
+.cta-button,
+.dash-live,
+.dash-hero-button,
+.dash-rail-action,
+.teacher-action,
+.dash-card-tag,
+.stats-hero-chip,
+.stats-follow-button.active,
+.lp-primary-action,
+.lp-hero-action {
+  background: linear-gradient(
+    135deg,
+    var(--accent-blue) 0%,
+    var(--accent) 100%
+  );
+  color: #f8fcff;
+}
+
+.nav-link.active,
+.sidebar-utility-link.active,
+.streak-pill,
+.stats-rank-index,
+.lp-lesson-index,
+.lp-step-index {
+  background: linear-gradient(
+    135deg,
+    var(--accent-blue-soft) 0%,
+    var(--accent-soft) 100%
+  );
+}
+
+.dashboard-panel {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(38, 124, 255, 0.14),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(68, 192, 107, 0.12),
+      transparent 34%
+    ),
+    var(--surface);
+  border: 1px solid rgba(38, 124, 255, 0.12);
+  box-shadow: 0 24px 60px rgba(7, 16, 24, 0.12);
+}
+
+[data-theme="dark"] .dashboard-panel {
+  border-color: rgba(83, 162, 255, 0.16);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.36);
+}
+
+.dash-search,
+.dash-icon,
+.teacher-card,
+.dash-course-card,
+.dash-rail-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(242, 248, 255, 0.92)),
+    var(--surface);
+  border-color: rgba(38, 124, 255, 0.12);
+}
+
+[data-theme="dark"] .dash-search,
+[data-theme="dark"] .dash-icon,
+[data-theme="dark"] .teacher-card,
+[data-theme="dark"] .dash-course-card,
+[data-theme="dark"] .dash-rail-card {
+  background:
+    linear-gradient(180deg, rgba(13, 17, 22, 0.96), rgba(18, 24, 32, 0.98)),
+    var(--surface);
+  border-color: rgba(83, 162, 255, 0.16);
+}
+
+.dash-hero {
+  background: linear-gradient(
+    135deg,
+    var(--accent-blue-strong) 0%,
+    #102238 52%,
+    var(--accent-strong) 100%
+  );
+  color: #f7fbff;
+}
+
+.dash-live,
+.dash-icon,
+.dash-link,
+.teacher-action,
+.dash-rail-action {
+  border-color: rgba(38, 124, 255, 0.18);
+}
+
+.teacher-card.violet,
+.teacher-card.rose,
+.teacher-card.gold,
+.teacher-card.mint {
+  background:
+    linear-gradient(180deg, rgba(38, 124, 255, 0.08), transparent 40%),
+    linear-gradient(180deg, rgba(68, 192, 107, 0.06), transparent 62%),
+    var(--surface);
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.review-card,
+.review-empty-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 24px;
+  border: 2px solid rgba(7, 16, 24, 0.12);
+  background:
+    linear-gradient(180deg, rgba(38, 124, 255, 0.06), transparent 42%),
+    linear-gradient(180deg, rgba(68, 192, 107, 0.04), transparent 70%),
+    var(--surface);
+}
+
+[data-theme="dark"] .review-card,
+[data-theme="dark"] .review-empty-card {
+  border-color: rgba(83, 162, 255, 0.16);
+}
+
+.review-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.review-card-kicker,
+.review-resource-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.review-card-title {
+  margin-top: 4px;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.review-card-state {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 2px solid var(--text);
+  background: linear-gradient(
+    135deg,
+    var(--accent-blue-soft) 0%,
+    var(--accent-soft) 100%
+  );
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.review-card-summary,
+.review-empty-card p,
+.review-resource-card small {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.review-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.review-resource-card {
+  display: grid;
+  gap: 4px;
+  min-height: 112px;
+  padding: 12px;
+  border-radius: 18px;
+  border: 2px solid rgba(7, 16, 24, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+[data-theme="dark"] .review-resource-card {
+  background: rgba(13, 17, 22, 0.84);
+  border-color: rgba(83, 162, 255, 0.14);
+}
+
+.review-resource-card.blue {
+  box-shadow: inset 0 0 0 1px rgba(38, 124, 255, 0.12);
+}
+
+.review-resource-card.green {
+  box-shadow: inset 0 0 0 1px rgba(68, 192, 107, 0.14);
+}
+
+.review-resource-card.mix {
+  box-shadow: inset 0 0 0 1px rgba(38, 124, 255, 0.1);
+}
+
+.review-resource-card strong {
+  font-size: 14px;
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.stats-hero-block,
+.stats-panel,
+.lp-hero,
+.lp-unit-pill,
+.lp-board,
+.lp-lesson-card,
+.lp-detail-card,
+.lp-step-card {
+  box-shadow: 8px 8px 0 rgba(38, 124, 255, 0.14);
+}
+
+[data-theme="dark"] .stats-hero-block,
+[data-theme="dark"] .stats-panel,
+[data-theme="dark"] .lp-hero,
+[data-theme="dark"] .lp-unit-pill,
+[data-theme="dark"] .lp-board,
+[data-theme="dark"] .lp-lesson-card,
+[data-theme="dark"] .lp-detail-card,
+[data-theme="dark"] .lp-step-card {
+  box-shadow: 8px 8px 0 rgba(68, 192, 107, 0.12);
+}
+
+.stats-hero-block,
+.stats-panel,
+.lp-hero,
+.lp-board,
+.lp-detail-card,
+.lp-unit-pill,
+.lp-lesson-card,
+.lp-step-card {
+  background:
+    radial-gradient(circle at top right, rgba(38, 124, 255, 0.08), transparent 32%),
+    radial-gradient(circle at bottom left, rgba(68, 192, 107, 0.07), transparent 30%),
+    var(--surface);
+}
+
+.stats-rank-list.compact {
+  gap: 8px;
+}
+
+.stats-rank-card.compact {
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.stats-rank-head.compact {
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.stats-rank-avatar {
+  width: 48px;
+  height: 48px;
+}
+
+.stats-rank-metrics.compact {
+  gap: 8px;
+}
+
+.stats-rank-stat.compact {
+  padding: 8px 10px;
+  min-width: 0;
+}
+
+.stats-follow-button.compact {
+  min-height: 34px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.stats-rank-bar.compact {
+  height: 8px;
+}
+
+.stats-rank-bar span,
+.stats-progress-row-bar span,
+.lp-unit-pill-track span,
+.lp-detail-progress-bar span,
+.lp-lesson-segments i.done {
+  background: linear-gradient(
+    90deg,
+    var(--accent-blue) 0%,
+    var(--accent) 100%
+  );
+}
+
+.stats-hero-chip,
+.stats-follow-button.active,
+.lp-primary-action,
+.lp-hero-action {
+  border-color: rgba(38, 124, 255, 0.22);
+}
+
+.stats-follow-button,
+.lp-primary-action,
+.lp-hero-action {
+  color: #f7fbff;
+}
+
+.lp-unit-pill.active {
+  box-shadow: 12px 12px 0 rgba(38, 124, 255, 0.16);
+}
+
+.lp-lesson-link {
+  background: linear-gradient(
+    135deg,
+    rgba(38, 124, 255, 0.12) 0%,
+    rgba(68, 192, 107, 0.14) 100%
+  );
+}
+
+.stats-streak-switch button.active,
+.stats-streak-days span.active {
+  background: linear-gradient(
+    135deg,
+    var(--accent-blue) 0%,
+    var(--accent) 100%
+  );
+  color: #f7fbff;
+}
+
+.stats-streak-footer > div,
+.stats-rank-stat,
+.stats-performance-card,
+.stats-progress-row-card,
+.lp-hero-metric,
+.lp-board-progress,
+.lp-lesson-icon,
+.lp-step-icon {
+  border-color: rgba(38, 124, 255, 0.12);
+}
+
+@media (max-width: 720px) {
+  .review-resource-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-rank-head.compact {
+    grid-template-columns: auto auto 1fr;
+  }
+
+  .stats-follow-button.compact {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 560px) {
+  .review-card-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@keyframes sleekCardReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+    filter: blur(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes borderFloat {
+  0%,
+  100% {
+    box-shadow:
+      0 20px 40px rgba(7, 16, 24, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+
+  50% {
+    box-shadow:
+      0 24px 54px rgba(7, 16, 24, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.66);
+  }
+}
+
+.card,
+.dashboard-panel,
+.teacher-card,
+.dash-course-card,
+.dash-rail-card,
+.review-card,
+.review-empty-card,
+.review-resource-card,
+.stats-hero-block,
+.stats-panel,
+.stats-rank-card,
+.stats-progress-row-card,
+.stats-performance-card,
+.lp-hero,
+.lp-unit-pill,
+.lp-board,
+.lp-lesson-card,
+.lp-detail-card,
+.lp-step-card,
+.lesson-page-card,
+.lesson-hero,
+.live-card,
+.messages-sidebar,
+.messages-window,
+.notification-card,
+.settings-card,
+.setting-row,
+.profile-card,
+.streak-card,
+.learn-phone,
+.path-area {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(38, 124, 255, 0.12);
+  box-shadow:
+    0 20px 40px rgba(7, 16, 24, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  animation: sleekCardReveal 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .dashboard-panel,
+[data-theme="dark"] .teacher-card,
+[data-theme="dark"] .dash-course-card,
+[data-theme="dark"] .dash-rail-card,
+[data-theme="dark"] .review-card,
+[data-theme="dark"] .review-empty-card,
+[data-theme="dark"] .review-resource-card,
+[data-theme="dark"] .stats-hero-block,
+[data-theme="dark"] .stats-panel,
+[data-theme="dark"] .stats-rank-card,
+[data-theme="dark"] .stats-progress-row-card,
+[data-theme="dark"] .stats-performance-card,
+[data-theme="dark"] .lp-hero,
+[data-theme="dark"] .lp-unit-pill,
+[data-theme="dark"] .lp-board,
+[data-theme="dark"] .lp-lesson-card,
+[data-theme="dark"] .lp-detail-card,
+[data-theme="dark"] .lp-step-card,
+[data-theme="dark"] .lesson-page-card,
+[data-theme="dark"] .lesson-hero,
+[data-theme="dark"] .live-card,
+[data-theme="dark"] .messages-sidebar,
+[data-theme="dark"] .messages-window,
+[data-theme="dark"] .notification-card,
+[data-theme="dark"] .settings-card,
+[data-theme="dark"] .setting-row,
+[data-theme="dark"] .profile-card,
+[data-theme="dark"] .streak-card,
+[data-theme="dark"] .learn-phone,
+[data-theme="dark"] .path-area {
+  border-color: rgba(83, 162, 255, 0.18);
+  box-shadow:
+    0 22px 46px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-panel::after,
+.review-card::after,
+.review-resource-card::after,
+.stats-panel::after,
+.lp-board::after,
+.lp-detail-card::after,
+.lesson-page-card::after,
+.live-card::after,
+.messages-window::after,
+.notification-card::after,
+.settings-card::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.24), transparent 24%),
+    linear-gradient(315deg, rgba(38, 124, 255, 0.1), transparent 36%);
+  opacity: 0.65;
+  z-index: -1;
+}
+
+[data-theme="dark"] .dashboard-panel::after,
+[data-theme="dark"] .review-card::after,
+[data-theme="dark"] .review-resource-card::after,
+[data-theme="dark"] .stats-panel::after,
+[data-theme="dark"] .lp-board::after,
+[data-theme="dark"] .lp-detail-card::after,
+[data-theme="dark"] .lesson-page-card::after,
+[data-theme="dark"] .live-card::after,
+[data-theme="dark"] .messages-window::after,
+[data-theme="dark"] .notification-card::after,
+[data-theme="dark"] .settings-card::after {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(315deg, rgba(83, 162, 255, 0.14), transparent 36%);
+}
+
+.dash-icon,
+.dash-live,
+.teacher-action,
+.dash-rail-action,
+.stats-follow-button,
+.lp-primary-action,
+.lp-hero-action,
+.lp-lesson-link,
+.ghost-button,
+.cta-button,
+.theme-toggle {
+  backdrop-filter: blur(16px) saturate(150%);
+  box-shadow:
+    0 12px 28px rgba(7, 16, 24, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38);
+}
+
+@media (hover: hover) {
+  .card:hover,
+  .dashboard-panel:hover,
+  .teacher-card:hover,
+  .dash-course-card:hover,
+  .dash-rail-card:hover,
+  .review-card:hover,
+  .review-resource-card:hover,
+  .stats-hero-block:hover,
+  .stats-panel:hover,
+  .stats-rank-card:hover,
+  .stats-progress-row-card:hover,
+  .stats-performance-card:hover,
+  .lp-hero:hover,
+  .lp-unit-pill:hover,
+  .lp-board:hover,
+  .lp-lesson-card:hover,
+  .lp-detail-card:hover,
+  .lp-step-card:hover,
+  .lesson-page-card:hover,
+  .lesson-hero:hover,
+  .live-card:hover,
+  .messages-sidebar:hover,
+  .messages-window:hover,
+  .notification-card:hover,
+  .settings-card:hover,
+  .setting-row:hover,
+  .profile-card:hover,
+  .streak-card:hover {
+    transform: translateY(-6px) scale(1.012);
+    border-color: rgba(38, 124, 255, 0.28);
+    animation: borderFloat 2.8s ease-in-out infinite;
+  }
+
+  [data-theme="dark"] .card:hover,
+  [data-theme="dark"] .dashboard-panel:hover,
+  [data-theme="dark"] .teacher-card:hover,
+  [data-theme="dark"] .dash-course-card:hover,
+  [data-theme="dark"] .dash-rail-card:hover,
+  [data-theme="dark"] .review-card:hover,
+  [data-theme="dark"] .review-resource-card:hover,
+  [data-theme="dark"] .stats-hero-block:hover,
+  [data-theme="dark"] .stats-panel:hover,
+  [data-theme="dark"] .stats-rank-card:hover,
+  [data-theme="dark"] .stats-progress-row-card:hover,
+  [data-theme="dark"] .stats-performance-card:hover,
+  [data-theme="dark"] .lp-hero:hover,
+  [data-theme="dark"] .lp-unit-pill:hover,
+  [data-theme="dark"] .lp-board:hover,
+  [data-theme="dark"] .lp-lesson-card:hover,
+  [data-theme="dark"] .lp-detail-card:hover,
+  [data-theme="dark"] .lp-step-card:hover,
+  [data-theme="dark"] .lesson-page-card:hover,
+  [data-theme="dark"] .lesson-hero:hover,
+  [data-theme="dark"] .live-card:hover,
+  [data-theme="dark"] .messages-sidebar:hover,
+  [data-theme="dark"] .messages-window:hover,
+  [data-theme="dark"] .notification-card:hover,
+  [data-theme="dark"] .settings-card:hover,
+  [data-theme="dark"] .setting-row:hover,
+  [data-theme="dark"] .profile-card:hover,
+  [data-theme="dark"] .streak-card:hover {
+    border-color: rgba(88, 209, 122, 0.26);
+  }
+
+  .dash-icon:hover,
+  .dash-live:hover,
+  .teacher-action:hover,
+  .dash-rail-action:hover,
+  .stats-follow-button:hover,
+  .lp-primary-action:hover,
+  .lp-hero-action:hover,
+  .lp-lesson-link:hover,
+  .ghost-button:hover,
+  .cta-button:hover,
+  .theme-toggle:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow:
+      0 16px 32px rgba(7, 16, 24, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.46);
   }
 }

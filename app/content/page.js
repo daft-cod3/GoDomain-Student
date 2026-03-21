@@ -1,5 +1,5 @@
-import LearnPath from "../components/learnPath";
 import Sidebar from "../components/sidebar";
+import LearnPath from "../learn/components/learning-path-shell";
 
 export default function ContentPage() {
   return (
