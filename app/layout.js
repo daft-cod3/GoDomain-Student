@@ -21,6 +21,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${displayFont.variable} ${bodyFont.variable} antialiased`}
       >
         <ThemeProvider>{children}</ThemeProvider>

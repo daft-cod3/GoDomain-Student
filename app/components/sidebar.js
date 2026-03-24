@@ -21,9 +21,9 @@ const navItems = [
   },
   {
     id: "stats",
-    label: "Stats",
+    label: "Profile",
     href: "/stats",
-    caption: "Track streaks and rankings",
+    caption: "Personal details, coins, and progress",
     icon: "stats",
   },
   {

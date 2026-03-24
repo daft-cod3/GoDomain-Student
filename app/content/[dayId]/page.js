@@ -50,6 +50,56 @@ export default async function LearningDayPage({ params }) {
   const progress = totalLessons
     ? Math.round((completedLessons / totalLessons) * 100)
     : 0;
+  const nextIncompleteStep = lesson.lessons.find((entry) => !entry.completed);
+  const rewardCards = [
+    {
+      label: "Coins",
+      value: `+${40 + lesson.lessonNumber * 8}`,
+      note: "Granted after the full lesson is completed.",
+    },
+    {
+      label: "Energy use",
+      value: `-${8 + lesson.lessonNumber}`,
+      note: "Plan shorter sessions if your energy bar is already low.",
+    },
+    {
+      label: "HP protection",
+      value: `${Math.max(62, 88 - (100 - progress) / 2)}%`,
+      note: "Cleaner lesson results help protect your driving HP.",
+    },
+    {
+      label: "Bonus",
+      value: progress === 100 ? "Unlocked" : "Pending",
+      note: "Finish all four steps to unlock the final completion bonus.",
+    },
+  ];
+  const resultCards = [
+    {
+      label: "Current result",
+      value:
+        progress === 100
+          ? "Mastered"
+          : progress >= 50
+            ? "In progress"
+            : "Starting",
+      note: "Your lesson result updates as theory, board, signs, and quiz steps are completed.",
+    },
+    {
+      label: "Step score",
+      value: `${completedLessons}/${totalLessons}`,
+      note: "All four steps count equally toward the lesson outcome.",
+    },
+    {
+      label: "Dashboard reward",
+      value: progress === 100 ? "Review card ready" : "Needs all steps",
+      note: "A full clear unlocks the lesson inside dashboard content review.",
+    },
+    {
+      label: "Recommended focus",
+      value: nextIncompleteStep?.title ?? "Revise and move forward",
+      note: "This is the next best step if you want to finish the topic efficiently.",
+    },
+  ];
 
   return (
     <div className="app-shell">
@@ -132,6 +182,59 @@ export default async function LearningDayPage({ params }) {
                       </span>
                     </article>
                   ))}
+                </div>
+              </section>
+
+              <section className="lesson-page-card">
+                <div className="lesson-page-head">
+                  <div>
+                    <div className="lesson-page-section-title">
+                      Result system
+                    </div>
+                    <div className="lesson-page-section-subtitle">
+                      The lesson page now tracks what the user earns and what
+                      still needs to be cleared.
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lesson-result-grid">
+                  {resultCards.map((card) => (
+                    <article key={card.label} className="lesson-result-card">
+                      <span>{card.label}</span>
+                      <strong>{card.value}</strong>
+                      <p>{card.note}</p>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
+              <section className="lesson-page-card">
+                <div className="lesson-page-head">
+                  <div>
+                    <div className="lesson-page-section-title">
+                      Reward system
+                    </div>
+                    <div className="lesson-page-section-subtitle">
+                      Each topic now shows the outcome, reward value, and what
+                      is still pending before payout.
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lesson-result-grid">
+                  {rewardCards.map((card) => (
+                    <article key={card.label} className="lesson-result-card">
+                      <span>{card.label}</span>
+                      <strong>{card.value}</strong>
+                      <p>{card.note}</p>
+                    </article>
+                  ))}
+                </div>
+
+                <div className="lesson-page-callout">
+                  Finish all four steps in {lesson.label} to lock in the full
+                  reward and add the lesson to dashboard review.
                 </div>
               </section>
 

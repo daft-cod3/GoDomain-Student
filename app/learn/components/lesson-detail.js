@@ -82,10 +82,11 @@ export default function LessonDetail({ lesson, onToggleSubLesson }) {
               className="lp-primary-action"
               href={getLearningDayHref(lesson.id)}
             >
-              Open full lesson
+              Open topic page
             </Link>}
         <div className="lp-detail-note">
-          4 sub-lessons per lesson. Toggle any step here to preview progress.
+          4 sub-lessons per lesson. Open the topic page for the learning flow,
+          result view, and reward breakdown.
         </div>
       </div>
     </aside>

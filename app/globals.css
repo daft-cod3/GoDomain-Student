@@ -1076,16 +1076,16 @@ button:focus-visible,
 }
 
 .road-sign-row {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(220px, 220px);
+  display: flex;
   gap: 14px;
   margin: 0;
   list-style: none;
   overflow-x: auto;
   padding: 4px 2px 10px;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scroll-snap-type: x proximity;
+  scroll-snap-type: x mandatory;
 }
 
 .road-sign-row::-webkit-scrollbar {
@@ -1097,10 +1097,15 @@ button:focus-visible,
   border-radius: 999px;
 }
 
+.road-sign-row-item {
+  flex: 0 0 220px;
+}
+
 .road-sign-card {
   display: grid;
   gap: 14px;
   min-height: 250px;
+  height: 100%;
   padding: 16px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.86);
@@ -1160,6 +1165,390 @@ button:focus-visible,
 
 .road-sign-copy p {
   font-size: 13px;
+}
+
+.road-sign-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-blue-strong);
+}
+
+.road-sign-page {
+  display: grid;
+  gap: 20px;
+}
+
+.road-sign-detail-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+  gap: 20px;
+  padding: 24px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(38, 124, 255, 0.14), transparent 36%),
+    radial-gradient(circle at bottom left, rgba(68, 192, 107, 0.12), transparent 34%),
+    var(--surface);
+  border: 1px solid rgba(38, 124, 255, 0.12);
+  box-shadow: 0 20px 40px rgba(7, 16, 24, 0.08);
+}
+
+.road-sign-detail-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.road-sign-back,
+.road-sign-detail-pill {
+  justify-self: start;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(38, 124, 255, 0.08);
+  border: 1px solid rgba(38, 124, 255, 0.12);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.road-sign-detail-title {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 38px);
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.road-sign-detail-subtitle {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.road-sign-detail-figure {
+  display: grid;
+  place-items: center;
+}
+
+.road-sign-detail-figure .road-sign-figure {
+  width: min(100%, 260px);
+  min-height: 220px;
+}
+
+.road-sign-detail-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.road-sign-detail-card {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(242, 248, 255, 0.82)),
+    var(--surface);
+  border: 1px solid rgba(38, 124, 255, 0.12);
+  box-shadow: 0 16px 32px rgba(7, 16, 24, 0.06);
+}
+
+.road-sign-detail-card p,
+.road-sign-detail-note {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.road-sign-detail-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.road-sign-detail-card-title {
+  font-size: 17px;
+  font-weight: 700;
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.road-sign-detail-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.road-sign-detail-list li {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.road-sign-related-card {
+  gap: 16px;
+}
+
+.road-sign-related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.road-sign-related-item {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(38, 124, 255, 0.1);
+}
+
+.road-sign-related-item .road-sign-figure {
+  min-height: 112px;
+}
+
+.road-sign-related-item strong {
+  font-size: 15px;
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.road-sign-related-item span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.lesson-result-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.lesson-result-card {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(242, 248, 255, 0.8)),
+    var(--surface);
+  border: 1px solid rgba(38, 124, 255, 0.12);
+}
+
+.lesson-result-card span {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.lesson-result-card strong {
+  font-size: 20px;
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.lesson-result-card p,
+.lesson-page-callout {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.lesson-page-callout {
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(38, 124, 255, 0.08);
+  border: 1px solid rgba(38, 124, 255, 0.12);
+}
+
+.profile-hero-block {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+  gap: 20px;
+  align-items: center;
+}
+
+.profile-hero-tags {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.profile-hero-tag {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.profile-hero-tag strong {
+  font-size: 18px;
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.profile-hero-tag span,
+.profile-hero-meta span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.profile-hero-summary {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+
+.profile-hero-avatar {
+  width: min(180px, 100%);
+  padding: 14px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top right, rgba(38, 124, 255, 0.18), transparent 34%),
+    radial-gradient(circle at bottom left, rgba(68, 192, 107, 0.16), transparent 36%),
+    rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(38, 124, 255, 0.18);
+}
+
+.profile-hero-meta {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  text-align: center;
+}
+
+.profile-hero-meta strong {
+  font-size: 18px;
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.profile-page-grid {
+  align-items: start;
+}
+
+.profile-balance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.profile-balance-card {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  padding: 16px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(242, 248, 255, 0.82)),
+    var(--surface);
+  border: 1px solid rgba(38, 124, 255, 0.12);
+  text-align: center;
+}
+
+.profile-balance-card strong,
+.profile-detail-card strong,
+.profile-highlight-card strong {
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.profile-balance-bar {
+  width: 54px;
+  height: 170px;
+  padding: 8px;
+  border-radius: 999px;
+  background: rgba(38, 124, 255, 0.1);
+  border: 1px solid rgba(38, 124, 255, 0.12);
+  display: flex;
+  align-items: flex-end;
+}
+
+.profile-balance-bar span {
+  display: block;
+  width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(180deg, var(--accent-blue) 0%, var(--accent) 100%);
+  min-height: 18px;
+}
+
+.profile-balance-card.hp .profile-balance-bar span {
+  background: linear-gradient(180deg, #46b7ff 0%, #138ef2 100%);
+}
+
+.profile-balance-card.energy .profile-balance-bar span {
+  background: linear-gradient(180deg, #58d17a 0%, #1f9f57 100%);
+}
+
+.profile-balance-card.coins .profile-balance-bar span {
+  background: linear-gradient(180deg, #ffd166 0%, #f59f00 100%);
+}
+
+.profile-balance-label,
+.profile-detail-card span,
+.profile-highlight-card span {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.profile-balance-card p,
+.profile-detail-card p,
+.profile-highlight-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.profile-detail-grid,
+.profile-highlight-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.profile-detail-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.profile-highlight-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 14px;
+}
+
+.profile-detail-card,
+.profile-highlight-card {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(242, 248, 255, 0.82)),
+    var(--surface);
+  border: 1px solid rgba(38, 124, 255, 0.12);
+}
+
+.settings-preferences-hero {
+  gap: 18px;
+}
+
+.settings-preferences-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.settings-preference-chip {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08)),
+    rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(38, 124, 255, 0.16);
+}
+
+.settings-preference-chip strong {
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
+.settings-preference-chip span {
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .learn-shell {
@@ -5908,6 +6297,47 @@ button:focus-visible,
   border-color: rgba(83, 162, 255, 0.18);
 }
 
+[data-theme="dark"] .road-sign-detail-hero,
+[data-theme="dark"] .road-sign-detail-card {
+  background:
+    linear-gradient(180deg, rgba(13, 17, 22, 0.94), rgba(18, 24, 32, 0.98)),
+    var(--surface);
+  border-color: rgba(83, 162, 255, 0.18);
+}
+
+[data-theme="dark"] .road-sign-related-item {
+  background: rgba(13, 17, 22, 0.82);
+  border-color: rgba(83, 162, 255, 0.18);
+}
+
+[data-theme="dark"] .lesson-result-card {
+  background:
+    linear-gradient(180deg, rgba(13, 17, 22, 0.9), rgba(18, 24, 32, 0.96)),
+    var(--surface);
+  border-color: rgba(83, 162, 255, 0.18);
+}
+
+[data-theme="dark"] .profile-balance-card,
+[data-theme="dark"] .profile-detail-card,
+[data-theme="dark"] .profile-highlight-card {
+  background:
+    linear-gradient(180deg, rgba(13, 17, 22, 0.9), rgba(18, 24, 32, 0.96)),
+    var(--surface);
+  border-color: rgba(83, 162, 255, 0.18);
+}
+
+[data-theme="dark"] .profile-balance-bar,
+[data-theme="dark"] .profile-hero-avatar,
+[data-theme="dark"] .settings-preference-chip {
+  background: rgba(13, 17, 22, 0.64);
+  border-color: rgba(83, 162, 255, 0.18);
+}
+
+[data-theme="dark"] .lesson-page-callout {
+  background: rgba(83, 162, 255, 0.12);
+  border-color: rgba(83, 162, 255, 0.18);
+}
+
 [data-theme="dark"] .road-signs-note,
 [data-theme="dark"] .dash-status-pill,
 [data-theme="dark"] .dash-rail-chip,
@@ -7200,6 +7630,21 @@ button:focus-visible,
 }
 
 @media (max-width: 980px) {
+  .road-sign-detail-hero,
+  .profile-hero-block,
+  .road-sign-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-balance-grid,
+  .settings-preferences-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .road-sign-related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .settings-profile-hero-body {
     grid-template-columns: auto minmax(0, 1fr);
   }
@@ -7215,6 +7660,20 @@ button:focus-visible,
 }
 
 @media (max-width: 720px) {
+  .lesson-result-grid,
+  .profile-balance-grid,
+  .profile-detail-grid,
+  .profile-highlight-grid,
+  .settings-preferences-summary,
+  .road-sign-detail-layout,
+  .road-sign-related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-hero-tags {
+    grid-template-columns: 1fr;
+  }
+
   .app-shell {
     padding: 16px;
   }
@@ -7258,6 +7717,10 @@ button:focus-visible,
 }
 
 @media (max-width: 560px) {
+  .road-sign-row-item {
+    flex-basis: 196px;
+  }
+
   .app-shell {
     padding: 12px;
     gap: 14px;
