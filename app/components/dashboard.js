@@ -1,60 +1,9 @@
 import Link from "next/link";
-import { getLearningDay, getLearningDayHref } from "../learn";
+import { getLearningDayHref } from "../learn";
 import ContentReview from "../learn/components/contReview";
-import { JourneyIcon } from "../learn/icons";
+import { teacherUploads } from "../data/teacher-uploads";
 import ModelTownBoard from "./modelTownBoard";
 import RoadSign from "./roadSign";
-
-const teacherUploads = [
-  {
-    id: "image-upload",
-    type: "Image set",
-    title: "Road markings photo wall",
-    meta: "Ms. Diaz / 16 images / Updated today",
-    summary:
-      "Quick visual references for lane edges, center lines, and turn bays.",
-    action: "View images",
-    href: getLearningDayHref("unit-1-lesson-3"),
-    icon: "image",
-    accent: "mint",
-  },
-  {
-    id: "video-upload",
-    type: "Video",
-    title: "Junction decisions breakdown",
-    meta: "Mr. Chen / 12 min / Uploaded 2 hours ago",
-    summary:
-      "A clean replay of priority calls, blind checks, and entry timing.",
-    action: "Play lesson",
-    href: getLearningDayHref("unit-1-lesson-4"),
-    icon: "video",
-    accent: "violet",
-  },
-  {
-    id: "quiz-upload",
-    type: "Quiz link",
-    title: "Hazard scan checkpoint",
-    meta: "Ms. Omar / 10 questions / Due in 2 days",
-    summary:
-      "Measure how early you are spotting movement, risk, and blind zones.",
-    action: "Start quiz",
-    href: getLearningDayHref("unit-1-lesson-5"),
-    icon: "quiz",
-    accent: "gold",
-  },
-  {
-    id: "resource-upload",
-    type: "Resource link",
-    title: "Traffic sign revision pack",
-    meta: "Ms. Bello / Notes + visuals / Updated today",
-    summary:
-      "Compact notes and visual prompts for warning, order, and direction signs.",
-    action: "Open pack",
-    href: getLearningDayHref("unit-1-lesson-2"),
-    icon: "link",
-    accent: "rose",
-  },
-];
 
 const popularLessons = [
   {
@@ -91,14 +40,6 @@ const popularLessons = [
   },
 ];
 
-const ongoingLessons = [
-  "unit-1-lesson-3",
-  "unit-1-lesson-4",
-  "unit-1-lesson-5",
-]
-  .map((dayId) => getLearningDay(dayId))
-  .filter(Boolean);
-
 const mentors = [
   {
     id: "mentor-gina",
@@ -125,7 +66,7 @@ export default function Dashboard() {
     <div className="dashboard-shell">
       <div className="dashboard-panel">
         <header className="dash-topbar">
-          <div className="dash-search dash-search-static">
+          <div className="dash-search dash-search-static" role="search">
             <svg
               width="18"
               height="18"
@@ -148,12 +89,20 @@ export default function Dashboard() {
               />
             </svg>
             <div className="dash-search-copy">
-              <span className="dash-search-label">Dashboard overview</span>
+              <label className="dash-search-label" htmlFor="dashboard-search">
+                Search dashboard content
+              </label>
+              <input
+                id="dashboard-search"
+                type="search"
+                placeholder="Search lessons, uploads, quizzes, and review notes"
+              />
               <span className="dash-search-note">
-                Lessons, review cards, and road signs are grouped into a calmer
-                layout.
+                Jump faster between review cards, teacher uploads, and learning
+                pages.
               </span>
             </div>
+            <span className="dash-search-shortcut">Ctrl K</span>
           </div>
           <div className="dash-top-actions">
             <span className="dash-status-pill">Low-motion workspace</span>
@@ -197,12 +146,10 @@ export default function Dashboard() {
                 <div>
                   <div className="dash-section-title">Teacher uploads</div>
                   <div className="dash-section-subtitle">
-                    Latest videos, image packs, quiz links, and extra resources.
+                    Open each card for its own dedicated upload page with
+                    teacher-specific content.
                   </div>
                 </div>
-                <Link className="dash-link" href="/content">
-                  View all
-                </Link>
               </div>
               <div className="teacher-grid">
                 {teacherUploads.map((upload) => (
@@ -257,39 +204,6 @@ export default function Dashboard() {
                       <span className="dash-card-tag">{lesson.tag}</span>
                     </div>
                     <div className="dash-card-meta">{lesson.meta}</div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-
-            <section className="dash-section">
-              <div className="dash-section-head">
-                <div>
-                  <div className="dash-section-title">Lesson progress</div>
-                  <div className="dash-section-subtitle">
-                    Open a lesson icon to view the full page with notes, GIF
-                    drills, and video guides.
-                  </div>
-                </div>
-                <Link className="dash-link" href="/content">
-                  View all
-                </Link>
-              </div>
-              <div className="dash-lesson-icon-grid">
-                {ongoingLessons.map((lesson) => (
-                  <Link
-                    key={lesson.id}
-                    className="dash-lesson-icon-link"
-                    href={getLearningDayHref(lesson.id)}
-                    aria-label={`Open ${lesson.title}`}
-                    title={lesson.title}
-                  >
-                    <span className="dash-lesson-icon-shell" aria-hidden="true">
-                      <span
-                        className={`dash-lesson-icon-dot ${lesson.lessons.every((entry) => entry.completed) ? "done" : ""}`}
-                      />
-                      <JourneyIcon name={lesson.icon} />
-                    </span>
                   </Link>
                 ))}
               </div>
