@@ -253,9 +253,14 @@ export default function ModelTownBoard() {
       </div>
 
       <div className="model-town-feature-grid">
-        {modelTownFeatures.map((feature) => (
+        {modelTownFeatures.map((feature, index) => (
           <article key={feature.title} className="model-town-feature-card">
-            <span className="model-town-mini-kicker">Feature</span>
+            <div className="model-town-feature-top">
+              <span className="model-town-mini-kicker">Feature</span>
+              <span className="model-town-feature-index">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+            </div>
             <strong>{feature.title}</strong>
             <p>{feature.description}</p>
           </article>
@@ -270,6 +275,9 @@ export default function ModelTownBoard() {
                 <span className="model-town-mini-kicker">Road option</span>
                 <h3>{route.title}</h3>
               </div>
+              <span className="model-town-route-badge">
+                {route.lanes.length} lanes
+              </span>
             </div>
 
             <p>{route.summary}</p>
@@ -289,6 +297,13 @@ export default function ModelTownBoard() {
                     <RouteArrow flow={lane.flow} />
                   </span>
                   <strong>{lane.label}</strong>
+                  <em className="model-town-lane-flow">
+                    {lane.flow === "turn"
+                      ? "Shared turn flow"
+                      : lane.flow === "down"
+                        ? "Opposing movement"
+                        : "Forward movement"}
+                  </em>
                   <span>{lane.detail}</span>
                 </div>
               ))}
@@ -328,7 +343,18 @@ export default function ModelTownBoard() {
                 <strong>{sign.label}</strong>
                 <p>{note}</p>
               </div>
-              <span className="model-town-sign-link">Open sign guide</span>
+              <span className="model-town-sign-link">
+                <span>Open sign guide</span>
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M3.5 8h8M8.5 3.5L13 8l-4.5 4.5"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
             </Link>
           ))}
         </div>
@@ -345,8 +371,15 @@ export default function ModelTownBoard() {
         <div className="model-town-parking-grid">
           {modelTownParkingGuides.map((guide) => (
             <article key={guide.id} className="model-town-parking-card">
-              <span className="model-town-mini-kicker">Parking option</span>
-              <h3>{guide.title}</h3>
+              <div className="model-town-card-head">
+                <div>
+                  <span className="model-town-mini-kicker">Parking option</span>
+                  <h3>{guide.title}</h3>
+                </div>
+                <span className="model-town-route-badge">
+                  {guide.steps.length} steps
+                </span>
+              </div>
               <p>{guide.summary}</p>
               <ul className="model-town-checklist">
                 {guide.steps.map((step) => (

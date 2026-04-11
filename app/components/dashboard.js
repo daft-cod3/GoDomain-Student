@@ -1,7 +1,7 @@
 import Link from "next/link";
+import { teacherUploads } from "../data/teacher-uploads";
 import { getLearningDayHref } from "../learn";
 import ContentReview from "../learn/components/contReview";
-import { teacherUploads } from "../data/teacher-uploads";
 import ModelTownBoard from "./modelTownBoard";
 import RoadSign from "./roadSign";
 
@@ -40,70 +40,11 @@ const popularLessons = [
   },
 ];
 
-const mentors = [
-  {
-    id: "mentor-gina",
-    initials: "GM",
-    name: "Gina Moore",
-    specialty: "Hazard reading / 4.9",
-  },
-  {
-    id: "mentor-priya",
-    initials: "PS",
-    name: "Priya Singh",
-    specialty: "Theory recall / 4.8",
-  },
-  {
-    id: "mentor-jun",
-    initials: "JW",
-    name: "Jun Wei",
-    specialty: "Road signs / 4.7",
-  },
-];
-
 export default function Dashboard() {
   return (
     <div className="dashboard-shell">
       <div className="dashboard-panel">
         <header className="dash-topbar">
-          <div className="dash-search dash-search-static" role="search">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-            >
-              <circle
-                cx="11"
-                cy="11"
-                r="7"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-              <path
-                d="M20 20L17 17"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-            <div className="dash-search-copy">
-              <label className="dash-search-label" htmlFor="dashboard-search">
-                Search dashboard content
-              </label>
-              <input
-                id="dashboard-search"
-                type="search"
-                placeholder="Search lessons, uploads, quizzes, and review notes"
-              />
-              <span className="dash-search-note">
-                Jump faster between review cards, teacher uploads, and learning
-                pages.
-              </span>
-            </div>
-            <span className="dash-search-shortcut">Ctrl K</span>
-          </div>
           <div className="dash-top-actions">
             <span className="dash-status-pill">Low-motion workspace</span>
             <div className="dash-avatar">AR</div>
@@ -112,13 +53,14 @@ export default function Dashboard() {
 
         <section className="dash-hero">
           <div className="dash-hero-content">
-            <div className="dash-hero-tag">Review unlocks</div>
+            <div className="dash-hero-tag">Student progress hub</div>
             <h1 className="dash-hero-title">
-              Fully complete a lesson and it drops into content review.
+              Track the live unit, lesson momentum, and review unlocks in one place.
             </h1>
             <p className="dash-hero-subtitle">
               Work through notes, boards, signs, and quizzes on the learning
-              path. Every finished lesson unlocks a reusable review card here.
+              path. The dashboard now keeps the active unit snapshot, current
+              lesson progress, and finished review cards together.
             </p>
             <Link className="dash-hero-button" href="/content">
               Open learning path
@@ -209,50 +151,6 @@ export default function Dashboard() {
               </div>
             </section>
           </div>
-
-          <aside className="dash-rail">
-            <div className="dash-rail-card">
-              <div className="dash-rail-head">
-                <div>
-                  <div className="dash-rail-title">Review unlock target</div>
-                  <div className="dash-rail-subtitle">
-                    Finish one full lesson to create a new review card.
-                  </div>
-                </div>
-                <span className="dash-rail-chip">Tracking active</span>
-              </div>
-              <div className="dash-rail-progress">
-                <div className="dash-progress-row">
-                  <span>Current lesson</span>
-                  <span>3/4</span>
-                </div>
-                <div className="dash-progress">
-                  <span style={{ width: "75%" }} />
-                </div>
-                <div className="dash-badge-row">
-                  <span className="dash-mini-avatar">NT</span>
-                  <span className="dash-mini-avatar">VD</span>
-                  <span className="dash-mini-avatar">IM</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="dash-rail-card">
-              <div className="dash-rail-title">Top mentors</div>
-              <div className="dash-rail-list">
-                {mentors.map((mentor) => (
-                  <div key={mentor.id} className="dash-rail-item">
-                    <span className="dash-rail-avatar">{mentor.initials}</span>
-                    <div>
-                      <div className="dash-rail-name">{mentor.name}</div>
-                      <div className="dash-rail-meta">{mentor.specialty}</div>
-                    </div>
-                    <span className="dash-rail-pill">Available</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </aside>
         </div>
 
         <RoadSign />

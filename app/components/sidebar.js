@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 
 const NAV_ITEMS = [
   {
@@ -34,32 +33,6 @@ const NAV_ITEMS = [
     icon: "settings",
   },
 ];
-
-const UTIL_ITEMS = [
-  {
-    id: "live",
-    label: "Live",
-    href: "/live",
-    caption: "Session room",
-    badge: "Now",
-  },
-  {
-    id: "messages",
-    label: "Messages",
-    href: "/messages",
-    caption: "Inbox",
-    badge: "Inbox",
-  },
-  {
-    id: "notifications",
-    label: "Alerts",
-    href: "/notifications",
-    caption: "Updates",
-    badge: "3 new",
-  },
-];
-
-const COLLAPSE_KEY = "godomain-sidebar-collapsed";
 
 function getSection(pathname, fallback) {
   if (!pathname || pathname === "/" || pathname.startsWith("/dashboard")) {
@@ -170,125 +143,12 @@ function Icon({ name }) {
 export default function Sidebar({ active = "dashboard" }) {
   const pathname = usePathname();
   const activeSection = getSection(pathname, active);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
-
-  useEffect(() => {
-    setCollapsed(localStorage.getItem(COLLAPSE_KEY) === "true");
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(COLLAPSE_KEY, collapsed ? "true" : "false");
-  }, [collapsed]);
-
-  useEffect(() => {
-    if (pathname) {
-      setMenuOpen(false);
-    }
-  }, [pathname]);
-
-  useEffect(() => {
-    if (!menuOpen) {
-      document.body.style.removeProperty("overflow");
-      return;
-    }
-
-    document.body.style.overflow = "hidden";
-
-    const onKey = (event) => {
-      if (event.key === "Escape") {
-        setMenuOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", onKey);
-
-    return () => {
-      document.body.style.removeProperty("overflow");
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
 
   return (
-    <div className={`sb-shell${collapsed ? " collapsed" : ""}`}>
-      <div className="sb-mobile-bar">
-        <button
-          className={`sb-hamburger${menuOpen ? " open" : ""}`}
-          type="button"
-          onClick={() => setMenuOpen((previous) => !previous)}
-          aria-label="Toggle menu"
-          aria-expanded={menuOpen}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
-
-        <div className="sb-mobile-copy">
-          <span className="sb-mobile-title">GoDomain</span>
-          <span className="sb-mobile-sub">Learning route</span>
-        </div>
-
-        <div className="sb-mobile-avatar">AR</div>
-      </div>
-
-      <button
-        className={`sb-overlay${menuOpen ? " open" : ""}`}
-        type="button"
-        aria-label="Close menu"
-        onClick={() => setMenuOpen(false)}
-      />
-
-      <aside
-        className={`sb-panel${menuOpen ? " open" : ""}${collapsed ? " collapsed" : ""}`}
-        id="app-sidebar"
-      >
-        <div className="sb-brand-row">
-          <button
-            className="sb-collapse-btn"
-            type="button"
-            onClick={() => setCollapsed((previous) => !previous)}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
-
-          <div className="sb-brand-mark">G</div>
-
-          <div className="sb-brand-copy">
-            <span className="sb-brand-name">GoDomain</span>
-            <span className="sb-brand-sub">Student workspace</span>
-          </div>
-
-          <button
-            className="sb-close-btn"
-            type="button"
-            onClick={() => setMenuOpen(false)}
-            aria-label="Close"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              aria-hidden="true"
-            >
-              <path d="M7 7L17 17M17 7L7 17" />
-            </svg>
-          </button>
-        </div>
-
+    <div className="sb-shell">
+      <aside className="sb-panel" id="app-sidebar">
         <div className="sb-content">
-          <Link
-            href="/stats"
-            className="sb-profile-card"
-            onClick={() => setMenuOpen(false)}
-            title={collapsed ? "Open profile" : undefined}
-          >
-            <div className="sb-profile-avatar">AR</div>
+          <Link href="/stats" className="sb-profile-card">
             <div className="sb-profile-info">
               <span className="sb-profile-name">Ari Rowe</span>
               <span className="sb-profile-meta">Class B / Unit 7</span>
@@ -318,8 +178,6 @@ export default function Sidebar({ active = "dashboard" }) {
                     href={item.href}
                     className={`sb-nav-link${isActive ? " active" : ""}`}
                     aria-current={isActive ? "page" : undefined}
-                    onClick={() => setMenuOpen(false)}
-                    title={collapsed ? item.label : undefined}
                   >
                     <span className={`sb-nav-icon sb-icon-${item.id}`}>
                       <Icon name={item.icon} />
@@ -332,41 +190,6 @@ export default function Sidebar({ active = "dashboard" }) {
                 );
               })}
             </nav>
-          </section>
-
-          <section className="sb-section sb-section-tools">
-            <div className="sb-section-head">
-              <span className="sb-section-kicker">Quick access</span>
-              <span className="sb-section-badge">Fast tools</span>
-            </div>
-
-            <div className="sb-quick-grid">
-              {UTIL_ITEMS.map((item, index) => {
-                const isActive =
-                  pathname === item.href || pathname?.startsWith(`${item.href}/`);
-                const isWide = index === UTIL_ITEMS.length - 1 && UTIL_ITEMS.length % 2 === 1;
-
-                return (
-                  <Link
-                    key={item.id}
-                    href={item.href}
-                    className={`sb-quick-link${isActive ? " active" : ""}${isWide ? " wide" : ""}`}
-                    aria-label={item.label}
-                    onClick={() => setMenuOpen(false)}
-                    title={collapsed ? item.label : undefined}
-                  >
-                    <span className="sb-quick-icon">
-                      <Icon name={item.id} />
-                    </span>
-                    <span className="sb-quick-copy">
-                      <span className="sb-quick-text">{item.label}</span>
-                      <span className="sb-quick-meta">{item.caption}</span>
-                    </span>
-                    <span className="sb-quick-pill">{item.badge}</span>
-                  </Link>
-                );
-              })}
-            </div>
           </section>
         </div>
 
@@ -386,11 +209,7 @@ export default function Sidebar({ active = "dashboard" }) {
             </p>
           </div>
 
-          <Link
-            className="sb-cta"
-            href="/content"
-            onClick={() => setMenuOpen(false)}
-          >
+          <Link className="sb-cta" href="/content">
             Continue learning
           </Link>
         </div>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { studentProfile } from "../../data/student-profile";
 import { getLearningDayHref, learningUnits } from "..";
 import { JourneyIcon } from "../icons";
 import {
@@ -45,6 +46,323 @@ const reviewResources = [
   },
 ];
 
+function getFeaturedUnit(unitSummaries) {
+  return (
+    unitSummaries.find((unit) => unit.progress > 0 && unit.progress < 100) ??
+    unitSummaries.find((unit) => unit.progress === 100) ??
+    unitSummaries[0] ??
+    null
+  );
+}
+
+function getLessonActivityStreak(lessons) {
+  let streak = 0;
+
+  for (const lesson of lessons) {
+    if (lesson.progress > 0) {
+      streak += 1;
+      continue;
+    }
+
+    break;
+  }
+
+  return streak;
+}
+
+function getUnitState(unit) {
+  if (!unit) {
+    return "Waiting";
+  }
+
+  if (unit.progress === 100) {
+    return "Cleared";
+  }
+
+  if (unit.progress > 0) {
+    return "Live now";
+  }
+
+  return "Queued";
+}
+
+function getShortLessonLabel(label, index) {
+  const numberMatch = label?.match(/\d+/);
+  return numberMatch ? `L${numberMatch[0]}` : `L${index + 1}`;
+}
+
+function getGraphNodes(lessons, width, height, padding) {
+  if (!lessons.length) {
+    return [];
+  }
+
+  const usableWidth = width - padding * 2;
+  const usableHeight = height - padding * 2;
+
+  return lessons.map((lesson, index) => {
+    const x =
+      lessons.length === 1
+        ? width / 2
+        : padding + (usableWidth / (lessons.length - 1)) * index;
+    const y = height - padding - (lesson.progress / 100) * usableHeight;
+
+    return {
+      id: lesson.id,
+      label: getShortLessonLabel(lesson.label, index),
+      progress: lesson.progress,
+      x,
+      y,
+      isComplete: lesson.progress === 100,
+      isActive: lesson.progress > 0 && lesson.progress < 100,
+    };
+  });
+}
+
+function buildLinePath(nodes) {
+  if (!nodes.length) {
+    return "";
+  }
+
+  return nodes
+    .map((node, index) =>
+      `${index === 0 ? "M" : "L"} ${node.x.toFixed(1)} ${node.y.toFixed(1)}`,
+    )
+    .join(" ");
+}
+
+function buildAreaPath(nodes, height, padding) {
+  if (!nodes.length) {
+    return "";
+  }
+
+  const baseY = height - padding;
+  const firstNode = nodes[0];
+  const lastNode = nodes[nodes.length - 1];
+
+  return `${buildLinePath(nodes)} L ${lastNode.x.toFixed(1)} ${baseY.toFixed(
+    1,
+  )} L ${firstNode.x.toFixed(1)} ${baseY.toFixed(1)} Z`;
+}
+
+function UnitProgressGraph({ unit }) {
+  const width = 328;
+  const height = 150;
+  const padding = 18;
+  const nodes = getGraphNodes(unit.lessons, width, height, padding);
+  const linePath = buildLinePath(nodes);
+  const areaPath = buildAreaPath(nodes, height, padding);
+  const gradientBase = `review-unit-graph-${unit.id}`;
+
+  return (
+    <div className="review-unit-graph-shell">
+      <svg
+        className="review-unit-graph"
+        viewBox={`0 0 ${width} ${height}`}
+        role="img"
+        aria-label={`${unit.label} lesson progress graph`}
+      >
+        <defs>
+          <linearGradient id={`${gradientBase}-line`} x1="0%" x2="100%">
+            <stop offset="0%" stopColor="#2f8bff" />
+            <stop offset="100%" stopColor="#6fe51f" />
+          </linearGradient>
+          <linearGradient id={`${gradientBase}-fill`} x1="0%" x2="0%" y1="0%" y2="100%">
+            <stop offset="0%" stopColor="#2f8bff" stopOpacity="0.28" />
+            <stop offset="100%" stopColor="#44c06b" stopOpacity="0.04" />
+          </linearGradient>
+        </defs>
+
+        {[0, 25, 50, 75, 100].map((tick) => {
+          const y = height - padding - (tick / 100) * (height - padding * 2);
+
+          return (
+            <line
+              key={tick}
+              x1={padding}
+              x2={width - padding}
+              y1={y}
+              y2={y}
+              className="review-unit-graph-grid"
+            />
+          );
+        })}
+
+        {areaPath ? (
+          <path
+            d={areaPath}
+            fill={`url(#${gradientBase}-fill)`}
+            className="review-unit-graph-area"
+          />
+        ) : null}
+
+        {linePath ? (
+          <path
+            d={linePath}
+            fill="none"
+            stroke={`url(#${gradientBase}-line)`}
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="review-unit-graph-line"
+          />
+        ) : null}
+
+        {nodes.map((node) => (
+          <g key={node.id}>
+            <circle
+              cx={node.x}
+              cy={node.y}
+              r="7"
+              className={`review-unit-graph-dot${
+                node.isComplete ? " complete" : node.isActive ? " active" : ""
+              }`}
+            />
+            <circle cx={node.x} cy={node.y} r="3.5" className="review-unit-graph-core" />
+          </g>
+        ))}
+      </svg>
+
+      <div className="review-unit-graph-axis" aria-hidden="true">
+        {unit.lessons.map((lesson, index) => (
+          <span key={lesson.id}>{getShortLessonLabel(lesson.label, index)}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FeaturedUnitCard({ unit }) {
+  const state = getUnitState(unit);
+  const activityStreak = getLessonActivityStreak(unit.lessons);
+  const completedLessons = unit.lessons.filter(
+    (lesson) => lesson.progress === 100,
+  ).length;
+  const strongestLesson =
+    [...unit.lessons].sort((left, right) => right.progress - left.progress)[0] ??
+    null;
+  const coveredTopics = unit.coveredTopics.length
+    ? unit.coveredTopics.slice(0, 4)
+    : ["No topics covered yet"];
+
+  return (
+    <article className="review-unit-spotlight">
+      <div className="review-unit-spotlight-copy">
+        <div className="review-unit-spotlight-head">
+          <div>
+            <div className="review-card-kicker">Featured student unit</div>
+            <div className="review-unit-spotlight-title">
+              {unit.label}: {unit.title}
+            </div>
+          </div>
+
+          <div className="review-unit-badge-row">
+            <span className="review-unit-chip">{state}</span>
+            <span className="review-unit-chip accent">
+              {activityStreak} lesson streak
+            </span>
+          </div>
+        </div>
+
+        <p className="review-unit-spotlight-summary">
+          {unit.summary} {studentProfile.name.split(" ")[0]} has covered{" "}
+          {unit.coveredLessons.length} of {unit.lessons.length} lessons in this
+          lane, so the next move and the strongest lesson stay visible together.
+        </p>
+
+        <div className="review-unit-stat-grid">
+          <article className="review-unit-stat">
+            <span>Unit progress</span>
+            <strong>{unit.progress}%</strong>
+          </article>
+          <article className="review-unit-stat">
+            <span>Lessons cleared</span>
+            <strong>
+              {completedLessons}/{unit.lessons.length}
+            </strong>
+          </article>
+          <article className="review-unit-stat">
+            <span>Completed steps</span>
+            <strong>
+              {unit.completedSubLessons}/{unit.totalSubLessons}
+            </strong>
+          </article>
+          <article className="review-unit-stat">
+            <span>Strongest lesson</span>
+            <strong>{strongestLesson?.progress ?? 0}%</strong>
+          </article>
+        </div>
+
+        <div className="review-unit-track-block">
+          <div className="review-unit-track-row">
+            <strong>Overall unit route</strong>
+            <span>{unit.progress}% mastered</span>
+          </div>
+          <div className="review-progress-bar review-progress-bar-lg" aria-hidden="true">
+            <span style={{ width: `${unit.progress}%` }} />
+          </div>
+        </div>
+
+        <div className="review-topic-list">
+          {coveredTopics.map((topic) => (
+            <span
+              key={topic}
+              className={`review-topic-pill${
+                topic === "No topics covered yet" ? " muted" : ""
+              }`}
+            >
+              {topic}
+            </span>
+          ))}
+        </div>
+
+        <div className="review-unit-footer">
+          <span>Next focus</span>
+          {unit.nextLesson ? (
+            <Link
+              className="review-unit-action"
+              href={getLearningDayHref(unit.nextLesson.id)}
+            >
+              Open {unit.nextLesson.label}
+            </Link>
+          ) : (
+            <strong>Revision loop ready</strong>
+          )}
+        </div>
+      </div>
+
+      <div className="review-unit-visual">
+        <div className="review-unit-visual-head">
+          <span className="review-card-kicker">Lesson graph</span>
+          <strong>{unit.lessons.length} lesson checkpoints</strong>
+        </div>
+
+        <UnitProgressGraph unit={unit} />
+
+        <div className="review-unit-bar-grid">
+          {unit.lessons.map((lesson, index) => (
+            <div key={lesson.id} className="review-unit-bar-card">
+              <div className="review-unit-bar-track" aria-hidden="true">
+                <span
+                  className={`review-unit-bar-fill${
+                    lesson.progress === 100
+                      ? " complete"
+                      : lesson.progress > 0
+                        ? " active"
+                        : ""
+                  }`}
+                  style={{ height: `${Math.max(lesson.progress, 8)}%` }}
+                />
+              </div>
+              <strong>{lesson.progress}%</strong>
+              <span>{getShortLessonLabel(lesson.label, index)}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function loadReviewData() {
   const hydratedUnits = hydrateLearningProgress(learningUnits);
   const completedLessons = getCompletedLessons(hydratedUnits).sort(
@@ -85,11 +403,17 @@ function loadReviewData() {
     (sum, unit) => sum + unit.coveredLessons.length,
     0,
   );
+  const featuredUnit = getFeaturedUnit(unitSummaries);
+  const featuredUnitStreak = featuredUnit
+    ? getLessonActivityStreak(featuredUnit.lessons)
+    : 0;
 
   return {
     averageScore,
     completedLessons,
     activeLessons,
+    featuredUnit,
+    featuredUnitStreak,
     totalTopicsCovered,
     unitSummaries,
   };
@@ -100,6 +424,8 @@ export default function ContentReview() {
     averageScore: 0,
     completedLessons: [],
     activeLessons: [],
+    featuredUnit: null,
+    featuredUnitStreak: 0,
     totalTopicsCovered: 0,
     unitSummaries: [],
   });
@@ -112,6 +438,8 @@ export default function ContentReview() {
     averageScore,
     completedLessons,
     activeLessons,
+    featuredUnit,
+    featuredUnitStreak,
     totalTopicsCovered,
     unitSummaries,
   } = reviewData;
@@ -121,11 +449,12 @@ export default function ContentReview() {
       <div className="dash-section-head">
         <div>
           <div className="dash-section-title">
-            Content review and lesson progress
+            Student review, lesson progress, and unit focus
           </div>
           <div className="dash-section-subtitle">
-            Completed lessons stay review-ready, while active topics keep their
-            progress, scores, and covered unit content visible in one place.
+            One section now holds the live unit snapshot, active lesson
+            momentum, and completed review cards so the dashboard reads as a
+            single student progress workspace.
           </div>
         </div>
         <Link className="dash-link" href="/content">
@@ -146,69 +475,32 @@ export default function ContentReview() {
           <span>Topics covered</span>
           <strong>{totalTopicsCovered}</strong>
         </article>
+        <article className="review-overview-stat">
+          <span>Featured unit streak</span>
+          <strong>{featuredUnitStreak}</strong>
+        </article>
       </div>
 
-      <div className="review-layout">
-        <div className="review-stack">
-          {completedLessons.length
-            ? <div className="review-grid">
-                {completedLessons.map((lesson) => (
-                  <article key={lesson.id} className="review-card">
-                    <div className="review-card-head">
-                      <div>
-                        <div className="review-card-kicker">
-                          {lesson.unitLabel} / {lesson.label}
-                        </div>
-                        <div className="review-card-title">{lesson.title}</div>
-                      </div>
-                      <span className="review-card-state">Complete</span>
-                    </div>
-
-                    <p className="review-card-summary">{lesson.subtitle}</p>
-
-                    <div className="review-card-metrics">
-                      <span>{lesson.lessons.length} checkpoints</span>
-                      <span>
-                        {lesson.overviewTopics?.length ?? lesson.lessons.length}{" "}
-                        topics
-                      </span>
-                      <span>Score 100%</span>
-                    </div>
-
-                    <div className="review-resource-grid">
-                      {reviewResources.map((resource) => (
-                        <Link
-                          key={`${lesson.id}-${resource.id}`}
-                          className={`review-resource-card ${resource.tone}`}
-                          href={resource.href(lesson)}
-                        >
-                          <span className="review-resource-label">
-                            {resource.label}
-                          </span>
-                          <strong>{resource.action}</strong>
-                          <small>{resource.summary(lesson)}</small>
-                        </Link>
-                      ))}
-                    </div>
-                  </article>
-                ))}
-              </div>
-            : <div className="review-empty-card">
-                <strong>No review cards yet.</strong>
-                <p>
-                  Finish all 4 sub-lessons inside any lesson and the dashboard
-                  will add a review card here automatically.
-                </p>
-              </div>}
-        </div>
+      <div className="review-focus-grid">
+        {featuredUnit ? (
+          <FeaturedUnitCard unit={featuredUnit} />
+        ) : (
+          <div className="review-progress-empty">
+            <strong>No unit activity yet.</strong>
+            <p>
+              Start a lesson from the learning path and the current unit
+              snapshot will appear here automatically.
+            </p>
+          </div>
+        )}
 
         <aside className="review-progress-panel">
           <div className="review-progress-head">
             <div>
               <div className="review-progress-title">Lesson progress</div>
               <div className="review-progress-subtitle">
-                Continue the strongest active lessons without leaving this
-                review section.
+                Continue the strongest active lessons without leaving the
+                student review section.
               </div>
             </div>
             <span className="review-progress-chip">
@@ -216,114 +508,124 @@ export default function ContentReview() {
             </span>
           </div>
 
-          {activeLessons.length
-            ? <div className="review-progress-list">
-                {activeLessons.map((lesson) => {
-                  const nextStep =
-                    lesson.lessons.find((entry) => !entry.completed) ?? null;
+          {activeLessons.length ? (
+            <div className="review-progress-list">
+              {activeLessons.map((lesson) => {
+                const nextStep =
+                  lesson.lessons.find((entry) => !entry.completed) ?? null;
 
-                  return (
-                    <Link
-                      key={lesson.id}
-                      className="review-progress-item"
-                      href={getLearningDayHref(lesson.id)}
-                    >
-                      <span className="review-progress-icon" aria-hidden="true">
-                        <JourneyIcon name={lesson.icon} />
-                      </span>
+                return (
+                  <Link
+                    key={lesson.id}
+                    className="review-progress-item"
+                    href={getLearningDayHref(lesson.id)}
+                  >
+                    <span className="review-progress-icon" aria-hidden="true">
+                      <JourneyIcon name={lesson.icon} />
+                    </span>
 
-                      <div className="review-progress-copy">
-                        <div className="review-progress-row">
-                          <strong>{lesson.title}</strong>
-                          <span>{lesson.progress}%</span>
-                        </div>
-                        <span className="review-progress-meta">
-                          {lesson.unitLabel} / {lesson.label}
-                        </span>
-                        <div className="review-progress-bar" aria-hidden="true">
-                          <span style={{ width: `${lesson.progress}%` }} />
-                        </div>
-                        <small>
-                          Next focus: {nextStep?.title ?? "Review this topic"}
-                        </small>
+                    <div className="review-progress-copy">
+                      <div className="review-progress-row">
+                        <strong>{lesson.title}</strong>
+                        <span>{lesson.progress}%</span>
                       </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            : <div className="review-progress-empty">
-                <strong>No active lessons yet.</strong>
-                <p>
-                  Start a lesson from the learning path and its live progress
-                  will appear here automatically.
-                </p>
-              </div>}
+                      <span className="review-progress-meta">
+                        {lesson.unitLabel} / {lesson.label}
+                      </span>
+                      <div className="review-progress-bar" aria-hidden="true">
+                        <span style={{ width: `${lesson.progress}%` }} />
+                      </div>
+                      <small>
+                        Next focus: {nextStep?.title ?? "Review this topic"}
+                      </small>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="review-progress-empty">
+              <strong>No active lessons yet.</strong>
+              <p>
+                Start a lesson from the learning path and its live progress
+                will appear here automatically.
+              </p>
+            </div>
+          )}
+
+          <div className="review-progress-note">
+            <span>Units tracked</span>
+            <strong>{unitSummaries.length}</strong>
+          </div>
         </aside>
       </div>
 
-      <div className="review-unit-block">
-        <div className="review-unit-head">
+      <div className="review-stack">
+        <div className="review-progress-head">
           <div>
-            <div className="review-progress-title">Student unit progress</div>
+            <div className="review-progress-title">Content review</div>
             <div className="review-progress-subtitle">
-              Progress, scores, and topics covered within each unit.
+              Completed lessons stay one click away for notes, recap videos,
+              image packs, and quick revision loops.
             </div>
           </div>
+          <span className="review-progress-chip">
+            {completedLessons.length} ready
+          </span>
         </div>
 
-        <div className="review-unit-grid">
-          {unitSummaries.map((unit) => (
-            <article key={unit.id} className="review-unit-card">
-              <div className="review-unit-top">
-                <div>
-                  <div className="review-card-kicker">{unit.label}</div>
-                  <div className="review-unit-title">{unit.title}</div>
+        {completedLessons.length ? (
+          <div className="review-grid">
+            {completedLessons.map((lesson) => (
+              <article key={lesson.id} className="review-card">
+                <div className="review-card-head">
+                  <div>
+                    <div className="review-card-kicker">
+                      {lesson.unitLabel} / {lesson.label}
+                    </div>
+                    <div className="review-card-title">{lesson.title}</div>
+                  </div>
+                  <span className="review-card-state">Complete</span>
                 </div>
-                <span className="review-unit-score">{unit.score}% score</span>
-              </div>
 
-              <div className="review-unit-metrics">
-                <article>
-                  <span>Progress</span>
-                  <strong>{unit.progress}%</strong>
-                </article>
-                <article>
-                  <span>Topics covered</span>
-                  <strong>
-                    {unit.coveredLessons.length}/{unit.lessons.length}
-                  </strong>
-                </article>
-                <article>
-                  <span>Completed steps</span>
-                  <strong>
-                    {unit.completedSubLessons}/{unit.totalSubLessons}
-                  </strong>
-                </article>
-              </div>
+                <p className="review-card-summary">{lesson.subtitle}</p>
 
-              <div className="review-progress-bar" aria-hidden="true">
-                <span style={{ width: `${unit.progress}%` }} />
-              </div>
+                <div className="review-card-metrics">
+                  <span>{lesson.lessons.length} checkpoints</span>
+                  <span>
+                    {lesson.overviewTopics?.length ?? lesson.lessons.length}{" "}
+                    topics
+                  </span>
+                  <span>Score 100%</span>
+                </div>
 
-              <div className="review-topic-list">
-                {unit.coveredTopics.length
-                  ? unit.coveredTopics.slice(0, 3).map((topic) => (
-                      <span key={topic} className="review-topic-pill">
-                        {topic}
+                <div className="review-resource-grid">
+                  {reviewResources.map((resource) => (
+                    <Link
+                      key={`${lesson.id}-${resource.id}`}
+                      className={`review-resource-card ${resource.tone}`}
+                      href={resource.href(lesson)}
+                    >
+                      <span className="review-resource-label">
+                        {resource.label}
                       </span>
-                    ))
-                  : <span className="review-topic-pill muted">
-                      No topics covered yet
-                    </span>}
-              </div>
-
-              <div className="review-unit-footer">
-                <span>Next focus</span>
-                <strong>{unit.nextLesson?.title ?? "Revision loop ready"}</strong>
-              </div>
-            </article>
-          ))}
-        </div>
+                      <strong>{resource.action}</strong>
+                      <small>{resource.summary(lesson)}</small>
+                    </Link>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="review-empty-card">
+            <strong>No review cards yet.</strong>
+            <p>
+              Finish all 4 sub-lessons inside any lesson and the dashboard will
+              add a review card here automatically.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );
