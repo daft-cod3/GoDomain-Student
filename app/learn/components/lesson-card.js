@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getLearningDayHref } from "..";
 import { JourneyIcon } from "../icons";
 
+const LANE_OFFSETS = [0, 54, 42, 48, -18, -52, -30, 14];
+
 function getCompletedSteps(lesson) {
   return (
     lesson.completedSteps ??
@@ -29,6 +31,64 @@ function getLessonState(lesson, isRecommended) {
   return "Ready";
 }
 
+function getLaneOffset(pathIndex) {
+  return LANE_OFFSETS[pathIndex % LANE_OFFSETS.length];
+}
+
+function getNodeSize(lesson, isRecommended) {
+  if (isRecommended) {
+    return 118;
+  }
+
+  if (lesson.progress === 100) {
+    return 92;
+  }
+
+  if (lesson.isLocked) {
+    return 80;
+  }
+
+  return 96;
+}
+
+function LessonGlyph({ lesson, isRecommended }) {
+  if (lesson.isLocked) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M8 10V8.5C8 6 9.8 4 12 4C14.2 4 16 6 16 8.5V10"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+        />
+        <rect x="6" y="10" width="12" height="10" rx="3" fill="currentColor" />
+      </svg>
+    );
+  }
+
+  if (lesson.progress === 100) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M7.5 12.5L10.8 15.8L16.8 8.8"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  if (isRecommended) {
+    return <JourneyIcon name="star" />;
+  }
+
+  return <JourneyIcon name={lesson.icon} />;
+}
+
 export default function LessonCard({
   currentLessonId,
   isActive,
@@ -38,25 +98,28 @@ export default function LessonCard({
 }) {
   const isRecommended = lesson.id === currentLessonId;
   const lessonState = getLessonState(lesson, isRecommended);
-
-  const lessonCircle = (
+  const nodeSize = getNodeSize(lesson, isRecommended);
+  const offset = getLaneOffset(pathIndex);
+  const label = `${lesson.label}: ${lesson.title} (${lessonState})`;
+  const lessonControl = (
     <>
       <span className="lp-lesson-icon">
-        <JourneyIcon name={lesson.icon} />
+        <LessonGlyph lesson={lesson} isRecommended={isRecommended} />
       </span>
-      <span className="lp-lesson-node-progress">{lesson.progress}%</span>
+      <span className="sr-only">{lesson.summary ?? lesson.unitLabel}</span>
     </>
   );
 
   return (
     <article
       className={`lp-stack-card${isActive ? " active" : ""}${lesson.isLocked ? " locked" : " open"}${lesson.progress === 100 ? " complete" : ""}${isRecommended ? " recommended" : ""}`}
-      style={{ "--card-index": pathIndex }}
+      style={{
+        "--card-index": pathIndex,
+        "--node-offset": `${offset}px`,
+        "--node-size": `${nodeSize}px`,
+      }}
       onMouseEnter={() => onSelect(lesson.id)}
     >
-      {/* connector line between cards */}
-      {pathIndex > 0 && <span className="lp-stack-connector" aria-hidden="true" />}
-
       <div className="lp-stack-node">
         {lesson.isLocked
           ? <button
@@ -64,41 +127,35 @@ export default function LessonCard({
               type="button"
               onClick={() => onSelect(lesson.id)}
               onFocus={() => onSelect(lesson.id)}
+              aria-label={label}
               aria-pressed={isActive}
+              title={label}
             >
-              {lessonCircle}
+              {isRecommended
+                ? <span className="lp-stack-start">START</span>
+                : null}
+              {lessonControl}
+              {isRecommended
+                ? <span className="lp-stack-orbit" aria-hidden="true" />
+                : null}
             </button>
           : <Link
               className="lp-stack-hit"
               href={getLearningDayHref(lesson.id)}
               onClick={() => onSelect(lesson.id)}
               onFocus={() => onSelect(lesson.id)}
+              aria-label={label}
               aria-current={isActive ? "page" : undefined}
+              title={label}
             >
-              {lessonCircle}
+              {isRecommended
+                ? <span className="lp-stack-start">START</span>
+                : null}
+              {lessonControl}
+              {isRecommended
+                ? <span className="lp-stack-orbit" aria-hidden="true" />
+                : null}
             </Link>}
-      </div>
-
-      <div className="lp-stack-info">
-        <div className="lp-stack-info-top">
-          <span className="lp-stack-index">{lesson.label}</span>
-          <span className="lp-stack-state">{lessonState}</span>
-        </div>
-        <strong className="lp-stack-title">{lesson.title}</strong>
-        <span className="lp-stack-desc">{lesson.summary ?? lesson.unitLabel}</span>
-
-        <div className="lp-stack-progress-row">
-          <div className="lp-stack-track" aria-hidden="true">
-            <span style={{ width: `${lesson.progress}%` }} />
-          </div>
-          <span className="lp-stack-pct">{lesson.progress}%</span>
-        </div>
-
-        <span className="lp-stack-segments" aria-hidden="true">
-          {lesson.lessons.map((entry) => (
-            <i key={entry.id} className={entry.completed ? "done" : ""} />
-          ))}
-        </span>
       </div>
     </article>
   );

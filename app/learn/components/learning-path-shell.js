@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Fragment, useEffect, useId, useMemo, useState } from "react";
 import { studentProfile } from "../../data/student-profile";
 import { getLearningDayHref, learningOverview, learningUnits } from "..";
-import { LearnMascot, RewardChest } from "../icons";
+import { BottomNavIcon, LearnMascot, RewardChest } from "../icons";
 import {
   deriveLearningProgress,
   hydrateLearningProgress,
@@ -282,18 +282,19 @@ function LearningGuideHero({
     units.find((unit) => !(unit.isComplete || unit.progress === 100)) ??
     units[units.length - 1] ??
     null;
-  const activeUnitLeadLesson = activeUnit ? getUnitLeadLesson(activeUnit) : null;
+  const activeUnitLeadLesson = activeUnit
+    ? getUnitLeadLesson(activeUnit)
+    : null;
   const guideUnits = units.slice(0, 4);
   const flowProgress =
     HERO_GUIDE_STEPS.length > 1
       ? (activeStep / (HERO_GUIDE_STEPS.length - 1)) * 100
       : 100;
-  const guideStatus =
-    !autoRotate
-      ? "Preview pinned"
-      : isGuideInteracting
-        ? "Autoplay paused while exploring"
-        : "Autoplay on";
+  const guideStatus = !autoRotate
+    ? "Preview pinned"
+    : isGuideInteracting
+      ? "Autoplay paused while exploring"
+      : "Autoplay on";
 
   useEffect(() => {
     if (!autoRotate || isGuideInteracting) {
@@ -301,7 +302,9 @@ function LearningGuideHero({
     }
 
     const intervalId = window.setInterval(() => {
-      setActiveStep((currentStep) => (currentStep + 1) % HERO_GUIDE_STEPS.length);
+      setActiveStep(
+        (currentStep) => (currentStep + 1) % HERO_GUIDE_STEPS.length,
+      );
     }, 4600);
 
     return () => window.clearInterval(intervalId);
@@ -487,16 +490,14 @@ function LearningGuideHero({
         </div>
 
         <div className="lg-detail-actions">
-          {activeUnitLeadLesson ? (
-            <Link
-              className="lg-detail-action"
-              href={getLearningDayHref(activeUnitLeadLesson.id)}
-            >
-              Open live lesson
-            </Link>
-          ) : (
-            <span className="lg-guide-status pinned">All units cleared</span>
-          )}
+          {activeUnitLeadLesson
+            ? <Link
+                className="lg-detail-action"
+                href={getLearningDayHref(activeUnitLeadLesson.id)}
+              >
+                Open live lesson
+              </Link>
+            : <span className="lg-guide-status pinned">All units cleared</span>}
           <span className="lg-detail-hint">
             Hover, tap, or let the guide cycle through the unit flow.
           </span>
@@ -544,6 +545,101 @@ const boardFilters = [
   { id: "focus", label: "Continue" },
   { id: "complete", label: "Completed" },
 ];
+
+const DUO_FOOTER_ITEMS = [
+  { href: "/dashboard", icon: "home", label: "Home", active: true },
+  { href: "#unit-reward-chest", icon: "chest", label: "Unit reward" },
+  { href: "/content", icon: "dumbbell", label: "Practice" },
+  { href: "/stats", icon: "profile", label: "Profile" },
+  { href: "/notifications", icon: "bell", label: "Alerts" },
+];
+
+function DuoCourseBadge() {
+  return (
+    <span className="lp-duo-course-badge" aria-hidden="true">
+      <i />
+      <i />
+      <i />
+    </span>
+  );
+}
+
+function DuoMenuGlyph() {
+  return (
+    <span className="lp-duo-menu-glyph" aria-hidden="true">
+      <i />
+      <i />
+      <i />
+    </span>
+  );
+}
+
+function DuoHudIcon({ tone }) {
+  if (tone === "fire") {
+    return (
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path
+          d="M10.1 2.2C12 4.4 13.4 6 13.4 8C13.4 9.4 12.8 10.6 11.8 11.4C11.8 9.4 10.8 7.8 9 6C7.1 7.5 6.1 9.2 6.1 10.9C6.1 13.5 8 15.5 10.4 15.5C12.9 15.5 14.9 13.4 14.9 10.5C14.9 7.9 13.2 5.3 10.1 2.2Z"
+          fill="currentColor"
+        />
+      </svg>
+    );
+  }
+
+  if (tone === "shield") {
+    return (
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path
+          d="M10 2.3L15.4 4.6V9.5C15.4 13 13.2 15.8 10 17.2C6.8 15.8 4.6 13 4.6 9.5V4.6L10 2.3Z"
+          fill="currentColor"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path
+        d="M5.3 4.4C7.5 2.8 10.2 2.7 12.5 4C14.7 5.2 15.9 7.5 15.6 9.8C17.5 10.5 18.5 12.3 18.1 14.1C17.7 15.9 16 17.2 14.1 17.1H8.6C5.5 17.1 3 14.7 3 11.6C3 8.7 4.9 6.2 7.6 5.3L5.3 4.4Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function DuoHudStat({ tone, label, value }) {
+  return (
+    <div
+      className={`lp-duo-hud-stat ${tone}`}
+      role="img"
+      aria-label={`${label}: ${value}`}
+      title={`${label}: ${value}`}
+    >
+      <span className="lp-duo-hud-icon">
+        <DuoHudIcon tone={tone} />
+      </span>
+      <strong>{value}</strong>
+    </div>
+  );
+}
+
+function DuoFooterNav() {
+  return (
+    <nav className="lp-duo-footer" aria-label="Unit quick navigation">
+      {DUO_FOOTER_ITEMS.map((item) => (
+        <Link
+          key={item.label}
+          className={`lp-duo-footer-item${item.active ? " active" : ""}`}
+          href={item.href}
+          aria-label={item.label}
+          title={item.label}
+        >
+          <BottomNavIcon name={item.icon} />
+        </Link>
+      ))}
+    </nav>
+  );
+}
 
 function getFirstLesson(unit) {
   return unit?.lessons[0] ?? null;
@@ -704,9 +800,24 @@ export default function LearningPathShell() {
     ? currentLesson.totalSteps - currentLesson.completedSteps
     : 0;
   const boardFilterNote = getBoardFilterNote(boardFilter, visibleLessons);
+  const currentVisibleIndex = visibleLessons.findIndex(
+    (lesson) => lesson.id === currentLesson?.id,
+  );
   const rewardInsertionIndex =
     visibleLessons.length > 2
-      ? Math.max(1, Math.floor(visibleLessons.length / 2) - 1)
+      ? currentVisibleIndex >= 0
+        ? currentVisibleIndex
+        : Math.max(1, Math.floor(visibleLessons.length / 2) - 1)
+      : -1;
+  const mascotInsertionIndex =
+    visibleLessons.length > 1
+      ? Math.max(
+          0,
+          Math.min(
+            currentVisibleIndex >= 0 ? currentVisibleIndex - 1 : 1,
+            visibleLessons.length - 1,
+          ),
+        )
       : -1;
 
   useEffect(() => {
@@ -956,26 +1067,9 @@ export default function LearningPathShell() {
 
       <div className="lp-main-grid">
         <section className="lp-board">
-          <div className="lp-board-head">
-            <div>
-              <div className="lp-board-kicker">
-                {activeUnit?.label} / {activeUnit?.title}
-              </div>
-              <h2 className="lp-board-title">{activeUnit?.summary}</h2>
-              <p className="lp-board-note">
-                Every lesson in this unit is open. Follow the recommended next
-                action or jump directly to a weak spot for revision.
-              </p>
-            </div>
-
-            <div className="lp-board-progress">
-              <strong>{activeUnit?.progress ?? 0}%</strong>
-              <span>
-                {activeUnit?.completedLessons ?? 0}/
-                {activeUnit?.lessons.length ?? 0} lessons mastered
-              </span>
-            </div>
-          </div>
+          <h2 className="sr-only">
+            {activeUnit?.title ?? "Current learning unit"}
+          </h2>
 
           <div className="lp-board-toolbar">
             <div
@@ -999,53 +1093,38 @@ export default function LearningPathShell() {
           </div>
 
           {visibleLessons.length
-            ? <>
-                <div className="lp-route-banner">
-                  <div className="lp-route-banner-copy">
-                    <span className="lp-route-banner-kicker">
-                      Section {String(activeUnit?.number ?? 0).padStart(2, "0")}{" "}
-                      / {activeUnit?.label}
-                    </span>
-                    <strong className="lp-route-banner-title">
-                      {activeUnit?.title}
-                    </strong>
-                    <span className="lp-route-banner-subtitle">
-                      Follow the lesson circles in order or skip straight to a
-                      topic you want to repair. Finished circles stay open for
-                      fast review.
-                    </span>
+            ? <div className="lp-duo-stage">
+                <div className="lp-duo-header">
+                  <div className="lp-duo-hud">
+                    <DuoCourseBadge />
+                    <DuoHudStat
+                      tone="fire"
+                      label="HP"
+                      value={studentProfile.hp}
+                    />
+                    <DuoHudStat
+                      tone="shield"
+                      label="Unit progress"
+                      value={`${activeUnit?.progress ?? 0}%`}
+                    />
+                    <DuoHudStat
+                      tone="spark"
+                      label="Coins"
+                      value={studentProfile.coins}
+                    />
                   </div>
 
-                  <div className="lp-route-banner-meta">
-                    <span>
-                      {activeUnit?.lessons.length ?? 0} lesson circles
-                    </span>
-                    <span>
-                      {activeUnitLessonsLeft}{" "}
-                      {activeUnitLessonsLeft === 1 ? "lesson" : "lessons"} left
-                    </span>
+                  <div className="lp-duo-unit-bar">
+                    <DuoMenuGlyph />
+                    <strong className="lp-duo-unit-title">
+                      {activeUnit
+                        ? `${activeUnit.title} ${activeUnit.number}`
+                        : "Learning unit"}
+                    </strong>
                   </div>
                 </div>
 
                 <div className="lp-route-scene">
-                  <div className="lp-route-guide top" aria-hidden="true">
-                    <LearnMascot variant="reader" />
-                    <div className="mascot-stars">
-                      <span />
-                      <span />
-                      <span />
-                    </div>
-                  </div>
-
-                  <div className="lp-route-guide bottom" aria-hidden="true">
-                    <LearnMascot variant="spark" />
-                    <div className="mascot-stars">
-                      <span />
-                      <span />
-                      <span />
-                    </div>
-                  </div>
-
                   <div className="lp-lesson-grid">
                     {visibleLessons.map((lesson, index) => (
                       <Fragment key={lesson.id}>
@@ -1057,8 +1136,25 @@ export default function LearningPathShell() {
                           pathIndex={index}
                         />
 
+                        {index === mascotInsertionIndex
+                          ? <div
+                              className="lp-route-guide top"
+                              aria-hidden="true"
+                            >
+                              <LearnMascot variant="reader" />
+                              <div className="mascot-stars muted">
+                                <span />
+                                <span />
+                                <span />
+                              </div>
+                            </div>
+                          : null}
+
                         {index === rewardInsertionIndex
-                          ? <div className="lp-route-prize">
+                          ? <div
+                              className="lp-route-prize"
+                              id="unit-reward-chest"
+                            >
                               <RewardChest
                                 claimed={(activeUnit?.progress ?? 0) === 100}
                                 unlocked={(activeUnit?.progress ?? 0) > 0}
@@ -1072,16 +1168,22 @@ export default function LearningPathShell() {
                                 <span>
                                   {(activeUnit?.progress ?? 0) === 100
                                     ? "The route is clear. Use the completed circles for revision loops."
-                                    : "Keep clearing the live circles to claim the unit reward and lift overall mastery."}
+                                    : `${activeUnitLessonsLeft} ${activeUnitLessonsLeft === 1 ? "lesson" : "lessons"} left before the unit reward opens.`}
                                 </span>
                               </div>
                             </div>
                           : null}
                       </Fragment>
                     ))}
+
+                    <div className="lp-route-guide bottom" aria-hidden="true">
+                      <LearnMascot variant="spark" />
+                    </div>
                   </div>
                 </div>
-              </>
+
+                <DuoFooterNav />
+              </div>
             : <div className="lp-board-empty">
                 <strong>No lessons in this view yet.</strong>
                 <span>
