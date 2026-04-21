@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Fragment, useEffect, useId, useMemo, useState } from "react";
-import { studentProfile } from "../../data/student-profile";
 import { getLearningDayHref, learningOverview, learningUnits } from "..";
 import { BottomNavIcon, LearnMascot, RewardChest } from "../icons";
 import {
@@ -788,17 +787,11 @@ export default function LearningPathShell() {
         (totalCompletedSubLessons / learningOverview.totalSubLessons) * 100,
       )
     : 0;
-  const completionRun = getCompletionRun(units);
   const nextOpenLesson = activeLesson
     ? getNextOpenLesson(units, activeLesson.id)
     : null;
-  const nextStep =
-    currentLesson?.lessons.find((entry) => !entry.completed) ?? null;
   const activeUnitLessonsLeft =
     activeUnit?.lessons.filter((lesson) => lesson.progress < 100).length ?? 0;
-  const currentLessonStepsLeft = currentLesson
-    ? currentLesson.totalSteps - currentLesson.completedSteps
-    : 0;
   const boardFilterNote = getBoardFilterNote(boardFilter, visibleLessons);
   const currentVisibleIndex = visibleLessons.findIndex(
     (lesson) => lesson.id === currentLesson?.id,
@@ -920,144 +913,9 @@ export default function LearningPathShell() {
     handleToggleSubLesson(activeLesson.id, pendingStep.id);
   }
 
-  function handleFocusOnCurrent() {
-    if (!currentLesson) {
-      return;
-    }
-
-    setBoardFilter("focus");
-    setActiveUnitId(currentLesson.unitId);
-    setActiveLessonId(currentLesson.id);
-  }
-
   return (
     <section className="lp-shell">
       {/* ── HOW-TO INFOGRAPH HERO ── */}
-      <LearningGuideHero
-        overallProgress={overallProgress}
-        totalLessons={learningOverview.totalLessons}
-        totalCompletedLessons={totalCompletedLessons}
-        units={units}
-      />
-
-      <header className="lp-hero">
-        <div className="lp-hero-copy">
-          <span className="lp-kicker">Learning path / progressive route</span>
-          <h1 className="lp-hero-title">
-            {currentLesson
-              ? `${studentProfile.name.split(" ")[0]}, keep the next lesson moving.`
-              : "Every lesson on the route is complete."}
-          </h1>
-          <p className="lp-hero-text">
-            Every unit and lesson is open, while the board still keeps the next
-            best action visible and turns every completed lesson into review
-            material. The layout is designed to keep progress obvious without
-            forcing the learner through hidden locks first.
-          </p>
-
-          <div className="lp-hero-actions">
-            {currentLesson
-              ? <Link
-                  className="lp-hero-action"
-                  href={getLearningDayHref(currentLesson.id)}
-                >
-                  Continue {currentLesson.label}
-                </Link>
-              : <Link className="lp-hero-action" href="/dashboard">
-                  Review completed lessons
-                </Link>}
-            <button
-              className={`lp-secondary-action ${boardFilter === "focus" ? "active" : ""}`}
-              type="button"
-              onClick={handleFocusOnCurrent}
-            >
-              Focus mode
-            </button>
-          </div>
-
-          <div className="lp-hero-journey">
-            <div className="lp-hero-chip">
-              <strong>{totalCompletedLessons}</strong>
-              <span>review cards unlocked</span>
-            </div>
-            <div className="lp-hero-chip">
-              <strong>
-                {learningOverview.totalLessons - totalCompletedLessons}
-              </strong>
-              <span>lessons still ahead</span>
-            </div>
-            <div className="lp-hero-chip">
-              <strong>{units.filter((unit) => unit.isComplete).length}</strong>
-              <span>units fully cleared</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="lp-hero-panel">
-          <div className="lp-hero-spotlight">
-            <div className="lp-hero-spotlight-top">
-              <span className="lp-hero-spotlight-kicker">Up next</span>
-              <span className="lp-hero-spotlight-state">
-                {currentLesson
-                  ? `${currentLessonStepsLeft} step${currentLessonStepsLeft === 1 ? "" : "s"} left`
-                  : "Path cleared"}
-              </span>
-            </div>
-
-            <strong className="lp-hero-spotlight-title">
-              {currentLesson?.title ?? "You have cleared the full route"}
-            </strong>
-            <p className="lp-hero-spotlight-text">
-              {nextStep
-                ? `${nextStep.title} is the fastest move right now. Finish it to keep the route flowing and push overall mastery higher.`
-                : "Use completed lessons for review loops, weak-point repair, and final exam confidence."}
-            </p>
-
-            <div className="lp-hero-spotlight-progress" aria-hidden="true">
-              <span style={{ width: `${currentLesson?.progress ?? 100}%` }} />
-            </div>
-
-            <div className="lp-hero-spotlight-footer">
-              <span>{currentLesson?.unitLabel ?? "Full route"}</span>
-              <span>
-                {currentLesson
-                  ? `${currentLesson.completedSteps}/4 steps complete`
-                  : `${totalCompletedLessons}/${learningOverview.totalLessons} lessons mastered`}
-              </span>
-            </div>
-          </div>
-
-          <div className="lp-hero-metrics-grid">
-            <article className="lp-hero-metric">
-              <span>Overall route</span>
-              <strong>{overallProgress}%</strong>
-            </article>
-            <article className="lp-hero-metric">
-              <span>Clean run</span>
-              <strong>{completionRun} lessons</strong>
-            </article>
-            <article className="lp-hero-metric">
-              <span>Open now</span>
-              <strong>
-                {units.reduce(
-                  (sum, unit) =>
-                    sum +
-                    unit.lessons.filter((lesson) => !lesson.isLocked).length,
-                  0,
-                )}{" "}
-                lessons
-              </strong>
-            </article>
-            <article className="lp-hero-metric">
-              <span>Units open</span>
-              <strong>
-                {units.length}/{learningOverview.totalUnits}
-              </strong>
-            </article>
-          </div>
-        </div>
-      </header>
-
       <UnitStrip
         activeUnitId={activeUnit?.id ?? ""}
         currentLessonId={currentLesson?.id ?? ""}
@@ -1094,36 +952,6 @@ export default function LearningPathShell() {
 
           {visibleLessons.length
             ? <div className="lp-duo-stage">
-                <div className="lp-duo-header">
-                  <div className="lp-duo-hud">
-                    <DuoCourseBadge />
-                    <DuoHudStat
-                      tone="fire"
-                      label="HP"
-                      value={studentProfile.hp}
-                    />
-                    <DuoHudStat
-                      tone="shield"
-                      label="Unit progress"
-                      value={`${activeUnit?.progress ?? 0}%`}
-                    />
-                    <DuoHudStat
-                      tone="spark"
-                      label="Coins"
-                      value={studentProfile.coins}
-                    />
-                  </div>
-
-                  <div className="lp-duo-unit-bar">
-                    <DuoMenuGlyph />
-                    <strong className="lp-duo-unit-title">
-                      {activeUnit
-                        ? `${activeUnit.title} ${activeUnit.number}`
-                        : "Learning unit"}
-                    </strong>
-                  </div>
-                </div>
-
                 <div className="lp-route-scene">
                   <div className="lp-lesson-grid">
                     {visibleLessons.map((lesson, index) => (

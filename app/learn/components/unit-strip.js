@@ -43,13 +43,25 @@ export default function UnitStrip({
             type="button"
             onClick={() => onSelectUnit(unit.id)}
             aria-pressed={isActive}
+            style={{ "--unit-progress": `${unit.progress}%` }}
           >
+            <span className="lp-unit-pill-glow" aria-hidden="true" />
             <span className="lp-unit-pill-top">
               <strong>{unit.label}</strong>
               <em>{getUnitStatus(unit)}</em>
             </span>
             <span className="lp-unit-pill-title">{unit.title}</span>
             <span className="lp-unit-pill-meta">{getUnitMeta(unit)}</span>
+            <span className="lp-unit-pill-stats">
+              <span className="lp-unit-pill-stat">
+                <strong>{unit.completedLessons}</strong>
+                <em>lessons done</em>
+              </span>
+              <span className="lp-unit-pill-stat">
+                <strong>{unit.progress}%</strong>
+                <em>route clear</em>
+              </span>
+            </span>
             <span className="lp-unit-pill-track" aria-hidden="true">
               <span style={{ width: `${unit.progress}%` }} />
             </span>

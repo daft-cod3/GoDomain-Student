@@ -44,13 +44,6 @@ export default function Dashboard() {
   return (
     <div className="dashboard-shell">
       <div className="dashboard-panel">
-        <header className="dash-topbar">
-          <div className="dash-top-actions">
-            <span className="dash-status-pill">Low-motion workspace</span>
-            <div className="dash-avatar">AR</div>
-          </div>
-        </header>
-
         <section className="dash-hero">
           <div className="dash-hero-content">
             <div className="dash-hero-tag">Student progress hub</div>

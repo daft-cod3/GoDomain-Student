@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const NAV_ITEMS = [
   {
@@ -143,31 +144,70 @@ function Icon({ name }) {
 export default function Sidebar({ active = "dashboard" }) {
   const pathname = usePathname();
   const activeSection = getSection(pathname, active);
+  const collapseTimerRef = useRef(null);
+  const pendingNavCollapseRef = useRef(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isNavDelayOpen, setIsNavDelayOpen] = useState(false);
+  const isExpanded = isHovered || isFocused || isNavDelayOpen;
+
+  useEffect(() => {
+    if (!pendingNavCollapseRef.current) {
+      return undefined;
+    }
+
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+    }
+
+    setIsNavDelayOpen(true);
+    collapseTimerRef.current = setTimeout(() => {
+      pendingNavCollapseRef.current = false;
+      setIsNavDelayOpen(false);
+    }, 2000);
+
+    return () => {
+      if (collapseTimerRef.current) {
+        clearTimeout(collapseTimerRef.current);
+      }
+    };
+  }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      if (collapseTimerRef.current) {
+        clearTimeout(collapseTimerRef.current);
+      }
+    };
+  }, []);
+
+  function handleNavClick() {
+    pendingNavCollapseRef.current = true;
+    setIsNavDelayOpen(true);
+  }
 
   return (
-    <div className="sb-shell">
-      <aside className="sb-panel" id="app-sidebar">
+    <div
+      className={`sb-shell${isExpanded ? " expanded" : " collapsed"}${
+        isNavDelayOpen ? " nav-delay" : ""
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onFocusCapture={() => setIsFocused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setIsFocused(false);
+        }
+      }}
+    >
+      <aside
+        className={`sb-panel${isExpanded ? " expanded" : " collapsed"}${
+          isNavDelayOpen ? " nav-delay" : ""
+        }`}
+        id="app-sidebar"
+      >
         <div className="sb-content">
-          <Link href="/stats" className="sb-profile-card">
-            <div className="sb-profile-info">
-              <span className="sb-profile-name">Ari Rowe</span>
-              <span className="sb-profile-meta">Class B / Unit 7</span>
-              <div className="sb-profile-bar">
-                <span style={{ width: "78%" }} />
-              </div>
-            </div>
-            <div className="sb-profile-side">
-              <span className="sb-profile-progress-tag">78% done</span>
-              <span className="sb-profile-dot" />
-            </div>
-          </Link>
-
-          <section className="sb-section">
-            <div className="sb-section-head">
-              <span className="sb-section-kicker">Main route</span>
-              <span className="sb-section-badge">{NAV_ITEMS.length} views</span>
-            </div>
-
+          <section className="sb-section sb-nav-section">
             <nav className="sb-nav" aria-label="Primary navigation">
               {NAV_ITEMS.map((item) => {
                 const isActive = item.id === activeSection;
@@ -178,6 +218,7 @@ export default function Sidebar({ active = "dashboard" }) {
                     href={item.href}
                     className={`sb-nav-link${isActive ? " active" : ""}`}
                     aria-current={isActive ? "page" : undefined}
+                    onClick={handleNavClick}
                   >
                     <span className={`sb-nav-icon sb-icon-${item.id}`}>
                       <Icon name={item.icon} />
