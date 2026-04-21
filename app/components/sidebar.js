@@ -146,13 +146,14 @@ export default function Sidebar({ active = "dashboard" }) {
   const activeSection = getSection(pathname, active);
   const collapseTimerRef = useRef(null);
   const pendingNavCollapseRef = useRef(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
   const [isNavDelayOpen, setIsNavDelayOpen] = useState(false);
-  const isExpanded = isHovered || isFocused || isNavDelayOpen;
 
   useEffect(() => {
     if (!pendingNavCollapseRef.current) {
+      return undefined;
+    }
+
+    if (!pathname) {
       return undefined;
     }
 
@@ -187,23 +188,9 @@ export default function Sidebar({ active = "dashboard" }) {
   }
 
   return (
-    <div
-      className={`sb-shell${isExpanded ? " expanded" : " collapsed"}${
-        isNavDelayOpen ? " nav-delay" : ""
-      }`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onFocusCapture={() => setIsFocused(true)}
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) {
-          setIsFocused(false);
-        }
-      }}
-    >
+    <div className={`sb-shell${isNavDelayOpen ? " nav-delay" : " collapsed"}`}>
       <aside
-        className={`sb-panel${isExpanded ? " expanded" : " collapsed"}${
-          isNavDelayOpen ? " nav-delay" : ""
-        }`}
+        className={`sb-panel${isNavDelayOpen ? " nav-delay" : " collapsed"}`}
         id="app-sidebar"
       >
         <div className="sb-content">

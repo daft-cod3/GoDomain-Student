@@ -5,55 +5,88 @@ import { RoadSignGraphic } from "./roadSign";
 const modelTownFeatures = [
   {
     title: "Controlled junctions",
-    description:
-      "Stop lines, give-way entries, merges, and turning pockets help learners rehearse priority decisions before road sessions.",
+    points: [
+      "Spot stop, give-way, and merge points early.",
+      "Practise priority decisions before live-road sessions.",
+      "Use turning pockets without cutting the junction.",
+    ],
   },
   {
     title: "Lane guidance",
-    description:
-      "Clearly painted lanes, arrows, and edge markings train learners to position early and read traffic flow without hesitation.",
+    points: [
+      "Read lane arrows before you move over.",
+      "Position early instead of drifting late.",
+      "Use edge markings to hold a clean line.",
+    ],
   },
   {
     title: "Crossing points",
-    description:
-      "Pedestrian crossings, school-zone approaches, and bus-stop areas show where scanning and speed control must tighten up.",
+    points: [
+      "Tighten scans near zebra and school crossings.",
+      "Reduce speed before bus-stop activity zones.",
+      "Cover the brake where people may step out.",
+    ],
   },
   {
     title: "Parking drills",
-    description:
-      "Dedicated bays for angle parking and reverse parking turn board practice into repeatable manoeuvre routines.",
+    points: [
+      "Repeat angle and reverse parking in marked bays.",
+      "Work on slow steering and bay alignment.",
+      "Build a routine before the real test route.",
+    ],
   },
+];
+
+const modelTownIntroPoints = [
+  "Read the board like a route map before moving off.",
+  "Pick up lane flow, sign positions, and junction controls early.",
+  "Use the board to rehearse observation and parking in a lower-risk space.",
 ];
 
 const modelTownRoutes = [
   {
     id: "one-way-four-lane",
     title: "One-way 4-lane traffic",
-    summary:
-      "All four lanes move in the same direction, so the driver focuses on lane discipline, clean lane changes, and correct entry into turns and bays.",
+    summaryPoints: [
+      "All four lanes move in the same direction.",
+      "The focus is steady lane discipline and clean changes.",
+      "Set up early for turns, bays, and pedestrian points.",
+    ],
     lanes: [
       {
         id: "one-way-lane-1",
         label: "Lane 1",
-        detail: "Calm approach lane for early positioning, bay access, and controlled entry near the kerb.",
+        points: [
+          "Use it for early positioning near the kerb.",
+          "Good for bay access and calm entry control.",
+        ],
         flow: "up",
       },
       {
         id: "one-way-lane-2",
         label: "Lane 2",
-        detail: "Main through lane used to keep steady movement once the vehicle is settled.",
+        points: [
+          "Main through lane once the vehicle is settled.",
+          "Hold steady speed and avoid unnecessary drift.",
+        ],
         flow: "up",
       },
       {
         id: "one-way-lane-3",
         label: "Lane 3",
-        detail: "Passing or transition lane for measured lane changes before the next board feature.",
+        points: [
+          "Use for measured lane changes only.",
+          "Prepare here before the next board feature.",
+        ],
         flow: "up",
       },
       {
         id: "one-way-lane-4",
         label: "Lane 4",
-        detail: "Outer setup lane used when the board requires a wider turn or controlled merge back in.",
+        points: [
+          "Outer setup lane for wider turn preparation.",
+          "Merge back in smoothly, one lane at a time.",
+        ],
         flow: "up",
       },
     ],
@@ -67,25 +100,37 @@ const modelTownRoutes = [
   {
     id: "two-way-three-lane",
     title: "Two-way 3-lane traffic",
-    summary:
-      "This layout carries traffic in both directions and teaches how to respect opposing flow while using the center space only for controlled turning movement.",
+    summaryPoints: [
+      "Traffic moves in both directions on this layout.",
+      "Respect the opposing lane at all times.",
+      "Use the center lane briefly for controlled turning only.",
+    ],
     lanes: [
       {
         id: "two-way-lane-1",
         label: "Forward lane",
-        detail: "Your live lane for steady travel toward the next junction or crossing.",
+        points: [
+          "This is your live lane for steady travel.",
+          "Stay stable before the next junction or crossing.",
+        ],
         flow: "up",
       },
       {
         id: "two-way-lane-2",
         label: "Center lane",
-        detail: "Shared holding or turning lane used briefly for set turns, never as a cruising lane.",
+        points: [
+          "Shared space for holding or turning briefly.",
+          "Never use it as a normal cruising lane.",
+        ],
         flow: "turn",
       },
       {
         id: "two-way-lane-3",
         label: "Opposing lane",
-        detail: "Traffic arriving from the other direction, which must always stay protected and visible.",
+        points: [
+          "Carries traffic from the opposite direction.",
+          "Keep it protected, visible, and undisturbed.",
+        ],
         flow: "down",
       },
     ],
@@ -102,8 +147,11 @@ const modelTownParkingGuides = [
   {
     id: "angle-parking",
     title: "Angle parking",
-    summary:
-      "Use this when the bay is marked diagonally and the car needs a smooth forward entry.",
+    summaryPoints: [
+      "Use this for diagonal bays.",
+      "Aim for a smooth forward entry.",
+      "Early setup matters more than late correction.",
+    ],
     steps: [
       "Signal early and slow down so the bay choice is clear before you turn in.",
       "Keep enough side gap, then steer in one clean arc without clipping the front corner line.",
@@ -115,8 +163,11 @@ const modelTownParkingGuides = [
   {
     id: "reverse-parking",
     title: "Reverse parking",
-    summary:
-      "Use slow control, mirror checks, and rear reference points to place the vehicle squarely into the bay.",
+    summaryPoints: [
+      "Use slow control all the way through.",
+      "Keep checking mirrors and blind spots.",
+      "Line the vehicle up squarely before stopping.",
+    ],
     steps: [
       "Stop beside the target bay with enough side space for the rear of the car to swing in.",
       "Select reverse, move slowly, and keep scanning mirrors plus blind spots before turning the wheel.",
@@ -131,42 +182,66 @@ const modelTownSignPoints = [
   {
     signId: "stop",
     point: "Major junction stop line",
-    note: "Used where the board wants a full stop, final scan, and deliberate re-entry into traffic.",
+    points: [
+      "Come to a full stop at the line.",
+      "Scan fully before deliberate re-entry.",
+    ],
   },
   {
     signId: "give-way",
     point: "Minor-road merge or roundabout approach",
-    note: "Teaches the learner to slow early, judge gaps, and wait for priority traffic to clear.",
+    points: [
+      "Slow early and judge the gap size.",
+      "Wait for priority traffic to clear.",
+    ],
   },
   {
     signId: "one-way",
     point: "Entrance to the 4-lane corridor",
-    note: "Confirms that every lane ahead carries traffic in one direction only.",
+    points: [
+      "Confirms one-direction flow ahead.",
+      "Do not expect opposing traffic in the corridor.",
+    ],
   },
   {
     signId: "no-entry",
     point: "Wrong-way side of the one-way route",
-    note: "Protects the model board from head-on entry at the exit mouth.",
+    points: [
+      "Blocks wrong-way entry into the route.",
+      "Protects the exit mouth from head-on conflict.",
+    ],
   },
   {
     signId: "pedestrian-crossing",
     point: "Zebra crossing approach",
-    note: "Warns the learner to cover the brake and watch both pavements before crossing the markings.",
+    points: [
+      "Cover the brake on the approach.",
+      "Check both pavements before crossing the markings.",
+    ],
   },
   {
     signId: "speed-limit-50",
     point: "Built-up training stretch",
-    note: "Shows where the learner must match the board environment to a lower safe speed.",
+    points: [
+      "Match the built-up area to a safer lower speed.",
+      "Do not carry extra speed into the next feature.",
+    ],
   },
   {
     signId: "parking",
     point: "Marked parking bay zone",
-    note: "Guides the learner to the correct place for angle parking and reverse parking drills.",
+    points: [
+      "Marks the correct drill area for parking tasks.",
+      "Use it for angle and reverse bay practice.",
+    ],
   },
   {
     signId: "no-parking",
     point: "Near junction mouths and crossings",
-    note: "Keeps sight lines clear where a parked vehicle would block turning judgment.",
+    points: [
+      "Keeps sight lines clear near conflict points.",
+      "Prevents parked vehicles from blocking turning judgment.",
+    ],
   },
 ]
   .map((entry) => ({
@@ -231,6 +306,35 @@ function RouteArrow({ flow }) {
   );
 }
 
+function PointList({ items, ordered = false, compact = false, tone = "blue" }) {
+  const ListTag = ordered ? "ol" : "ul";
+
+  return (
+    <ListTag
+      className={`model-town-point-list tone-${tone}${compact ? " compact" : ""}`}
+    >
+      {items.map((item, index) => (
+        <li key={item} className="model-town-point-item">
+          <span className="model-town-point-marker" aria-hidden="true">
+            {ordered
+              ? String(index + 1).padStart(2, "0")
+              : <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M3.5 8.5L6.5 11.5L12.5 4.5"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>}
+          </span>
+          <span className="model-town-point-copy">{item}</span>
+        </li>
+      ))}
+    </ListTag>
+  );
+}
+
 export default function ModelTownBoard() {
   return (
     <section className="dash-section model-town-section">
@@ -238,18 +342,15 @@ export default function ModelTownBoard() {
         <div>
           <div className="dash-section-title">Model town board</div>
           <div className="dash-section-subtitle">
-            A quick guide to the layouts, signs, and parking tasks learners
-            meet on the training board.
+            A quick guide to the layouts, signs, and parking tasks learners meet
+            on the training board.
           </div>
         </div>
         <div className="model-town-badge">Board drill guide</div>
       </div>
 
       <div className="model-town-intro">
-        Study the board like a map before driving on it. The model town board
-        combines junction control, road signs, lane options, and parking bays
-        so the learner can practise observation and positioning in a safer
-        space first.
+        <PointList items={modelTownIntroPoints} tone="green" />
       </div>
 
       <div className="model-town-feature-grid">
@@ -262,7 +363,7 @@ export default function ModelTownBoard() {
               </span>
             </div>
             <strong>{feature.title}</strong>
-            <p>{feature.description}</p>
+            <PointList items={feature.points} compact tone="blue" />
           </article>
         ))}
       </div>
@@ -280,19 +381,19 @@ export default function ModelTownBoard() {
               </span>
             </div>
 
-            <p>{route.summary}</p>
+            <div className="model-town-list-cluster">
+              <span className="model-town-mini-kicker">Quick read</span>
+              <PointList items={route.summaryPoints} compact tone="green" />
+            </div>
 
             <div
               className="model-town-lane-board"
               style={{
-                gridTemplateColumns: `repeat(${route.lanes.length}, minmax(0, 1fr))`,
+                "--model-town-lanes": route.lanes.length,
               }}
             >
               {route.lanes.map((lane) => (
-                <div
-                  key={lane.id}
-                  className={`model-town-lane ${lane.flow}`}
-                >
+                <div key={lane.id} className={`model-town-lane ${lane.flow}`}>
                   <span className="model-town-lane-arrow">
                     <RouteArrow flow={lane.flow} />
                   </span>
@@ -304,16 +405,25 @@ export default function ModelTownBoard() {
                         ? "Opposing movement"
                         : "Forward movement"}
                   </em>
-                  <span>{lane.detail}</span>
+                  <PointList
+                    items={lane.points}
+                    compact
+                    tone={
+                      lane.flow === "turn"
+                        ? "amber"
+                        : lane.flow === "down"
+                          ? "rose"
+                          : "green"
+                    }
+                  />
                 </div>
               ))}
             </div>
 
-            <ul className="model-town-checklist">
-              {route.options.map((option) => (
-                <li key={option}>{option}</li>
-              ))}
-            </ul>
+            <div className="model-town-list-cluster">
+              <span className="model-town-mini-kicker">Practice list</span>
+              <PointList items={route.options} compact tone="blue" />
+            </div>
 
             <div className="model-town-tip">{route.tip}</div>
           </article>
@@ -329,7 +439,7 @@ export default function ModelTownBoard() {
         </div>
 
         <div className="model-town-sign-grid">
-          {modelTownSignPoints.map(({ note, point, sign }) => (
+          {modelTownSignPoints.map(({ point, points, sign }) => (
             <Link
               key={sign.id}
               className="model-town-sign-card"
@@ -341,7 +451,7 @@ export default function ModelTownBoard() {
               <div className="model-town-sign-copy">
                 <span className="model-town-sign-point">{point}</span>
                 <strong>{sign.label}</strong>
-                <p>{note}</p>
+                <PointList items={points} compact tone="blue" />
               </div>
               <span className="model-town-sign-link">
                 <span>Open sign guide</span>
@@ -380,12 +490,14 @@ export default function ModelTownBoard() {
                   {guide.steps.length} steps
                 </span>
               </div>
-              <p>{guide.summary}</p>
-              <ul className="model-town-checklist">
-                {guide.steps.map((step) => (
-                  <li key={step}>{step}</li>
-                ))}
-              </ul>
+              <div className="model-town-list-cluster">
+                <span className="model-town-mini-kicker">Quick read</span>
+                <PointList items={guide.summaryPoints} compact tone="amber" />
+              </div>
+              <div className="model-town-list-cluster">
+                <span className="model-town-mini-kicker">Parking list</span>
+                <PointList items={guide.steps} ordered compact tone="green" />
+              </div>
               <div className="model-town-tip">{guide.tip}</div>
             </article>
           ))}
