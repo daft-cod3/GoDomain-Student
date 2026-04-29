@@ -122,14 +122,14 @@ export default function MessagesPanel() {
       <div className="messages-hero">
         <div>
           <div className="messages-eyebrow">Messages</div>
-          <h1 className="messages-title">Teacher conversations</h1>
+          <h1 className="messages-title">Teacher Conversations</h1>
           <p className="messages-subtitle">
-            Receive updates, ask questions, and send work back to your teacher.
+            Connect with your instructors, get personalized feedback, and track your learning progress through direct communication.
           </p>
         </div>
         <div className="messages-status-card">
-          <span className="messages-status-label">Response window</span>
-          <strong>Usually under 20 minutes</strong>
+          <span className="messages-status-label">Response Time</span>
+          <strong>Under 15 minutes</strong>
         </div>
       </div>
 

@@ -145,9 +145,9 @@ function buildAreaPath(nodes, height, padding) {
 }
 
 function UnitProgressGraph({ unit }) {
-  const width = 328;
-  const height = 150;
-  const padding = 18;
+  const width = 260;
+  const height = 110;
+  const padding = 14;
   const nodes = getGraphNodes(unit.lessons, width, height, padding);
   const linePath = buildLinePath(nodes);
   const areaPath = buildAreaPath(nodes, height, padding);
@@ -233,7 +233,6 @@ function UnitProgressGraph({ unit }) {
 
 function FeaturedUnitCard({ unit }) {
   const state = getUnitState(unit);
-  const activityStreak = getLessonActivityStreak(unit.lessons);
   const completedLessons = unit.lessons.filter(
     (lesson) => lesson.progress === 100,
   ).length;
@@ -241,7 +240,7 @@ function FeaturedUnitCard({ unit }) {
     [...unit.lessons].sort((left, right) => right.progress - left.progress)[0] ??
     null;
   const coveredTopics = unit.coveredTopics.length
-    ? unit.coveredTopics.slice(0, 4)
+    ? unit.coveredTopics.slice(0, 3)
     : ["No topics covered yet"];
 
   return (
@@ -257,16 +256,15 @@ function FeaturedUnitCard({ unit }) {
 
           <div className="review-unit-badge-row">
             <span className="review-unit-chip">{state}</span>
-            <span className="review-unit-chip accent">
-              {activityStreak} lesson streak
-            </span>
+            <span className="review-unit-chip accent">{unit.progress}%</span>
           </div>
         </div>
 
         <p className="review-unit-spotlight-summary">
           {unit.summary} {studentProfile.name.split(" ")[0]} has covered{" "}
           {unit.coveredLessons.length} of {unit.lessons.length} lessons in this
-          lane, so the next move and the strongest lesson stay visible together.
+          lane, with the strongest lesson and next move kept visible in one
+          compact panel.
         </p>
 
         <div className="review-unit-stat-grid">
@@ -290,16 +288,6 @@ function FeaturedUnitCard({ unit }) {
             <span>Strongest lesson</span>
             <strong>{strongestLesson?.progress ?? 0}%</strong>
           </article>
-        </div>
-
-        <div className="review-unit-track-block">
-          <div className="review-unit-track-row">
-            <strong>Overall unit route</strong>
-            <span>{unit.progress}% mastered</span>
-          </div>
-          <div className="review-progress-bar review-progress-bar-lg" aria-hidden="true">
-            <span style={{ width: `${unit.progress}%` }} />
-          </div>
         </div>
 
         <div className="review-topic-list">
@@ -341,20 +329,8 @@ function FeaturedUnitCard({ unit }) {
         <div className="review-unit-bar-grid">
           {unit.lessons.map((lesson, index) => (
             <div key={lesson.id} className="review-unit-bar-card">
-              <div className="review-unit-bar-track" aria-hidden="true">
-                <span
-                  className={`review-unit-bar-fill${
-                    lesson.progress === 100
-                      ? " complete"
-                      : lesson.progress > 0
-                        ? " active"
-                        : ""
-                  }`}
-                  style={{ height: `${Math.max(lesson.progress, 8)}%` }}
-                />
-              </div>
-              <strong>{lesson.progress}%</strong>
-              <span>{getShortLessonLabel(lesson.label, index)}</span>
+              <strong>{getShortLessonLabel(lesson.label, index)}</strong>
+              <span>{lesson.progress}%</span>
             </div>
           ))}
         </div>
@@ -437,141 +413,57 @@ export default function ContentReview() {
   const {
     averageScore,
     completedLessons,
-    activeLessons,
     featuredUnit,
-    featuredUnitStreak,
     totalTopicsCovered,
-    unitSummaries,
   } = reviewData;
 
   return (
     <section className="dash-section review-section">
       <div className="dash-section-head">
         <div>
-          <div className="dash-section-title">
-            Student review, lesson progress, and unit focus
-          </div>
+          <div className="dash-section-title">Student review</div>
           <div className="dash-section-subtitle">
-            One section now holds the live unit snapshot, active lesson
-            momentum, and completed review cards so the dashboard reads as a
-            single student progress workspace.
+            Unit momentum, completed lessons, and revision entry points.
           </div>
         </div>
-        <Link className="dash-link" href="/content">
-          Open path
-        </Link>
+        <Link className="dash-link" href="/content">Open path</Link>
       </div>
 
-      <div className="review-overview-bar">
+      <div className="review-overview-bar compact">
         <article className="review-overview-stat">
-          <span>Completed review cards</span>
+          <span>Completed</span>
           <strong>{completedLessons.length}</strong>
         </article>
         <article className="review-overview-stat">
-          <span>Live topic score</span>
+          <span>Score</span>
           <strong>{averageScore}%</strong>
         </article>
         <article className="review-overview-stat">
-          <span>Topics covered</span>
+          <span>Topics</span>
           <strong>{totalTopicsCovered}</strong>
         </article>
         <article className="review-overview-stat">
-          <span>Featured unit streak</span>
-          <strong>{featuredUnitStreak}</strong>
+          <span>Unit</span>
+          <strong>{featuredUnit?.label ?? "—"}</strong>
         </article>
       </div>
 
-      <div className="review-focus-grid">
-        {featuredUnit ? (
-          <FeaturedUnitCard unit={featuredUnit} />
-        ) : (
-          <div className="review-progress-empty">
-            <strong>No unit activity yet.</strong>
-            <p>
-              Start a lesson from the learning path and the current unit
-              snapshot will appear here automatically.
-            </p>
-          </div>
-        )}
-
-        <aside className="review-progress-panel">
-          <div className="review-progress-head">
-            <div>
-              <div className="review-progress-title">Lesson progress</div>
-              <div className="review-progress-subtitle">
-                Continue the strongest active lessons without leaving the
-                student review section.
-              </div>
-            </div>
-            <span className="review-progress-chip">
-              {activeLessons.length} active
-            </span>
-          </div>
-
-          {activeLessons.length ? (
-            <div className="review-progress-list">
-              {activeLessons.map((lesson) => {
-                const nextStep =
-                  lesson.lessons.find((entry) => !entry.completed) ?? null;
-
-                return (
-                  <Link
-                    key={lesson.id}
-                    className="review-progress-item"
-                    href={getLearningDayHref(lesson.id)}
-                  >
-                    <span className="review-progress-icon" aria-hidden="true">
-                      <JourneyIcon name={lesson.icon} />
-                    </span>
-
-                    <div className="review-progress-copy">
-                      <div className="review-progress-row">
-                        <strong>{lesson.title}</strong>
-                        <span>{lesson.progress}%</span>
-                      </div>
-                      <span className="review-progress-meta">
-                        {lesson.unitLabel} / {lesson.label}
-                      </span>
-                      <div className="review-progress-bar" aria-hidden="true">
-                        <span style={{ width: `${lesson.progress}%` }} />
-                      </div>
-                      <small>
-                        Next focus: {nextStep?.title ?? "Review this topic"}
-                      </small>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="review-progress-empty">
-              <strong>No active lessons yet.</strong>
-              <p>
-                Start a lesson from the learning path and its live progress
-                will appear here automatically.
-              </p>
-            </div>
-          )}
-
-          <div className="review-progress-note">
-            <span>Units tracked</span>
-            <strong>{unitSummaries.length}</strong>
-          </div>
-        </aside>
-      </div>
+      {featuredUnit ? (
+        <FeaturedUnitCard unit={featuredUnit} />
+      ) : (
+        <div className="review-progress-empty">
+          <strong>No unit activity yet.</strong>
+          <p>Start a lesson and the unit snapshot will appear here.</p>
+        </div>
+      )}
 
       <div className="review-stack">
         <div className="review-progress-head">
           <div>
             <div className="review-progress-title">Content review</div>
-            <div className="review-progress-subtitle">
-              Completed lessons stay one click away for notes, recap videos,
-              image packs, and quick revision loops.
-            </div>
+            <div className="review-progress-subtitle">Completed lessons with quick revision actions.</div>
           </div>
-          <span className="review-progress-chip">
-            {completedLessons.length} ready
-          </span>
+          <span className="review-progress-chip">{completedLessons.length} ready</span>
         </div>
 
         {completedLessons.length ? (
@@ -580,25 +472,19 @@ export default function ContentReview() {
               <article key={lesson.id} className="review-card">
                 <div className="review-card-head">
                   <div>
-                    <div className="review-card-kicker">
-                      {lesson.unitLabel} / {lesson.label}
-                    </div>
+                    <div className="review-card-kicker">{lesson.unitLabel} / {lesson.label}</div>
                     <div className="review-card-title">{lesson.title}</div>
                   </div>
                   <span className="review-card-state">Complete</span>
                 </div>
-
-                <p className="review-card-summary">{lesson.subtitle}</p>
-
                 <div className="review-card-metrics">
-                  <span>{lesson.lessons.length} checkpoints</span>
                   <span>
-                    {lesson.overviewTopics?.length ?? lesson.lessons.length}{" "}
-                    topics
+                    <JourneyIcon name={lesson.icon} />
+                    {lesson.lessons.length} pts
                   </span>
-                  <span>Score 100%</span>
+                  <span>{lesson.overviewTopics?.length ?? lesson.lessons.length} topics</span>
+                  <span>100%</span>
                 </div>
-
                 <div className="review-resource-grid">
                   {reviewResources.map((resource) => (
                     <Link
@@ -606,11 +492,8 @@ export default function ContentReview() {
                       className={`review-resource-card ${resource.tone}`}
                       href={resource.href(lesson)}
                     >
-                      <span className="review-resource-label">
-                        {resource.label}
-                      </span>
+                      <span className="review-resource-label">{resource.label}</span>
                       <strong>{resource.action}</strong>
-                      <small>{resource.summary(lesson)}</small>
                     </Link>
                   ))}
                 </div>
@@ -620,10 +503,7 @@ export default function ContentReview() {
         ) : (
           <div className="review-empty-card">
             <strong>No review cards yet.</strong>
-            <p>
-              Finish all 4 sub-lessons inside any lesson and the dashboard will
-              add a review card here automatically.
-            </p>
+            <p>Finish all sub-lessons in any lesson to unlock a review card.</p>
           </div>
         )}
       </div>

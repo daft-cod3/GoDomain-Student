@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { studentProfile } from "../data/student-profile";
+import { useThemePreference } from "./theme-state";
 
 function getPercent(value, capacity) {
   if (!capacity) return 0;
@@ -66,16 +69,19 @@ function NavbarMeter({ tone, value, capacity }) {
 }
 
 export default function TopNavbar() {
+  const { theme, mounted, toggleTheme } = useThemePreference();
+  const darkMode = mounted && theme === "dark";
+
   return (
     <header className="top-navbar no-search">
       <div className="top-navbar-leading">
-        <Link className="top-navbar-brand" href="/dashboard" aria-label="Open GoDomain dashboard">
+        <Link className="top-navbar-brand" href="/" aria-label="Open GoDomain dashboard">
           <span className="top-navbar-brand-mark">
             <Image
               src="/godomain-logo.svg"
               alt="GoDomain logo"
-              width={40}
-              height={40}
+              width={30}
+              height={30}
             />
           </span>
           <span className="top-navbar-brand-copy">
@@ -89,14 +95,46 @@ export default function TopNavbar() {
           href="/stats"
           aria-label="Open learner profile"
         >
-          <span className="top-navbar-overline">Learner</span>
+          <span className="top-navbar-overline">Student</span>
           <strong>{studentProfile.name}</strong>
-          <span>{studentProfile.drivingClass}</span>
+          <span>{studentProfile.drivingClass} License</span>
         </Link>
       </div>
 
 
       <div className="top-navbar-stats">
+        <button
+          type="button"
+          className={`top-navbar-theme-toggle${darkMode ? " dark" : ""}`}
+          onClick={toggleTheme}
+          aria-pressed={darkMode}
+          aria-label={`Switch to ${darkMode ? "light" : "dark"} mode`}
+        >
+          <span className="top-navbar-theme-icon" aria-hidden="true">
+            {darkMode ? (
+              <svg viewBox="0 0 20 20" fill="none">
+                <path
+                  d="M13.8 2.8a6.8 6.8 0 1 0 3.4 12.7A7.5 7.5 0 1 1 13.8 2.8Z"
+                  fill="currentColor"
+                />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="3.1" fill="currentColor" />
+                <path
+                  d="M10 2.2V4.1M10 15.9v1.9M17.8 10h-1.9M4.1 10H2.2M15.5 4.5 14.1 5.9M5.9 14.1 4.5 15.5M15.5 15.5 14.1 14.1M5.9 5.9 4.5 4.5"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
+          </span>
+          <span className="top-navbar-theme-copy">
+            <span className="top-navbar-theme-label">Theme</span>
+            <strong>{darkMode ? "Dark" : "Light"}</strong>
+          </span>
+        </button>
         <NavbarMeter
           tone="hp"
           value={studentProfile.hp}

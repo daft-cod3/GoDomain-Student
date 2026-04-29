@@ -316,17 +316,19 @@ function PointList({ items, ordered = false, compact = false, tone = "blue" }) {
       {items.map((item, index) => (
         <li key={item} className="model-town-point-item">
           <span className="model-town-point-marker" aria-hidden="true">
-            {ordered
-              ? String(index + 1).padStart(2, "0")
-              : <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path
-                    d="M3.5 8.5L6.5 11.5L12.5 4.5"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>}
+            {ordered ? (
+              String(index + 1).padStart(2, "0")
+            ) : (
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="M3.5 8.5L6.5 11.5L12.5 4.5"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
           </span>
           <span className="model-town-point-copy">{item}</span>
         </li>
@@ -340,20 +342,20 @@ export default function ModelTownBoard() {
     <section className="dash-section model-town-section">
       <div className="dash-section-head model-town-head">
         <div>
-          <div className="dash-section-title">Model town board</div>
+          <div className="dash-section-title">Model Town Training Board</div>
           <div className="dash-section-subtitle">
-            A quick guide to the layouts, signs, and parking tasks learners meet
-            on the training board.
+            A tighter training board for route reading, sign placement, and
+            parking practice without bulky visual clutter.
           </div>
         </div>
-        <div className="model-town-badge">Board drill guide</div>
+        <div className="model-town-badge">Compact training board</div>
       </div>
 
       <div className="model-town-intro">
-        <PointList items={modelTownIntroPoints} tone="green" />
+        <PointList items={modelTownIntroPoints} tone="green" compact />
       </div>
 
-      <div className="model-town-feature-grid">
+      <div className="model-town-feature-grid model-town-scroll-row">
         {modelTownFeatures.map((feature, index) => (
           <article key={feature.title} className="model-town-feature-card">
             <div className="model-town-feature-top">
@@ -368,7 +370,7 @@ export default function ModelTownBoard() {
         ))}
       </div>
 
-      <div className="model-town-layout-grid">
+      <div className="model-town-layout-grid model-town-scroll-row">
         {modelTownRoutes.map((route) => (
           <article key={route.id} className="model-town-layout-card">
             <div className="model-town-card-head">
@@ -438,7 +440,7 @@ export default function ModelTownBoard() {
           </div>
         </div>
 
-        <div className="model-town-sign-grid">
+        <div className="model-town-sign-grid model-town-scroll-row">
           {modelTownSignPoints.map(({ point, points, sign }) => (
             <Link
               key={sign.id}
@@ -478,7 +480,7 @@ export default function ModelTownBoard() {
           </div>
         </div>
 
-        <div className="model-town-parking-grid">
+        <div className="model-town-parking-grid model-town-scroll-row">
           {modelTownParkingGuides.map((guide) => (
             <article key={guide.id} className="model-town-parking-card">
               <div className="model-town-card-head">

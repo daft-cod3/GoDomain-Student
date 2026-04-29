@@ -1,16 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-
-const THEME_KEY = "godomain-theme";
-
-function resolveTheme() {
-  const stored = window.localStorage.getItem(THEME_KEY);
-  const prefersDark =
-    window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
-
-  return stored || (prefersDark ? "dark" : "light");
-}
+import {
+  resolveTheme,
+  THEME_EVENT,
+  THEME_KEY,
+} from "./theme-state";
 
 export default function ThemeProvider({ children }) {
   useEffect(() => {
@@ -37,6 +32,10 @@ export default function ThemeProvider({ children }) {
       syncTheme();
     }
 
+    function handleThemeEvent(event) {
+      root.setAttribute("data-theme", event.detail || resolveTheme());
+    }
+
     syncTheme();
 
     const readyFrame = window.requestAnimationFrame(() => {
@@ -44,11 +43,13 @@ export default function ThemeProvider({ children }) {
     });
 
     window.addEventListener("storage", handleStorage);
+    window.addEventListener(THEME_EVENT, handleThemeEvent);
     themeMedia?.addEventListener("change", handleSystemThemeChange);
 
     return () => {
       window.cancelAnimationFrame(readyFrame);
       window.removeEventListener("storage", handleStorage);
+      window.removeEventListener(THEME_EVENT, handleThemeEvent);
       themeMedia?.removeEventListener("change", handleSystemThemeChange);
     };
   }, []);

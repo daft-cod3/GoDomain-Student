@@ -31,6 +31,14 @@ const unitBlueprints = [
     summary: "Five open lessons for mock tests, revision loops, and final prep.",
     unlocked: true,
   },
+  {
+    id: "unit-5",
+    number: 5,
+    label: "Unit 5",
+    title: "Road Test Mastery",
+    summary: "Five open lessons for final test preparation and confidence building.",
+    unlocked: true,
+  },
 ];
 
 const lessonBlueprints = [
@@ -476,6 +484,38 @@ const lessonBlueprints = [
       subtitle: "Run a final confidence check before the exam.",
       icon: "dumbbell",
       focus: "Exam warmup",
+    },
+  ],
+  [
+    {
+      title: "Full Mock Test",
+      subtitle: "Simulate the real test under timed conditions.",
+      icon: "star",
+      focus: "Mock test",
+    },
+    {
+      title: "Weak Spot Repair",
+      subtitle: "Target the areas that still need the most work.",
+      icon: "dumbbell",
+      focus: "Weak spots",
+    },
+    {
+      title: "Instructor Debrief",
+      subtitle: "Review feedback and apply corrections before the test.",
+      icon: "mic",
+      focus: "Debrief",
+    },
+    {
+      title: "Confidence Drill",
+      subtitle: "Build calm and control through repeated short runs.",
+      icon: "book",
+      focus: "Confidence",
+    },
+    {
+      title: "Test Day Ready",
+      subtitle: "Final checklist and mental preparation for the road test.",
+      icon: "video",
+      focus: "Test day",
     },
   ],
 ];

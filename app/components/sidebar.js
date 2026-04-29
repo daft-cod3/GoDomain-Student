@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   {
     id: "dashboard",
     label: "Dashboard",
-    href: "/dashboard",
+    href: "/",
     caption: "Uploads & progress",
     icon: "dashboard",
   },
@@ -39,15 +39,9 @@ function getSection(pathname, fallback) {
   if (!pathname || pathname === "/" || pathname.startsWith("/dashboard")) {
     return "dashboard";
   }
-  if (pathname.startsWith("/content")) {
-    return "path";
-  }
-  if (pathname.startsWith("/stats")) {
-    return "stats";
-  }
-  if (pathname.startsWith("/settings")) {
-    return "settings";
-  }
+  if (pathname.startsWith("/content")) return "path";
+  if (pathname.startsWith("/stats")) return "stats";
+  if (pathname.startsWith("/settings")) return "settings";
   return fallback;
 }
 
@@ -57,7 +51,7 @@ function Icon({ name }) {
     viewBox: "0 0 24 24",
     fill: "none",
     stroke: "currentColor",
-    strokeWidth: "1.8",
+    strokeWidth: "1.7",
   };
 
   if (name === "dashboard") {
@@ -107,36 +101,10 @@ function Icon({ name }) {
     );
   }
 
-  if (name === "live") {
-    return (
-      <svg {...props}>
-        <title>{title}</title>
-        <rect x="4" y="6" width="11" height="12" rx="2.5" />
-        <path d="M15 10L20 7V17L15 14V10Z" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-
-  if (name === "messages") {
-    return (
-      <svg {...props}>
-        <title>{title}</title>
-        <path d="M5 6H19V15H8L5 18V6Z" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-
   return (
     <svg {...props}>
       <title>{title}</title>
-      <path
-        d="M7 10C7 7.2 9 5 12 5C15 5 17 7.2 17 10V13L19 15H5L7 13V10Z"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M10 18C10.5 18.8 11.2 19.2 12 19.2C12.8 19.2 13.5 18.8 14 18"
-        strokeLinecap="round"
-      />
+      <circle cx="12" cy="12" r="4" />
     </svg>
   );
 }
@@ -144,99 +112,85 @@ function Icon({ name }) {
 export default function Sidebar({ active = "dashboard" }) {
   const pathname = usePathname();
   const activeSection = getSection(pathname, active);
+  const [expanded, setExpanded] = useState(false);
   const collapseTimerRef = useRef(null);
   const pendingNavCollapseRef = useRef(false);
-  const [isNavDelayOpen, setIsNavDelayOpen] = useState(false);
 
   useEffect(() => {
-    if (!pendingNavCollapseRef.current) {
-      return undefined;
-    }
-
-    if (!pathname) {
-      return undefined;
-    }
-
-    if (collapseTimerRef.current) {
-      clearTimeout(collapseTimerRef.current);
-    }
-
-    setIsNavDelayOpen(true);
+    if (!pendingNavCollapseRef.current || !pathname) return undefined;
+    clearTimeout(collapseTimerRef.current);
+    setExpanded(true);
     collapseTimerRef.current = setTimeout(() => {
       pendingNavCollapseRef.current = false;
-      setIsNavDelayOpen(false);
-    }, 2000);
-
-    return () => {
-      if (collapseTimerRef.current) {
-        clearTimeout(collapseTimerRef.current);
-      }
-    };
+      setExpanded(false);
+    }, 2200);
+    return () => clearTimeout(collapseTimerRef.current);
   }, [pathname]);
 
-  useEffect(() => {
-    return () => {
-      if (collapseTimerRef.current) {
-        clearTimeout(collapseTimerRef.current);
-      }
-    };
-  }, []);
+  useEffect(() => () => clearTimeout(collapseTimerRef.current), []);
 
   function handleNavClick() {
     pendingNavCollapseRef.current = true;
-    setIsNavDelayOpen(true);
+    setExpanded(true);
   }
 
   return (
-    <div className={`sb-shell${isNavDelayOpen ? " nav-delay" : " collapsed"}`}>
+    <div
+      className="sb-shell"
+      data-expanded={expanded}
+      onMouseEnter={() => setExpanded(true)}
+      onMouseLeave={() => {
+        if (!pendingNavCollapseRef.current) setExpanded(false);
+      }}
+    >
       <aside
-        className={`sb-panel${isNavDelayOpen ? " nav-delay" : " collapsed"}`}
+        className={`sb-panel${expanded ? " expanded" : ""}`}
         id="app-sidebar"
+        aria-label="Primary navigation"
       >
-        <div className="sb-content">
-          <section className="sb-section sb-nav-section">
-            <nav className="sb-nav" aria-label="Primary navigation">
-              {NAV_ITEMS.map((item) => {
-                const isActive = item.id === activeSection;
-
-                return (
-                  <Link
-                    key={item.id}
-                    href={item.href}
-                    className={`sb-nav-link${isActive ? " active" : ""}`}
-                    aria-current={isActive ? "page" : undefined}
-                    onClick={handleNavClick}
-                  >
-                    <span className={`sb-nav-icon sb-icon-${item.id}`}>
-                      <Icon name={item.icon} />
-                    </span>
-                    <span className="sb-nav-text">
-                      <span className="sb-nav-label">{item.label}</span>
-                      <span className="sb-nav-caption">{item.caption}</span>
-                    </span>
-                  </Link>
-                );
-              })}
-            </nav>
-          </section>
+        <div className="sb-brand">
+          <span className="sb-brand-mark">GD</span>
+          <span className="sb-text sb-brand-text">
+            <span className="sb-brand-name">GoDomain</span>
+            <span className="sb-brand-sub">Driving School</span>
+          </span>
         </div>
 
-        <div className="sb-footer">
+        <nav className="sb-nav">
+          {NAV_ITEMS.map((item) => {
+            const isActive = item.id === activeSection;
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`sb-nav-link${isActive ? " active" : ""}`}
+                aria-current={isActive ? "page" : undefined}
+                onClick={handleNavClick}
+                title={item.label}
+              >
+                <span className={`sb-icon sb-icon-${item.id}`}>
+                  <Icon name={item.icon} />
+                </span>
+                <span className="sb-text sb-nav-text">
+                  <span className="sb-nav-label">{item.label}</span>
+                  <span className="sb-nav-caption">{item.caption}</span>
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="sb-text sb-footer">
           <div className="sb-streak">
-            <div className="sb-streak-top">
+            <div className="sb-streak-row">
               <span className="sb-streak-label">8-day streak</span>
               <span className="sb-streak-pill">78%</span>
             </div>
-
             <div className="sb-streak-bar">
               <span style={{ width: "78%" }} />
             </div>
-
-            <p className="sb-streak-note">
-              2 more activities to unlock bonus gems.
-            </p>
+            <p className="sb-streak-note">2 more activities to unlock bonus gems.</p>
           </div>
-
           <Link className="sb-cta" href="/content">
             Continue learning
           </Link>

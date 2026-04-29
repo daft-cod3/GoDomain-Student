@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { teacherUploads } from "../data/teacher-uploads";
 import { getLearningDayHref } from "../learn";
 import ContentReview from "../learn/components/contReview";
 import ModelTownBoard from "./modelTownBoard";
 import RoadSign from "./roadSign";
+import TeacherUploadsSection from "./teacher-uploads-section";
 
 const popularLessons = [
   {
@@ -55,9 +55,20 @@ export default function Dashboard() {
               path. The dashboard now keeps the active unit snapshot, current
               lesson progress, and finished review cards together.
             </p>
-            <Link className="dash-hero-button" href="/content">
-              Open learning path
-            </Link>
+            <div className="dash-hero-actions">
+              <Link className="dash-hero-button primary" href="/content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+                Open learning path
+              </Link>
+              <Link className="dash-hero-button secondary" href="/stats">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                View progress
+              </Link>
+            </div>
           </div>
           <div className="dash-hero-art">
             <div className="book-stack">
@@ -71,46 +82,17 @@ export default function Dashboard() {
               <span />
               <span />
             </div>
+            <div className="floating-elements">
+              <div className="floating-badge">🚗</div>
+              <div className="floating-badge">📚</div>
+              <div className="floating-badge">🎯</div>
+            </div>
           </div>
         </section>
 
         <div className="dash-body">
           <div className="dash-main">
-            <section className="dash-section">
-              <div className="dash-section-head">
-                <div>
-                  <div className="dash-section-title">Teacher uploads</div>
-                  <div className="dash-section-subtitle">
-                    Open each card for its own dedicated upload page with
-                    teacher-specific content.
-                  </div>
-                </div>
-              </div>
-              <div className="teacher-grid">
-                {teacherUploads.map((upload) => (
-                  <Link
-                    key={upload.id}
-                    className={`teacher-card teacher-card-link ${upload.accent}`}
-                    href={upload.href}
-                  >
-                    <div className="teacher-card-top">
-                      <span className={`teacher-icon ${upload.icon}`} />
-                      <span className="teacher-type">{upload.type}</span>
-                      <span className="teacher-badge">Latest</span>
-                    </div>
-                    <div className="teacher-title">{upload.title}</div>
-                    <div className="teacher-meta">{upload.meta}</div>
-                    <p className="teacher-summary">{upload.summary}</p>
-                    <div className="teacher-card-footer">
-                      <span className="teacher-card-status">
-                        Teacher shared
-                      </span>
-                      <span className="teacher-action">{upload.action}</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
+            <TeacherUploadsSection />
 
             <ContentReview />
 
@@ -141,6 +123,77 @@ export default function Dashboard() {
                     <div className="dash-card-meta">{lesson.meta}</div>
                   </Link>
                 ))}
+              </div>
+            </section>
+
+            <section className="dash-section">
+              <div className="dash-section-head">
+                <div>
+                  <div className="dash-section-title">Recent Activity</div>
+                  <div className="dash-section-subtitle">
+                    Latest updates and milestones from your learning journey.
+                  </div>
+                </div>
+                <Link className="dash-link" href="/stats">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 5l7 7-7 7"/>
+                  </svg>
+                  View all
+                </Link>
+              </div>
+              <div className="dash-activity-list">
+                <div className="dash-activity-item">
+                  <div className="dash-activity-icon-wrapper">
+                    <span className="dash-activity-icon">📚</span>
+                  </div>
+                  <div className="dash-activity-content">
+                    <div className="dash-activity-copy">
+                      <strong>Completed Unit 1</strong>
+                      <p>Finished all lessons in Unit 1 with 95% score</p>
+                    </div>
+                    <span className="dash-activity-time">2 hours ago</span>
+                  </div>
+                  <div className="dash-activity-badge">Achievement</div>
+                </div>
+                <div className="dash-activity-item">
+                  <div className="dash-activity-icon-wrapper">
+                    <span className="dash-activity-icon">👨‍🏫</span>
+                  </div>
+                  <div className="dash-activity-content">
+                    <div className="dash-activity-copy">
+                      <strong>Mentor Session</strong>
+                      <p>Reviewed progress with instructor John</p>
+                    </div>
+                    <span className="dash-activity-time">1 day ago</span>
+                  </div>
+                  <div className="dash-activity-badge">Session</div>
+                </div>
+                <div className="dash-activity-item">
+                  <div className="dash-activity-icon-wrapper">
+                    <span className="dash-activity-icon">🏆</span>
+                  </div>
+                  <div className="dash-activity-content">
+                    <div className="dash-activity-copy">
+                      <strong>Achievement Unlocked</strong>
+                      <p>Earned 'Streak Master' badge</p>
+                    </div>
+                    <span className="dash-activity-time">3 days ago</span>
+                  </div>
+                  <div className="dash-activity-badge">Badge</div>
+                </div>
+                <div className="dash-activity-item">
+                  <div className="dash-activity-icon-wrapper">
+                    <span className="dash-activity-icon">🎯</span>
+                  </div>
+                  <div className="dash-activity-content">
+                    <div className="dash-activity-copy">
+                      <strong>Quiz Completed</strong>
+                      <p>Scored 88% on Traffic Signs quiz</p>
+                    </div>
+                    <span className="dash-activity-time">5 days ago</span>
+                  </div>
+                  <div className="dash-activity-badge">Quiz</div>
+                </div>
               </div>
             </section>
           </div>

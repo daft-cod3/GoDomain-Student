@@ -1,114 +1,164 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   moduleProgress,
   profileTools,
   studentProfile,
 } from "../data/student-profile";
+import { useThemePreference } from "./theme-state";
 
-const THEME_KEY = "godomain-theme";
+function ToggleButton({ active, onClick, label }) {
+  return (
+    <button
+      type="button"
+      className={`settings-toggle ${active ? "active" : ""}`}
+      onClick={onClick}
+      aria-pressed={active}
+      aria-label={label}
+    >
+      <span className="settings-toggle-slider" />
+    </button>
+  );
+}
+
+function ThemeIllustration({ darkMode }) {
+  return darkMode ? (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path
+        d="M21.6 5.3A11.2 11.2 0 1 0 27.2 26 12.4 12.4 0 1 1 21.6 5.3Z"
+        fill="currentColor"
+      />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <circle cx="16" cy="16" r="5.2" fill="currentColor" />
+      <path
+        d="M16 3.8v3.6M16 24.6v3.6M28.2 16h-3.6M7.4 16H3.8M24.7 7.3l-2.6 2.6M9.9 22.1l-2.6 2.6M24.7 24.7l-2.6-2.6M9.9 9.9 7.3 7.3"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
 export default function Setting() {
-  const [theme, setTheme] = useState("light");
-  const [mounted, setMounted] = useState(false);
+  const { theme, mounted, toggleTheme } = useThemePreference();
+  const [lessonReminders, setLessonReminders] = useState(true);
+  const [mentorSharing, setMentorSharing] = useState(true);
+  const [autoSave, setAutoSave] = useState(true);
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(THEME_KEY);
-    const prefersDark = window.matchMedia?.(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    const nextTheme = stored || (prefersDark ? "dark" : "light");
-    setTheme(nextTheme);
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    document.documentElement.setAttribute("data-theme", theme);
-    window.localStorage.setItem(THEME_KEY, theme);
-  }, [theme, mounted]);
-
-  const toggleTheme = () =>
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  const darkMode = mounted && theme === "dark";
 
   const settingPreferences = [
     {
       label: "Theme mode",
-      value: theme === "dark" ? "Dark mode" : "Light mode",
-      hint: "Applies across dashboard, lessons, and profile pages.",
+      value: darkMode ? "Dark mode active" : "Light mode active",
+      hint: "The full interface updates instantly when you switch theme.",
+      interactive: true,
+      active: darkMode,
+      onToggle: toggleTheme,
     },
     {
       label: "Profile page",
-      value: "Moved to Profile",
-      hint: "Personal details now live on the page previously labeled Stats.",
+      value: "Professional learner view",
+      hint: "Profile and progress data now sit in a polished adaptive layout.",
     },
     {
       label: "Alerts",
-      value: "Lesson reminders on",
-      hint: "Uploads, live sessions, and notifications stay visible.",
+      value: lessonReminders ? "Lesson reminders on" : "Lesson reminders off",
+      hint: "Uploads, deadlines, and live sessions remain visible when enabled.",
+      interactive: true,
+      active: lessonReminders,
+      onToggle: () => setLessonReminders((prev) => !prev),
     },
     {
       label: "Mentor sharing",
-      value: "Enabled",
-      hint: "Your assigned mentor can review current learner progress.",
+      value: mentorSharing ? "Enabled" : "Disabled",
+      hint: "Your assigned mentor can review learner progress when enabled.",
+      interactive: true,
+      active: mentorSharing,
+      onToggle: () => setMentorSharing((prev) => !prev),
     },
   ];
 
+  const preferenceControls = [
+    {
+      title: "Lesson reminders",
+      description:
+        "Receive updates for upcoming sessions, reviews, and instructor uploads.",
+      active: lessonReminders,
+      onToggle: () => setLessonReminders((prev) => !prev),
+    },
+    {
+      title: "Mentor sharing",
+      description:
+        "Allow your instructor to monitor your learner dashboard and feedback trail.",
+      active: mentorSharing,
+      onToggle: () => setMentorSharing((prev) => !prev),
+    },
+    {
+      title: "Auto-save progress",
+      description:
+        "Keep lesson state, profile actions, and revision activity saved as you work.",
+      active: autoSave,
+      onToggle: () => setAutoSave((prev) => !prev),
+    },
+  ];
+
+  const workspaceChips = [
+    studentProfile.track,
+    studentProfile.nextSession,
+    `${studentProfile.attendance} attendance`,
+  ];
+
   return (
-    <section className="settings-profile">
-      <header className="settings-profile-hero card settings-preferences-hero">
-        <div className="settings-profile-hero-top">
-          <div>
-            <div className="settings-profile-eyebrow">Workspace settings</div>
-            <h1 className="settings-profile-title">
-              Preferences and study tools
-            </h1>
-            <p className="settings-profile-subtitle">
-              Use this page for display mode, alerts, and session tools. The
-              personal learner record now lives under Profile.
-            </p>
-          </div>
-          <button
-            className={`theme-toggle ${theme === "dark" ? "is-dark" : ""}`}
-            type="button"
-            onClick={toggleTheme}
-            aria-pressed={theme === "dark"}
-            aria-label="Toggle theme"
-          >
-            <span className="toggle-knob" />
-            <span className="toggle-text">
-              {theme === "dark" ? "Dark mode" : "Light mode"}
-            </span>
-          </button>
+    <section className="settings-page">
+      <div className="settings-section brutal-card">
+        <div className="settings-section-title">Workspace</div>
+        <div className="settings-section-subtitle">
+          Theme, alerts, and study controls.
         </div>
 
-        <div className="settings-preferences-summary">
-          <div className="settings-preference-chip">
-            <strong>{studentProfile.track}</strong>
-            <span>Active learner track</span>
+        <div className="settings-theme-toggle-wrapper">
+          <div className="settings-theme-toggle">
+            <div className="settings-theme-toggle-icon">
+              <ThemeIllustration darkMode={darkMode} />
+            </div>
+            <div className="settings-theme-toggle-content">
+              <h3>{darkMode ? "Dark mode" : "Light mode"}</h3>
+              <p>Switch between bright and low-glare mode.</p>
+            </div>
           </div>
-          <div className="settings-preference-chip">
-            <strong>{studentProfile.nextSession}</strong>
-            <span>Next session focus</span>
-          </div>
-          <div className="settings-preference-chip">
-            <strong>{studentProfile.attendance}</strong>
-            <span>Attendance status</span>
-          </div>
+          <ToggleButton active={darkMode} onClick={toggleTheme} label="Toggle application theme" />
         </div>
-      </header>
+
+        <div className="settings-preferences">
+          {preferenceControls.map((item) => (
+            <div key={item.title} className="settings-preference-item">
+              <div className="settings-preference-content">
+                <div className="settings-preference-title">{item.title}</div>
+                <div className="settings-preference-description">{item.description}</div>
+              </div>
+              <ToggleButton active={item.active} onClick={item.onToggle} label={`Toggle ${item.title}`} />
+            </div>
+          ))}
+        </div>
+
+        <div className="settings-chips">
+          {workspaceChips.map((chip) => (
+            <span key={chip} className="settings-chip">{chip}</span>
+          ))}
+        </div>
+      </div>
 
       <div className="settings-profile-layout">
-        <section className="settings-profile-panel card">
+        <section className="settings-profile-panel brutal-card">
           <div className="settings-profile-section-head">
             <div>
-              <div className="settings-profile-section-kicker">
-                Study preferences
-              </div>
-              <h3 className="settings-profile-section-title">
-                Workspace setup
-              </h3>
+              <div className="settings-profile-section-kicker">Preferences</div>
+              <h3 className="settings-profile-section-title">Workspace setup</h3>
             </div>
           </div>
 
@@ -117,33 +167,25 @@ export default function Setting() {
               <article
                 key={detail.label}
                 className="settings-profile-detail-card"
-                style={{ "--tile-delay": `${index * 80}ms` }}
+                style={{ "--tile-delay": `${index * 70}ms` }}
               >
-                <div className="settings-profile-detail-label">
-                  {detail.label}
+                <div className="settings-profile-detail-header">
+                  <div className="settings-profile-detail-label">{detail.label}</div>
+                  {detail.interactive ? (
+                    <ToggleButton active={detail.active} onClick={detail.onToggle} label={`Toggle ${detail.label}`} />
+                  ) : null}
                 </div>
-                <div className="settings-profile-detail-value">
-                  {detail.value}
-                </div>
-                <div className="settings-profile-detail-hint">
-                  {detail.hint}
-                </div>
+                <div className="settings-profile-detail-value">{detail.value}</div>
+                <div className="settings-profile-detail-hint">{detail.hint}</div>
               </article>
             ))}
           </div>
         </section>
 
         <aside className="settings-profile-side">
-          <section className="settings-profile-panel settings-progress-panel card">
-            <div className="settings-profile-section-kicker">
-              Active modules
-            </div>
+          <section className="settings-profile-panel settings-progress-panel brutal-card">
+            <div className="settings-profile-section-kicker">Modules</div>
             <h3 className="settings-profile-section-title">Study visibility</h3>
-            <p className="settings-profile-panel-note">
-              Keep a quick read on the key theory areas that still need
-              attention before the next practical session.
-            </p>
-
             <div className="settings-progress-stack">
               {moduleProgress.map((module) => (
                 <div key={module.label} className="settings-progress-item">
@@ -151,10 +193,7 @@ export default function Setting() {
                     <span>{module.label}</span>
                     <span>{module.value}%</span>
                   </div>
-                  <div
-                    className="settings-progress-mini-track"
-                    aria-hidden="true"
-                  >
+                  <div className="settings-progress-mini-track" aria-hidden="true">
                     <span style={{ width: `${module.value}%` }} />
                   </div>
                 </div>
@@ -162,35 +201,23 @@ export default function Setting() {
             </div>
           </section>
 
-          <section className="settings-profile-panel settings-tools-panel card">
+          <section className="settings-profile-panel settings-tools-panel brutal-card">
             <div className="settings-profile-section-kicker">Tools</div>
             <h3 className="settings-profile-section-title">Quick controls</h3>
-
             <div className="settings-tools-list">
               {profileTools.map((tool, index) => (
-                <article
-                  key={tool.title}
-                  className="settings-tool-card"
-                  style={{ "--tile-delay": `${index * 90}ms` }}
-                >
+                <article key={tool.title} className="settings-tool-card" style={{ "--tile-delay": `${index * 90}ms` }}>
                   <div>
                     <div className="settings-tool-title">{tool.title}</div>
-                    <div className="settings-tool-description">
-                      {tool.description}
-                    </div>
+                    <div className="settings-tool-description">{tool.description}</div>
                   </div>
-                  <button className="ghost-button" type="button">
-                    Manage
-                  </button>
+                  <button className="ghost-button" type="button">Manage</button>
                 </article>
               ))}
             </div>
-
             <div className="settings-next-session">
               <div className="settings-next-session-label">Next practical</div>
-              <div className="settings-next-session-value">
-                {studentProfile.nextSession}
-              </div>
+              <div className="settings-next-session-value">{studentProfile.nextSession}</div>
             </div>
           </section>
         </aside>
