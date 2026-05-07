@@ -3,27 +3,21 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getLearningDayHref, learningUnits } from "..";
+import { getLearningDayHref, getSubLessonHref, learningUnits } from "..";
 import {
   deriveLearningProgress,
   hydrateLearningProgress,
   persistLearningProgress,
 } from "../progress-store";
 
-/* ─── Day labels ─── */
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-
-/* ─── Zigzag offsets matching the Duolingo S-curve path ─── */
-/* ─── Per-lesson icon types (5 lessons per unit, each unique) ─── */
 const ICON_SEQUENCE = ["star", "star", "headphones", "mic", "star"];
 
 function getCompletedSteps(lesson) {
   return lesson.lessons.filter((entry) => entry.completed).length;
 }
 
-/* ════════════════════════════════════════
-   SVG ICONS
-════════════════════════════════════════ */
+/* ── Icons ── */
 function IconStar({ color }) {
   return (
     <svg viewBox="0 0 32 32" fill={color} aria-hidden="true">
@@ -47,12 +41,7 @@ function IconCheck() {
 function IconHeadphones({ color }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <path
-        d="M6 17C6 10.4 10.5 5 16 5s10 5.4 10 12"
-        stroke={color}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
+      <path d="M6 17C6 10.4 10.5 5 16 5s10 5.4 10 12" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
       <rect x="4" y="17" width="6" height="9" rx="3" fill={color} />
       <rect x="22" y="17" width="6" height="9" rx="3" fill={color} />
     </svg>
@@ -62,47 +51,17 @@ function IconMic({ color }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
       <rect x="11" y="4" width="10" height="14" rx="5" fill={color} />
-      <path
-        d="M7 16c0 5 4 9 9 9s9-4 9-9"
-        stroke={color}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <line
-        x1="16"
-        y1="25"
-        x2="16"
-        y2="29"
-        stroke={color}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <line
-        x1="11"
-        y1="29"
-        x2="21"
-        y2="29"
-        stroke={color}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
+      <path d="M7 16c0 5 4 9 9 9s9-4 9-9" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+      <line x1="16" y1="25" x2="16" y2="29" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+      <line x1="11" y1="29" x2="21" y2="29" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
     </svg>
   );
 }
 function IconTrophy({ color }) {
   return (
-    <svg
-      viewBox="0 0 32 32"
-      fill="none"
-      stroke={color}
-      strokeWidth="2"
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 32 32" fill="none" stroke={color} strokeWidth="2" aria-hidden="true">
       <path d="M10 5H22V12C22 15.9 19.3 19 16 19C12.7 19 10 15.9 10 12V5Z" />
-      <path
-        d="M10 6H5V9C5 12.8 7.7 16 11 17M22 6H27V9C27 12.8 24.3 16 21 17"
-        strokeLinecap="round"
-      />
+      <path d="M10 6H5V9C5 12.8 7.7 16 11 17M22 6H27V9C27 12.8 24.3 16 21 17" strokeLinecap="round" />
       <path d="M16 19V25M11 28H21" strokeLinecap="round" />
     </svg>
   );
@@ -110,12 +69,7 @@ function IconTrophy({ color }) {
 function IconLock({ color }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <path
-        d="M10 14V11C10 7.7 12.7 5 16 5s6 2.7 6 6v3"
-        stroke={color}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
+      <path d="M10 14V11C10 7.7 12.7 5 16 5s6 2.7 6 6v3" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
       <rect x="7" y="14" width="18" height="13" rx="3.5" fill={color} />
     </svg>
   );
@@ -131,25 +85,16 @@ function NodeIcon({ type, color }) {
   return <IconStar color={color} />;
 }
 
-/* ════════════════════════════════════════
-   OWL MASCOT  (matches both images)
-════════════════════════════════════════ */
+/* ── Owl mascot ── */
 function OwlMascot({ active }) {
   return (
-    <div
-      className={`lp-owl${active ? " lp-owl--active" : ""}`}
-      aria-hidden="true"
-    >
+    <div className={`lp-owl${active ? " lp-owl--active" : ""}`} aria-hidden="true">
       <div className="lp-owl-body">
         <div className="lp-owl-wing lp-owl-wing--l" />
         <div className="lp-owl-wing lp-owl-wing--r" />
         <div className="lp-owl-face">
-          <div className="lp-owl-eye lp-owl-eye--l">
-            <div className="lp-owl-pupil" />
-          </div>
-          <div className="lp-owl-eye lp-owl-eye--r">
-            <div className="lp-owl-pupil" />
-          </div>
+          <div className="lp-owl-eye lp-owl-eye--l"><div className="lp-owl-pupil" /></div>
+          <div className="lp-owl-eye lp-owl-eye--r"><div className="lp-owl-pupil" /></div>
           <div className="lp-owl-beak" />
         </div>
         <div className="lp-owl-belly" />
@@ -163,20 +108,12 @@ function OwlMascot({ active }) {
   );
 }
 
-/* ════════════════════════════════════════
-   STAR RATING
-════════════════════════════════════════ */
+/* ── Stars ── */
 function Stars({ earned = 0 }) {
   return (
     <div className="lp-stars" role="img" aria-label={`${earned} of 3 stars`}>
       {[0, 1, 2].map((i) => (
-        <svg
-          key={i}
-          viewBox="0 0 22 22"
-          width="22"
-          height="22"
-          aria-hidden="true"
-        >
+        <svg key={i} viewBox="0 0 22 22" width="22" height="22" aria-hidden="true">
           <path
             d="M11 2.5l2.6 5.5 6 .9-4.3 4.2 1 6L11 16.2l-5.3 2.9 1-6L2.4 8.9l6-.9z"
             fill={i < earned ? "#fbbf24" : "none"}
@@ -189,22 +126,13 @@ function Stars({ earned = 0 }) {
   );
 }
 
-/* ════════════════════════════════════════
-   TREASURE CHEST
-════════════════════════════════════════ */
+/* ── Chest ── */
 function Chest({ unlocked, claimed }) {
-  const cls = [
-    "lp-chest",
-    unlocked && "lp-chest--open",
-    claimed && "lp-chest--claimed",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const cls = ["lp-chest", unlocked && "lp-chest--open", claimed && "lp-chest--claimed"]
+    .filter(Boolean).join(" ");
   return (
     <div className={cls} aria-hidden="true">
-      <div className="lp-chest-lid">
-        <div className="lp-chest-lid-band" />
-      </div>
+      <div className="lp-chest-lid"><div className="lp-chest-lid-band" /></div>
       <div className="lp-chest-body">
         <div className="lp-chest-body-band" />
         <div className="lp-chest-lock" />
@@ -214,27 +142,23 @@ function Chest({ unlocked, claimed }) {
   );
 }
 
-/* ════════════════════════════════════════
-   CONTINUE / START TOOLTIP
-════════════════════════════════════════ */
+/* ── Tooltip ── */
 function Tooltip({ href, label }) {
   return (
     <div className="lp-tooltip">
-      <Link className="lp-tooltip-cta lp-text-box" href={href}>
-        {label}
-      </Link>
+      <Link className="lp-tooltip-cta lp-text-box" href={href}>{label}</Link>
       <div className="lp-tooltip-arrow" />
     </div>
   );
 }
 
+/* ── Unit banner ── */
 function UnitBanner({ unit }) {
   return (
     <section className="lp-banner">
       <div className="lp-banner-copy lp-text-panel">
         <span className="lp-banner-eyebrow lp-text-box">
-          {unit.label} / {unit.completedLessons} of {unit.lessons.length}{" "}
-          lessons
+          {unit.label} / {unit.completedLessons} of {unit.lessons.length} lessons
         </span>
         <h2 className="lp-banner-title lp-text-box">{unit.title}</h2>
         <p className="lp-banner-guide lp-text-box">{unit.summary}</p>
@@ -249,42 +173,27 @@ function UnitBanner({ unit }) {
   );
 }
 
-/* ════════════════════════════════════════
-   SINGLE LESSON NODE
-════════════════════════════════════════ */
+/* ── Single lesson node ── */
 function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
   const done = lesson.progress === 100;
   const locked = !done && lesson.isLocked;
-  const future = !done && !isCurrent;
-  const inert = locked || future;
+  const future = !done && !isCurrent && !locked && lesson.progress === 0;
+  const inert = locked;
   const offset = lessonIndex % 2 === 0 ? -72 : 72;
   const day = DAYS[lessonIndex] ?? `Day ${lessonIndex + 1}`;
   const completedSteps = getCompletedSteps(lesson);
   const totalSteps = lesson.lessons.length || 4;
-  const filledSegments = done
-    ? 4
-    : Math.min(4, Math.round((completedSteps / totalSteps) * 4));
+  const filledSegments = done ? 4 : Math.min(4, Math.round((completedSteps / totalSteps) * 4));
   const segmentColor = "#58cc02";
   const emptySegmentColor = "#d1d5db";
 
-  const starRating =
-    completedSteps === 0
-      ? 0
-      : Math.min(3, Math.ceil((completedSteps / totalSteps) * 3));
+  const starRating = completedSteps === 0 ? 0 : Math.min(3, Math.ceil((completedSteps / totalSteps) * 3));
 
   let iconType = ICON_SEQUENCE[lessonIndex % ICON_SEQUENCE.length];
   let iconColor = "#c4c9d4";
-  if (done) {
-    iconType = "check";
-    iconColor = "#fff";
-  }
-  if (inert) {
-    iconType = locked ? "lock" : iconType;
-    iconColor = "#94a3b8";
-  }
-  if (isCurrent && !done) {
-    iconColor = "#fff";
-  }
+  if (done) { iconType = "check"; iconColor = "#fff"; }
+  if (inert) { iconType = "lock"; iconColor = "#94a3b8"; }
+  if (isCurrent && !done) iconColor = "#fff";
 
   const cls = [
     "lp-node",
@@ -292,23 +201,25 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
     isCurrent && !done ? "lp-node--current" : "",
     locked ? "lp-node--locked" : "",
     future ? "lp-node--future" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  ].filter(Boolean).join(" ");
+
+  const isMonday = lessonIndex === 0;
+  const showStart = isCurrent && !done;
+  const showReview = done && isCurrent;
+
+  // Clicking a circle goes to the subLearn page for the first step
+  const firstStepId = lesson.lessons[0]?.id;
+  const subLearnHref = firstStepId ? getSubLessonHref(lesson.id, firstStepId) : getLearningDayHref(lesson.id);
 
   return (
     <div className="lp-node-wrap" style={{ "--lp-x": `${offset}px` }}>
-      {isCurrent && !done && (
-        <Tooltip href={getLearningDayHref(lesson.id)} label="START" />
-      )}
-      {done && isCurrent && (
-        <Tooltip href={getLearningDayHref(lesson.id)} label="REVIEW" />
-      )}
+      {showStart && <Tooltip href={subLearnHref} label="START" />}
+      {showReview && <Tooltip href={subLearnHref} label="REVIEW" />}
 
       <button
         type="button"
         className={`lp-node-interactive ${cls}`}
-        data-current={isCurrent && !done ? "true" : "false"}
+        data-current={showStart ? "true" : "false"}
         onClick={() => {
           if (inert) return;
           navigateLesson(lesson.id);
@@ -317,7 +228,7 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
         title={
           inert
             ? `${day} is locked`
-            : isCurrent && !done
+            : showStart
               ? `Start ${day}: ${lesson.title}`
               : `Open ${day}: ${lesson.title}`
         }
@@ -329,16 +240,13 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
           "--seg-4": filledSegments >= 4 ? segmentColor : emptySegmentColor,
         }}
       >
-        {isCurrent && !done && (
-          <span
-            className="lp-node-ring lp-node-ring-animated"
-            aria-hidden="true"
-          />
+        {showStart && (
+          <span className="lp-node-ring lp-node-ring-animated" aria-hidden="true" />
         )}
         <span className="lp-node-icon lp-node-icon-interactive">
           <NodeIcon type={iconType} color={iconColor} />
         </span>
-        {isCurrent && !done && (
+        {showStart && (
           <span className="lp-node-label lp-node-label-pulse">START</span>
         )}
       </button>
@@ -348,39 +256,28 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
         <Stars earned={starRating} />
       </div>
 
-      <span className="lp-node-day lp-node-day-interactive lp-text-box">
-        {day}
-      </span>
+      <span className="lp-node-day lp-node-day-interactive lp-text-box">{day}</span>
     </div>
   );
 }
 
-/* ════════════════════════════════════════
-   FULL UNIT PATH SECTION
-════════════════════════════════════════ */
+/* ── Full unit path section ── */
 function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
   const chestUnlocked = unit.progress > 0;
   const chestClaimed = unit.progress === 100;
   const lessonsLeft = unit.lessons.filter((l) => l.progress < 100).length;
-
-  /* mascot appears beside lesson index 2, chest beside lesson index 3 */
   const MASCOT_AT = 2;
   const CHEST_AT = 3;
 
   return (
     <div className="lp-unit">
       <UnitBanner unit={unit} />
-
       <div className="lp-path">
         {unit.lessons.map((lesson, i) => {
           const isCurrent = lesson.id === currentLessonId;
-
           return (
             <div key={lesson.id} className="lp-path-step">
-              {/* dashed connector from previous node */}
               {i > 0 && <div className="lp-connector" />}
-
-              {/* node row — node + optional side element */}
               <div className="lp-step-row">
                 <LessonNode
                   lesson={lesson}
@@ -388,21 +285,17 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
                   isCurrent={isCurrent}
                   navigateLesson={onNavigateLesson}
                 />
-
                 {i === MASCOT_AT && (
                   <div className="lp-side lp-side--right">
                     <OwlMascot active={chestUnlocked} />
                     <Stars earned={chestUnlocked ? 1 : 0} />
                   </div>
                 )}
-
                 {i === CHEST_AT && (
                   <div className="lp-side lp-side--left">
                     <Chest unlocked={chestUnlocked} claimed={chestClaimed} />
                     {!chestClaimed && (
-                      <span className="lp-chest-hint lp-text-box">
-                        {lessonsLeft} to unlock
-                      </span>
+                      <span className="lp-chest-hint lp-text-box">{lessonsLeft} to unlock</span>
                     )}
                   </div>
                 )}
@@ -411,7 +304,6 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
           );
         })}
 
-        {/* connector + trophy */}
         <div className="lp-connector" />
         <div className="lp-path-step">
           <div className="lp-step-row">
@@ -430,24 +322,22 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
   );
 }
 
-/* ════════════════════════════════════════
-   HELPERS
-════════════════════════════════════════ */
+/* ── Helpers ── */
 function getCurrentLesson(units) {
   for (const unit of units) {
     for (const lesson of unit.lessons) {
       if (!lesson.isLocked && lesson.progress < 100) return lesson;
     }
   }
-  return null;
+  // All done — return last lesson for review
+  const allLessons = units.flatMap((u) => u.lessons);
+  return allLessons[allLessons.length - 1] ?? null;
 }
 
 const _init = deriveLearningProgress(learningUnits);
 const _initCur = getCurrentLesson(_init);
 
-/* ════════════════════════════════════════
-   ROOT SHELL
-════════════════════════════════════════ */
+/* ── Root shell ── */
 export default function LearningPathShell() {
   const router = useRouter();
   const [units, setUnits] = useState(() => _init);
@@ -460,6 +350,7 @@ export default function LearningPathShell() {
     const h = hydrateLearningProgress(learningUnits);
     const cur = getCurrentLesson(h);
     setUnits(h);
+    // Default to Unit 1 for new users; otherwise go to the unit with the current lesson
     const unitIndex = h.findIndex((unit) =>
       unit.lessons.some((lesson) => lesson.id === cur?.id),
     );
@@ -477,13 +368,14 @@ export default function LearningPathShell() {
   const completedSteps = units.reduce((s, u) => s + u.completedSubLessons, 0);
   const pct = totalSteps ? Math.round((completedSteps / totalSteps) * 100) : 0;
   const activeUnit = units[activeUnitIndex] ?? units[0];
+
+  // Allow navigating to any unit (not just completed ones)
   const canGoPrev = activeUnitIndex > 0;
-  const canGoNext =
-    activeUnitIndex < units.length - 1 && (activeUnit?.progress ?? 0) === 100;
+  const canGoNext = activeUnitIndex < units.length - 1;
 
   return (
     <div className="lp-shell">
-      {/* ── top progress bar ── */}
+      {/* Top progress bar */}
       <div className="lp-topbar">
         <div className="lp-topbar-track">
           <div className="lp-topbar-fill" style={{ width: `${pct}%` }} />
@@ -493,25 +385,33 @@ export default function LearningPathShell() {
         </span>
       </div>
 
-      {/* ── all unit paths ── */}
+      {/* Unit path */}
       <div className="lp-units">
         {activeUnit
           ? <UnitSection
               key={activeUnit.id}
               unit={activeUnit}
               currentLessonId={currentLesson?.id ?? ""}
-              onNavigateLesson={(lessonId) =>
-                router.push(getLearningDayHref(lessonId))
-              }
+              onNavigateLesson={(lessonId) => {
+                const lesson = activeUnit.lessons.find((l) => l.id === lessonId);
+                const firstStepId = lesson?.lessons[0]?.id;
+                if (firstStepId) {
+                  router.push(getSubLessonHref(lessonId, firstStepId));
+                } else {
+                  router.push(getLearningDayHref(lessonId));
+                }
+              }}
             />
           : null}
       </div>
+
+      {/* Unit navigation controls */}
       <div className="lp-unit-controls">
         <button
           type="button"
           className="lp-unit-nav-btn"
           disabled={!canGoPrev}
-          onClick={() => setActiveUnitIndex((index) => Math.max(0, index - 1))}
+          onClick={() => setActiveUnitIndex((i) => Math.max(0, i - 1))}
         >
           Previous
         </button>
@@ -522,9 +422,7 @@ export default function LearningPathShell() {
           type="button"
           className="lp-unit-nav-btn"
           disabled={!canGoNext}
-          onClick={() =>
-            setActiveUnitIndex((index) => Math.min(units.length - 1, index + 1))
-          }
+          onClick={() => setActiveUnitIndex((i) => Math.min(units.length - 1, i + 1))}
         >
           Next
         </button>

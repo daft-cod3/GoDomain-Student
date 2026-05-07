@@ -39,7 +39,9 @@ function getSection(pathname, fallback) {
   if (!pathname || pathname === "/" || pathname.startsWith("/dashboard")) {
     return "dashboard";
   }
-  if (pathname.startsWith("/content")) return "path";
+  if (pathname.startsWith("/content") || pathname.startsWith("/subLearn")) {
+    return "path";
+  }
   if (pathname.startsWith("/stats")) return "stats";
   if (pathname.startsWith("/settings")) return "settings";
   return fallback;
@@ -156,6 +158,10 @@ export default function Sidebar({ active = "dashboard" }) {
       <div
         className={`sb-panel${expanded ? " expanded" : ""}`}
         id="app-sidebar"
+        style={{
+          padding: "clamp(1.2rem,2.5vw,1.8rem) clamp(0.9rem,2vw,1.4rem)",
+          gap: "1.2rem",
+        }}
       >
         <nav className="sb-nav">
           {NAV_ITEMS.map((item) => {

@@ -51,9 +51,12 @@ function SectionHeader({ kicker, title, subtitle }) {
   );
 }
 
-function GlassCard({ children, className = "", hover = true }) {
+function GlassCard({ children, className = "", hover = true, style }) {
   return (
-    <div className={`settings-glass-card${hover ? " settings-hoverable" : ""} ${className}`}>
+    <div
+      className={`settings-glass-card${hover ? " settings-hoverable" : ""} ${className}`}
+      style={style}
+    >
       {children}
     </div>
   );

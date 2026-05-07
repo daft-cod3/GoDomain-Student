@@ -73,7 +73,7 @@ export default function TopNavbar() {
   const darkMode = mounted && theme === "dark";
 
   return (
-    <header className="top-navbar no-search">
+    <header className="top-navbar no-search" style={{ padding: "clamp(0.65rem,1.6vw,1rem) clamp(1rem,2.8vw,2rem)" }}>
       <div className="top-navbar-leading">
         <Link
           className="top-navbar-brand"

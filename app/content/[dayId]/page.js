@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import {
   getLearningDay,
   getLearningDayHref,
-  getLearningStepHref,
   getLearningUnit,
+  getSubLessonHref,
   learningDayIds,
   learningDays,
 } from "../../learn";
@@ -187,7 +187,7 @@ export default async function LearningDayPage({ params }) {
                   <Link
                     key={entry.id}
                     className={`lesson-step-node ${entry.completed ? "done" : ""} ${entry.id === nextIncompleteStep?.id ? "next" : ""}`}
-                    href={getLearningStepHref(lesson.id, entry.id)}
+                    href={getSubLessonHref(lesson.id, entry.id)}
                     aria-label={`Open ${entry.title}`}
                   >
                     <div className="lesson-step-node-index">

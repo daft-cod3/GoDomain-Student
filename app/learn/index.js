@@ -662,3 +662,16 @@ export function getLearningStep(dayId, stepId) {
 export function getLearningStepHref(dayId, stepId) {
   return `/content/${dayId}/steps/${stepId}`;
 }
+
+export function getSubLessonHref(lessonId, stepId) {
+  return `/subLearn/${lessonId}/${stepId}`;
+}
+
+export function getSubLessonIds() {
+  return learningDays.flatMap((lesson) =>
+    lesson.lessons.map((step) => ({
+      lessonId: lesson.id,
+      stepId: step.id,
+    })),
+  );
+}
