@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { studentProfile } from "../data/student-profile";
 import { useThemePreference } from "./theme-state";
 
@@ -71,9 +72,35 @@ function NavbarMeter({ tone, value, capacity }) {
 export default function TopNavbar() {
   const { theme, mounted, toggleTheme } = useThemePreference();
   const darkMode = mounted && theme === "dark";
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/profile")
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json();
+      })
+      .then((data) => {
+        if (active && data) {
+          setProfile(data);
+        }
+      })
+      .catch(() => {
+        // keep fallback profile
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const effectiveProfile = profile || studentProfile;
 
   return (
-    <header className="top-navbar no-search" style={{ padding: "clamp(0.65rem,1.6vw,1rem) clamp(1rem,2.8vw,2rem)" }}>
+    <header
+      className="top-navbar no-search"
+      style={{ padding: "clamp(0.65rem,1.6vw,1rem) clamp(1rem,2.8vw,2rem)" }}
+    >
       <div className="top-navbar-leading">
         <Link
           className="top-navbar-brand"
@@ -127,20 +154,20 @@ export default function TopNavbar() {
         <fieldset className="top-navbar-vitals" aria-label="Learner vitals">
           <NavbarMeter
             tone="hp"
-            value={studentProfile.hp}
-            capacity={studentProfile.hpCapacity}
+            value={effectiveProfile.hp}
+            capacity={effectiveProfile.hpCapacity}
           />
           <NavbarMeter
             tone="energy"
-            value={studentProfile.energy}
-            capacity={studentProfile.energyCapacity}
+            value={effectiveProfile.energy}
+            capacity={effectiveProfile.energyCapacity}
           />
         </fieldset>
         <Link
           className="top-navbar-coins"
           href="/stats"
-          aria-label={`Coins: ${studentProfile.coins}`}
-          title={`Coins: ${studentProfile.coins}`}
+          aria-label={`Coins: ${effectiveProfile.coins}`}
+          title={`Coins: ${effectiveProfile.coins}`}
         >
           <span className="top-navbar-coins-icon" aria-hidden="true">
             <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -165,7 +192,7 @@ export default function TopNavbar() {
             </svg>
           </span>
           <strong className="top-navbar-coins-val">
-            {studentProfile.coins}
+            {effectiveProfile.coins}
           </strong>
         </Link>
       </div>

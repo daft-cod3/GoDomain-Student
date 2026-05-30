@@ -10,7 +10,10 @@ import {
   learningDays,
 } from "../../../learn";
 import { JourneyIcon, LessonIcon } from "../../../learn/icons";
-import { LEARNING_PROGRESS_KEY } from "../../../learn/progress-store";
+import {
+  LEARNING_PROGRESS_KEY,
+  syncLearningProgress,
+} from "../../../learn/progress-store";
 import TwoDModel from "../../components/2dmodel";
 import ThreeDModel from "../../components/3dmodel";
 import { SubtopicCard } from "../../components/learnCard";
@@ -189,10 +192,21 @@ export default function SubLessonPage() {
     if (isDone) return;
     setJustCompleted(true);
     setTimeout(() => setJustCompleted(false), 1400);
+
     setCompletedIds((prev) => {
       const next = new Set(prev);
       next.add(step.id);
       writeCompletedIds(lesson.id, next);
+
+      const progressPercent = total ? Math.round((next.size / total) * 100) : 0;
+      syncLearningProgress({
+        lessonId: lesson.id,
+        completedStepIds: Array.from(next),
+        progressPercent,
+      }).catch(() => {
+        // Keep local progress if the network call fails.
+      });
+
       return next;
     });
   }
