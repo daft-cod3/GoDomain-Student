@@ -1,5 +1,5 @@
-import { getUserFromRequest } from "../../../lib/auth.js";
-import { query } from "../../../lib/db.js";
+import { getUserFromRequest } from "../../../../lib/auth.js";
+import { query } from "../../../../lib/db.js";
 
 async function upsertProgress(userId, lessonId, completedStepIds, progressPercent) {
   const existing = await query(

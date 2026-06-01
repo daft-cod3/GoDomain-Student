@@ -1,9 +1,10 @@
 "use client";
 
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 const PROVIDERS = [
+
   {
     id: "google",
     label: "Google",
@@ -46,12 +47,14 @@ const PROVIDERS = [
   },
 ];
 
-export default function LoginPage() {
+function LoginPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
 
   const [mode, setMode] = useState("login");
+
+
   const [resetMode, setResetMode] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -144,6 +147,7 @@ export default function LoginPage() {
 
   return (
     <main className="auth-page">
+
       <div className="auth-shell">
         <aside className="auth-aside">
           <span className="auth-side-tag">Automatic gear shifter</span>
@@ -313,3 +317,14 @@ export default function LoginPage() {
     </main>
   );
 }
+
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="auth-loading" />}>
+      <LoginPageInner />
+    </Suspense>
+  );
+}
+
+
