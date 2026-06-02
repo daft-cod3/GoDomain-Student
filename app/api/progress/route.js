@@ -1,5 +1,6 @@
 import { getUserFromRequest } from "../../../lib/auth.js";
 import { query } from "../../../lib/db.js";
+import { getLearningDay } from "../../learn/index.js";
 
 async function insertOrUpdateProgress(userId, lessonId, completedStepIds, progressPercent) {
   const existing = await query(
@@ -65,9 +66,15 @@ export async function POST(request) {
   const body = await request.json();
   const lessonId = (body.lessonId || "").trim();
   const completedStepIds = Array.isArray(body.completedStepIds) ? body.completedStepIds : [];
-  const progressPercent = Number.isFinite(body.progressPercent)
-    ? Math.max(0, Math.min(100, Number(body.progressPercent)))
-    : Math.round(completedStepIds.length * 100);
+
+  let progressPercent;
+  if (Number.isFinite(body.progressPercent)) {
+    progressPercent = Math.max(0, Math.min(100, Number(body.progressPercent)));
+  } else {
+    const lesson = getLearningDay(lessonId);
+    const totalSteps = lesson?.lessons?.length ?? completedStepIds.length;
+    progressPercent = totalSteps > 0 ? Math.round((completedStepIds.length / totalSteps) * 100) : 0;
+  }
 
   if (!lessonId) {
     return new Response(JSON.stringify({ error: "lessonId is required." }), {

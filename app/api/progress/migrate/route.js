@@ -1,5 +1,6 @@
 import { getUserFromRequest } from "../../../../lib/auth.js";
 import { query } from "../../../../lib/db.js";
+import { getLearningDay } from "../../../learn/index.js";
 
 async function upsertProgress(userId, lessonId, completedStepIds, progressPercent) {
   const existing = await query(
@@ -44,9 +45,14 @@ export async function POST(request) {
     const lessonId = (lesson.id || "").trim();
     if (!lessonId) continue;
     const completedStepIds = Array.isArray(lesson.completedStepIds) ? lesson.completedStepIds : [];
-    const progressPercent = Number.isFinite(lesson.progressPercent)
-      ? Math.max(0, Math.min(100, Number(lesson.progressPercent)))
-      : 0;
+    let progressPercent;
+    if (Number.isFinite(lesson.progressPercent)) {
+      progressPercent = Math.max(0, Math.min(100, Number(lesson.progressPercent)));
+    } else {
+      const learningDay = getLearningDay(lessonId);
+      const totalSteps = learningDay?.lessons?.length ?? completedStepIds.length;
+      progressPercent = totalSteps > 0 ? Math.round((completedStepIds.length / totalSteps) * 100) : 0;
+    }
 
     const previousPercent = await upsertProgress(
       user.id,
