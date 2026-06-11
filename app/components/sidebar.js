@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "./translations";
 
 const NAV_ITEMS = [
   {
@@ -143,10 +144,12 @@ export default function Sidebar({ active = "dashboard" }) {
     }
   }
 
+  const t = useTranslation();
+
   return (
     <aside
       className="sb-shell"
-      data-expanded={expanded}
+      data-expanded={String(expanded)}
       aria-label="Primary navigation"
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => {
@@ -173,14 +176,14 @@ export default function Sidebar({ active = "dashboard" }) {
                 className={`sb-nav-link${isActive ? " active" : ""}`}
                 aria-current={isActive ? "page" : undefined}
                 onClick={handleNavClick}
-                title={item.label}
+                title={t(`sidebar.${item.id}Label`)}
               >
                 <span className={`sb-icon sb-icon-${item.id}`}>
                   <Icon name={item.icon} />
                 </span>
                 <span className="sb-text sb-nav-text">
-                  <span className="sb-nav-label">{item.label}</span>
-                  <span className="sb-nav-caption">{item.caption}</span>
+                  <span className="sb-nav-label">{t(`sidebar.${item.id}Label`)}</span>
+                  <span className="sb-nav-caption">{t(`sidebar.${item.id}Caption`)}</span>
                 </span>
               </Link>
             );
@@ -190,18 +193,18 @@ export default function Sidebar({ active = "dashboard" }) {
         <div className="sb-text sb-footer">
           <div className="sb-streak">
             <div className="sb-streak-row">
-              <span className="sb-streak-label">8-day streak</span>
+              <span className="sb-streak-label">{t("sidebar.streakLabel")}</span>
               <span className="sb-streak-pill">78%</span>
             </div>
             <div className="sb-streak-bar">
               <span style={{ width: "78%" }} />
             </div>
             <p className="sb-streak-note">
-              2 more activities to unlock bonus gems.
+              {t("sidebar.streakNote")}
             </p>
           </div>
           <Link className="sb-cta" href="/content">
-            Continue learning
+            {t("sidebar.cta")}
           </Link>
         </div>
       </div>

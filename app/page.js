@@ -121,47 +121,6 @@ function DashboardIcon({ name }) {
   );
 }
 
-const translations = {
-  en: {
-    heroTag: "Learner dashboard",
-    heroTitle:
-      "A focused overview for lessons, uploads, and live driving progress.",
-    heroSubtitle:
-      "Keep revision, instructor uploads, current unit momentum, and recent milestones in one clear workspace designed for steady practice and quick review.",
-    primaryAction: "Open learning path",
-    secondaryAction: "View learner profile",
-    progressLabel: "Progress",
-    roadHoursLabel: "Road hours",
-    nextSessionLabel: "Next session",
-    recommendedLessons: "Recommended lessons",
-    recommendedSubtitle:
-      "High-value lesson blocks for revision, recall, and continued progress this week.",
-    browseAll: "Browse all",
-    badgeFocus: "Focus",
-    badgeTrack: "Track",
-    badgeReview: "Review",
-  },
-  luo: {
-    heroTag: "Fudu mar onge",
-    heroTitle:
-      "Wich mar dongo mag loso, gobiro, kod ning'iyo mar yudo gi neno.",
-    heroSubtitle:
-      "Yudo loso, gombo mag guru, ngima mar lajuok mondo biro bedo gi eniya gi twero gi loso mar bedo maduong'.",
-    primaryAction: "Yudo gi loso",
-    secondaryAction: "Wiye chang'ru mar onge",
-    progressLabel: "Ngima",
-    roadHoursLabel: "Nengo mar tinde",
-    nextSessionLabel: "Duogo mar gimoro",
-    recommendedLessons: "Loso ma dalagi",
-    recommendedSubtitle:
-      "Loso mag teko mar loso kod loso mar tich, ngere gi winjo mag ngima.",
-    browseAll: "Nya mondo gi geno",
-    badgeFocus: "Moko",
-    badgeTrack: "Handoyo",
-    badgeReview: "Tweny",
-  },
-};
-
 export default function HomePage() {
   const t = useTranslation();
 
@@ -221,9 +180,9 @@ export default function HomePage() {
                   <span />
                 </div>
                 <div className="floating-elements">
-                  <div className="floating-badge">{copy.badgeFocus}</div>
-                  <div className="floating-badge">{copy.badgeTrack}</div>
-                  <div className="floating-badge">{copy.badgeReview}</div>
+                  <div className="floating-badge">{t("dashboard.badgeFocus")}</div>
+                  <div className="floating-badge">{t("dashboard.badgeTrack")}</div>
+                  <div className="floating-badge">{t("dashboard.badgeReview")}</div>
                 </div>
               </div>
             </section>
@@ -238,14 +197,14 @@ export default function HomePage() {
                   <div className="dash-section-head">
                     <div>
                       <div className="dash-section-title">
-                        {copy.recommendedLessons}
+                        {t("dashboard.recommendedLessonsTitle")}
                       </div>
                       <div className="dash-section-subtitle">
-                        {copy.recommendedSubtitle}
+                        {t("dashboard.recommendedLessonsSubtitle")}
                       </div>
                     </div>
                     <Link className="dash-link" href="/content">
-                      {copy.browseAll}
+                      {t("dashboard.browseAll")}
                       <DashboardIcon name="path" />
                     </Link>
                   </div>
@@ -270,14 +229,13 @@ export default function HomePage() {
                 <section className="dash-section">
                   <div className="dash-section-head">
                     <div>
-                      <div className="dash-section-title">Recent activity</div>
+                      <div className="dash-section-title">{t("dashboard.recentActivityTitle")}</div>
                       <div className="dash-section-subtitle">
-                        Recent milestones, sessions, and assessments connected
-                        to the learner record.
+                        {t("dashboard.recentActivitySubtitle")}
                       </div>
                     </div>
                     <Link className="dash-link" href="/stats">
-                      View report
+                      {t("dashboard.viewReport")}
                       <DashboardIcon name="stats" />
                     </Link>
                   </div>

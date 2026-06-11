@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "./translations";
 import { learningUnits } from "../learn";
 import { hydrateLearningProgress, deriveLearningProgress } from "../learn/progress-store";
 import { getLearningDayHref } from "../learn";
@@ -114,6 +115,7 @@ function InfoRow({ label, value }) {
 }
 
 function UnitBar({ unit, index }) {
+  const t = useTranslation();
   return (
     <div className="prof-unit-row" style={{ animationDelay: `${index * 60}ms` }}>
       <div className="prof-unit-row-head">
@@ -126,7 +128,7 @@ function UnitBar({ unit, index }) {
       <Bar pct={unit.progress} color="linear-gradient(90deg,#2f8bff,#6fe51f)" delay={index * 60} />
       <div className="prof-unit-row-foot">
         <span>{unit.completedLessons}/{unit.totalLessons} lessons</span>
-        <span>{unit.unlocked ? "Open" : "Locked"}</span>
+        <span>{unit.unlocked ? t("stats.openText") : t("stats.lockedText")}</span>
       </div>
     </div>
   );
@@ -143,6 +145,7 @@ function AchBadge({ a, index }) {
 }
 
 function StreakButtons() {
+  const t = useTranslation();
   const [selected, setSelected] = useState("Thu");
   const days = [
     { label: "Mon", done: true },
@@ -154,7 +157,7 @@ function StreakButtons() {
   return (
     <fieldset className="prof-streak-card" aria-label="Five day streak tracker">
       <div className="prof-streak-head">
-        <span>Week streak</span>
+        <span>{t("stats.weekStreakLabel")}</span>
         <strong>{days.filter((d) => d.done).length}/5</strong>
       </div>
       <div className="prof-streak-days">
@@ -247,13 +250,15 @@ export default function StatsLive() {
     event.target.value = "";
   }
 
+  const t = useTranslation();
+
   if (status === "unauthorized") {
     return (
       <div className="prof-shell">
         <div className="prof-hero">
           <div className="prof-identity">
-            <h1>Sign in to view your stats</h1>
-            <p>Authenticate at /login to see your live learner progress and dashboard metrics.</p>
+            <h1>{t("stats.unauthorizedTitle")}</h1>
+            <p>{t("stats.unauthorizedCopy")}</p>
           </div>
         </div>
       </div>
@@ -261,32 +266,32 @@ export default function StatsLive() {
   }
 
   const heroMetrics = [
-    { label: "Learning progress", value: profile ? `${profile.progress}%` : "—" },
-    { label: "Lessons complete", value: profile ? profile.lessonsComplete : "—" },
-    { label: "Attendance", value: profile ? profile.attendance : "—" },
+    { label: t("stats.heroMetricLearningProgress"), value: profile ? `${profile.progress}%` : "—" },
+    { label: t("stats.heroMetricLessonsComplete"), value: profile ? profile.lessonsComplete : "—" },
+    { label: t("stats.heroMetricAttendance"), value: profile ? profile.attendance : "—" },
   ];
 
   const STAT_PILLS = [
-    { id: "hp", label: "HP", value: profile?.hp ?? 0, capacity: profile?.hpCapacity ?? 100, color: "#e05c7a", icon: "HP" },
-    { id: "energy", label: "Energy", value: profile?.energy ?? 0, capacity: profile?.energyCapacity ?? 100, color: "#22c55e", icon: "EN" },
-    { id: "coins", label: "Coins", value: profile?.coins ?? 0, capacity: profile?.coinCapacity ?? 100, color: "#f59f00", icon: "$" },
-    { id: "streak", label: "Streak", value: profile ? `${profile.streak ?? 7} days` : "—", color: "#267cff", icon: "ST" },
+    { id: "hp", label: t("stats.statPillHP"), value: profile?.hp ?? 0, capacity: profile?.hpCapacity ?? 100, color: "#e05c7a", icon: "HP" },
+    { id: "energy", label: t("stats.statPillEnergy"), value: profile?.energy ?? 0, capacity: profile?.energyCapacity ?? 100, color: "#22c55e", icon: "EN" },
+    { id: "coins", label: t("stats.statPillCoins"), value: profile?.coins ?? 0, capacity: profile?.coinCapacity ?? 100, color: "#f59f00", icon: "$" },
+    { id: "streak", label: t("stats.statPillStreak"), value: profile ? `${profile.streak ?? 7} days` : "—", color: "#267cff", icon: "ST" },
   ];
 
   const profileDetails = [
-    { label: "Index number", value: profile?.indexNumber ?? "—" },
-    { label: "Full name", value: profile?.name ?? "—" },
-    { label: "Phone number", value: profile?.phoneNumber ?? "—" },
-    { label: "County", value: profile?.county ?? "—" },
-    { label: "Driving school", value: profile?.drivingSchool ?? "—" },
-    { label: "Age", value: profile?.age ?? "—" },
+    { label: t("stats.profileDetailIndexNumber"), value: profile?.indexNumber ?? "—" },
+    { label: t("stats.profileDetailFullName"), value: profile?.name ?? "—" },
+    { label: t("stats.profileDetailPhoneNumber"), value: profile?.phoneNumber ?? "—" },
+    { label: t("stats.profileDetailCounty"), value: profile?.county ?? "—" },
+    { label: t("stats.profileDetailDrivingSchool"), value: profile?.drivingSchool ?? "—" },
+    { label: t("stats.profileDetailAge"), value: profile?.age ?? "—" },
   ];
 
   const profilePerformanceCards = [
-    { label: "Theory accuracy", value: profile?.quizAccuracy ?? "92%", meta: "Quiz precision this week" },
-    { label: "Live hours", value: profile?.liveHours ?? "14.5h", meta: "Session time logged" },
-    { label: "Focus rate", value: profile?.focusRate ?? "81%", meta: "Study blocks completed" },
-    { label: "Badges", value: profile?.badgesCount ?? 12, meta: "Milestones unlocked" },
+    { label: t("stats.profilePerformanceTheoryAccuracy"), value: profile?.quizAccuracy ?? "92%", meta: t("stats.profilePerformanceTheoryAccuracyMeta") },
+    { label: t("stats.profilePerformanceLiveHours"), value: profile?.liveHours ?? "14.5h", meta: t("stats.profilePerformanceLiveHoursMeta") },
+    { label: t("stats.profilePerformanceFocusRate"), value: profile?.focusRate ?? "81%", meta: t("stats.profilePerformanceFocusRateMeta") },
+    { label: t("stats.profilePerformanceBadges"), value: profile?.badgesCount ?? 12, meta: t("stats.profilePerformanceBadgesMeta") },
   ];
 
   const completedUnits = units.filter((u) => u.progress === 100).length;
@@ -311,7 +316,7 @@ export default function StatsLive() {
         <div className="prof-identity">
           <div className="prof-identity-top">
             <div>
-              <p className="prof-eyebrow">Profile</p>
+              <p className="prof-eyebrow">{t("stats.profileLabel")}</p>
               <h1 className="prof-name">{profile?.name ?? "Learner"}</h1>
               <p className="prof-sub">
                 {profile?.indexNumber ?? "—"} · {profile?.drivingSchool ?? "—"}
@@ -335,7 +340,7 @@ export default function StatsLive() {
               <strong>
                 {completedUnits}/{units.length}
               </strong>
-              <span>Units done</span>
+              <span>{t("stats.unitsDoneLabel")}</span>
             </div>
           </div>
         </div>
@@ -351,7 +356,7 @@ export default function StatsLive() {
 
       <div className="prof-overall">
         <div className="prof-overall-head">
-          <span>Overall progress</span>
+          <span>{t("stats.overallProgressLabel")}</span>
           <strong>{overallPct}%</strong>
         </div>
         <Bar pct={overallPct} color="linear-gradient(90deg,#2563eb,#58cc02)" />
@@ -359,10 +364,10 @@ export default function StatsLive() {
 
       <div className="prof-tabs" role="tablist">
         {[
-          { id: "overview", label: "Overview" },
-          { id: "units", label: "Units" },
-          { id: "details", label: "Details" },
-          { id: "badges", label: "Badges" },
+          { id: "overview", label: t("stats.tabOverview") },
+          { id: "units", label: t("stats.tabUnits") },
+          { id: "details", label: t("stats.tabDetails") },
+          { id: "badges", label: t("stats.tabBadges") },
         ].map((tabButton) => (
           <Tab key={tabButton.id} id={tabButton.id} label={tabButton.label} active={tab === tabButton.id} onClick={setTab} />
         ))}
@@ -379,18 +384,18 @@ export default function StatsLive() {
               </div>
             ))}
             <div className="prof-focus-card">
-              <span className="prof-focus-kicker">Next session</span>
+              <span className="prof-focus-kicker">{t("dashboard.nextSessionLabel")}</span>
               <strong className="prof-focus-title">{profile?.nextSession ?? "—"}</strong>
               <div className="prof-focus-row">
-                <span>Mentor</span>
+                <span>{t("stats.mentorLabel")}</span>
                 <strong>{profile?.mentor ?? "—"}</strong>
               </div>
               <div className="prof-focus-row">
-                <span>Road hours</span>
+                <span>{t("stats.roadHoursLabel")}</span>
                 <strong>{profile?.roadHours ?? "—"}</strong>
               </div>
               <div className="prof-focus-row">
-                <span>Attendance</span>
+                <span>{t("stats.attendanceLabel")}</span>
                 <strong>{profile?.attendance ?? "—"}</strong>
               </div>
             </div>
