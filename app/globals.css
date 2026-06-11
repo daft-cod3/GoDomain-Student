@@ -37,11 +37,12 @@
   --radius-md: 16px;
   --radius-sm: 10px;
   --content-width: 1480px;
-  --shell-nav-height: 4rem;
+  --shell-nav-height: 4.5rem;
   --shell-sidebar-collapsed: clamp(50px, 12vw, 68px);
   --shell-sidebar-expanded: clamp(200px, 30vw, 240px);
   --shell-page-gap: clamp(0.5rem, 2vw, 1rem);
   --shell-page-pad: clamp(0.75rem, 2vw, 1.5rem);
+  --shell-nav-height: 5.5rem;
 }
 
 html[data-theme="dark"] {
@@ -240,11 +241,12 @@ button {
     left: 0;
     right: 0;
     z-index: 40;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: clamp(1rem, 4vw, 1.8rem);
-    padding: clamp(1.4rem, 4vw, 2rem) clamp(1.8rem, 4.5vw, 2.8rem);
+    padding: clamp(1.1rem, 2vw, 1.5rem) clamp(1.2rem, 3vw, 2rem);
+    min-height: var(--shell-nav-height);
     border-bottom: 1px solid var(--line);
     background: color-mix(in srgb, var(--surface-strong) 62%, transparent);
     backdrop-filter: blur(26px) saturate(1.2);
@@ -268,6 +270,7 @@ button {
   }
 
   .top-navbar-leading,
+  .top-navbar-center,
   .top-navbar-stats {
     gap: clamp(0.5rem, 1.5vw, 0.9rem);
     flex-wrap: wrap;
@@ -277,7 +280,8 @@ button {
   .top-navbar-identity,
   .top-navbar-meter,
   .top-navbar-coins,
-  .top-navbar-theme-toggle {
+  .top-navbar-theme-toggle,
+  .top-navbar-language {
     gap: clamp(0.4rem, 1vw, 0.85rem);
     padding: clamp(0.45rem, 1vw, 0.62rem) clamp(0.55rem, 1.5vw, 0.82rem);
     border: 1px solid var(--line);
@@ -287,6 +291,23 @@ button {
     min-height: 40px;
     display: flex;
     align-items: center;
+  }
+
+  .top-navbar-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    width: max-content;
+    z-index: 1;
+  }
+
+  .top-navbar-center .top-navbar-language {
+    pointer-events: auto;
   }
 
   @media (max-width: 640px) {
@@ -336,7 +357,8 @@ button {
   .top-navbar-brand-label,
   .top-navbar-coins-val,
   .top-navbar-meter-val,
-  .top-navbar-identity strong {
+  .top-navbar-identity strong,
+  .top-navbar-language select {
     font-family: var(--font-display), Arial, Helvetica, sans-serif;
     font-weight: 700;
   }
@@ -431,7 +453,8 @@ button {
     font-size: 0.92rem;
   }
 
-  .top-navbar-theme-toggle {
+  .top-navbar-theme-toggle,
+  .top-navbar-language {
     position: relative;
     gap: 0.68rem;
     overflow: hidden;
@@ -515,6 +538,23 @@ button {
     display: flex;
     flex-direction: column;
     gap: 0.08rem;
+  }
+
+  .top-navbar-language {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .top-navbar-language select {
+    min-width: 8rem;
+    border: 0;
+    border-radius: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    background: color-mix(in srgb, var(--surface-strong) 90%, transparent);
+    color: inherit;
+    font: inherit;
+    appearance: none;
   }
 
   @media (max-width: 768px) {
@@ -4126,29 +4166,39 @@ button {
 
 /* Targeted UI refresh overrides */
 .top-navbar {
-  border: 1px solid color-mix(in srgb, var(--line-strong) 72%, transparent);
-  border-top: none;
-  background: color-mix(in srgb, var(--surface-strong) 70%, transparent);
-  backdrop-filter: blur(30px) saturate(1.35);
-  -webkit-backdrop-filter: blur(30px) saturate(1.35);
-  min-height: var(--shell-nav-height);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: clamp(0.5rem, 1.2vw, 0.65rem) clamp(0.75rem, 1.7vw, 1.1rem);
-  gap: clamp(0.5rem, 1.2vw, 0.9rem);
-}
-
-.top-navbar-leading {
-  min-width: 0;
-  flex: 1 1 auto;
-  align-items: center;
-  overflow: hidden;
+    position: relative;
+    border: 1px solid color-mix(in srgb, var(--line-strong) 72%, transparent);
+    border-top: none;
+    background: color-mix(in srgb, var(--surface-strong) 70%, transparent);
+    backdrop-filter: blur(30px) saturate(1.35);
+    -webkit-backdrop-filter: blur(30px) saturate(1.35);
+    min-height: var(--shell-nav-height);
+    display: grid;
+    grid-template-columns: minmax(0, auto) 1fr minmax(0, auto);
+    align-items: center;
+    justify-items: stretch;
+    padding: clamp(0.9rem, 1.8vw, 1.1rem) clamp(1rem, 2vw, 1.3rem);
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+    overflow: visible;
 }
 
 .top-navbar-brand {
   min-width: 0;
   flex-shrink: 1;
+}
+
+.top-navbar-center {
+  position: relative;
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: min-content;
+  pointer-events: auto;
+}
+
+.top-navbar-center .top-navbar-language {
+  width: min-content;
 }
 
 .top-navbar-brand-copy {

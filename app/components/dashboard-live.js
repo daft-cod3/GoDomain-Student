@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "./translations";
 import { getLearningDayHref } from "../learn";
 import ContentReview from "../learn/components/contReview";
 import ModelTownBoard from "./modelTownBoard";
@@ -113,20 +114,22 @@ export default function DashboardLive() {
     };
   }, []);
 
+  const t = useTranslation();
+
   const heroMetrics = useMemo(() => [
     {
-      label: "Progress",
+      label: t("dashboard.progressLabel"),
       value: profile ? `${profile.progress}%` : "—",
     },
     {
-      label: "Road hours",
+      label: t("dashboard.roadHoursLabel"),
       value: profile ? profile.roadHours : "—",
     },
     {
-      label: "Next session",
+      label: t("dashboard.nextSessionLabel"),
       value: profile ? profile.nextSession : "—",
     },
-  ], [profile]);
+  ], [profile, t]);
 
   if (status === "unauthorized") {
     return (
@@ -134,15 +137,14 @@ export default function DashboardLive() {
         <div className="dashboard-panel">
           <section className="dash-hero">
             <div className="dash-hero-content">
-              <div className="dash-hero-tag">Learner dashboard</div>
-              <h1 className="dash-hero-title">Sign in to view your live progress.</h1>
+              <div className="dash-hero-tag">{t("dashboard.heroTag")}</div>
+              <h1 className="dash-hero-title">{t("dashboard.heroTitleUnauthorized")}</h1>
               <p className="dash-hero-subtitle">
-                Connect your local learner profile and keep your dashboard data
-                synced to PostgreSQL.
+                {t("dashboard.heroSubtitleUnauthorized")}
               </p>
               <div className="dash-hero-actions">
                 <Link className="dash-hero-button primary" href="/login">
-                  Sign in now
+                  {t("dashboard.heroSignInNow")}
                 </Link>
               </div>
             </div>
@@ -152,14 +154,14 @@ export default function DashboardLive() {
               <section className="dash-section">
                 <div className="dash-section-head">
                   <div>
-                    <div className="dash-section-title">Need an account?</div>
+                    <div className="dash-section-title">{t("dashboard.sectionNeedAccount")}</div>
                     <div className="dash-section-subtitle">
-                      Register with your email to save progress and activity.
+                      {t("dashboard.sectionRegisterCopy")}
                     </div>
                   </div>
                 </div>
                 <div className="dash-section-note">
-                  Then return to the dashboard to continue with real data.
+                  {t("dashboard.sectionReturnCopy")}
                 </div>
               </section>
             </div>
@@ -174,20 +176,19 @@ export default function DashboardLive() {
       <div className="dashboard-panel">
         <section className="dash-hero">
           <div className="dash-hero-content">
-            <div className="dash-hero-tag">Learner dashboard</div>
+            <div className="dash-hero-tag">{t("dashboard.heroTag")}</div>
             <h1 className="dash-hero-title">
-              Track your progress, activity, and review items in one place.
+              {t("dashboard.heroTitle")}
             </h1>
             <p className="dash-hero-subtitle">
-              Your learner dashboard now reflects your authenticated local
-              profile and real activity stored in PostgreSQL.
+              {t("dashboard.heroSubtitle")}
             </p>
             <div className="dash-hero-actions">
               <Link className="dash-hero-button primary" href="/content">
-                Open learning path
+                {t("dashboard.primaryAction")}
               </Link>
               <Link className="dash-hero-button secondary" href="/stats">
-                View learner profile
+                {t("dashboard.secondaryAction")}
               </Link>
             </div>
             <div className="dash-hero-metrics">
@@ -214,9 +215,9 @@ export default function DashboardLive() {
               <span />
             </div>
             <div className="floating-elements">
-              <div className="floating-badge">Focus</div>
-              <div className="floating-badge">Track</div>
-              <div className="floating-badge">Review</div>
+              <div className="floating-badge">{t("dashboard.badgeFocus")}</div>
+              <div className="floating-badge">{t("dashboard.badgeTrack")}</div>
+              <div className="floating-badge">{t("dashboard.badgeReview")}</div>
             </div>
           </div>
         </section>
@@ -229,13 +230,13 @@ export default function DashboardLive() {
             <section className="dash-section">
               <div className="dash-section-head">
                 <div>
-                  <div className="dash-section-title">Recommended lessons</div>
+                  <div className="dash-section-title">{t("dashboard.recommendedLessonsTitle")}</div>
                   <div className="dash-section-subtitle">
-                    High-value lesson blocks for revision, recall, and progress.
+                    {t("dashboard.recommendedLessonsSubtitle")}
                   </div>
                 </div>
                 <Link className="dash-link" href="/content">
-                  Browse all
+                  {t("dashboard.browseAll")}
                 </Link>
               </div>
               <div className="dash-card-grid">

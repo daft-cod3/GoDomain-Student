@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslation } from "./components/translations";
 import Link from "next/link";
 import ModelTownBoard from "./components/modelTownBoard";
 import RoadSign from "./components/roadSign";
@@ -118,7 +121,50 @@ function DashboardIcon({ name }) {
   );
 }
 
+const translations = {
+  en: {
+    heroTag: "Learner dashboard",
+    heroTitle:
+      "A focused overview for lessons, uploads, and live driving progress.",
+    heroSubtitle:
+      "Keep revision, instructor uploads, current unit momentum, and recent milestones in one clear workspace designed for steady practice and quick review.",
+    primaryAction: "Open learning path",
+    secondaryAction: "View learner profile",
+    progressLabel: "Progress",
+    roadHoursLabel: "Road hours",
+    nextSessionLabel: "Next session",
+    recommendedLessons: "Recommended lessons",
+    recommendedSubtitle:
+      "High-value lesson blocks for revision, recall, and continued progress this week.",
+    browseAll: "Browse all",
+    badgeFocus: "Focus",
+    badgeTrack: "Track",
+    badgeReview: "Review",
+  },
+  luo: {
+    heroTag: "Fudu mar onge",
+    heroTitle:
+      "Wich mar dongo mag loso, gobiro, kod ning'iyo mar yudo gi neno.",
+    heroSubtitle:
+      "Yudo loso, gombo mag guru, ngima mar lajuok mondo biro bedo gi eniya gi twero gi loso mar bedo maduong'.",
+    primaryAction: "Yudo gi loso",
+    secondaryAction: "Wiye chang'ru mar onge",
+    progressLabel: "Ngima",
+    roadHoursLabel: "Nengo mar tinde",
+    nextSessionLabel: "Duogo mar gimoro",
+    recommendedLessons: "Loso ma dalagi",
+    recommendedSubtitle:
+      "Loso mag teko mar loso kod loso mar tich, ngere gi winjo mag ngima.",
+    browseAll: "Nya mondo gi geno",
+    badgeFocus: "Moko",
+    badgeTrack: "Handoyo",
+    badgeReview: "Tweny",
+  },
+};
+
 export default function HomePage() {
+  const t = useTranslation();
+
   return (
     <div className="app-shell">
       <DashboardSidebar active="dashboard" />
@@ -127,41 +173,34 @@ export default function HomePage() {
           <div className="dashboard-panel">
             <section className="dash-hero">
               <div className="dash-hero-content">
-                <div className="dash-hero-tag">Learner dashboard</div>
-                <h1 className="dash-hero-title">
-                  A focused overview for lessons, uploads, and live driving
-                  progress.
-                </h1>
-                <p className="dash-hero-subtitle">
-                  Keep revision, instructor uploads, current unit momentum, and
-                  recent milestones in one clear workspace designed for steady
-                  practice and quick review.
-                </p>
+                <div className="dash-hero-tag">{t("dashboard.heroTag")}</div>
+                <h1 className="dash-hero-title">{t("dashboard.heroTitle")}</h1>
+                <p className="dash-hero-subtitle">{t("dashboard.heroSubtitle")}</p>
                 <div className="dash-hero-actions">
                   <Link className="dash-hero-button primary" href="/content">
                     <DashboardIcon name="path" />
-                    Open learning path
+                    {t("dashboard.primaryAction")}
                   </Link>
                   <Link className="dash-hero-button secondary" href="/stats">
                     <DashboardIcon name="stats" />
-                    View learner profile
+                    {t("dashboard.secondaryAction")}
                   </Link>
                 </div>
                 <div className="dash-hero-metrics">
                   <article className="dash-hero-metric">
-                    <span className="dash-hero-metric-label">Progress</span>
+                    <span className="dash-hero-metric-label">{t("dashboard.progressLabel")}</span>
                     <strong className="dash-hero-metric-value">
                       {studentProfile.progress}%
                     </strong>
                   </article>
                   <article className="dash-hero-metric">
-                    <span className="dash-hero-metric-label">Road hours</span>
+                    <span className="dash-hero-metric-label">{t("dashboard.roadHoursLabel")}</span>
                     <strong className="dash-hero-metric-value">
                       {studentProfile.roadHours}
                     </strong>
                   </article>
                   <article className="dash-hero-metric">
-                    <span className="dash-hero-metric-label">Next session</span>
+                    <span className="dash-hero-metric-label">{t("dashboard.nextSessionLabel")}</span>
                     <strong className="dash-hero-metric-value">
                       {studentProfile.nextSession}
                     </strong>
@@ -182,9 +221,9 @@ export default function HomePage() {
                   <span />
                 </div>
                 <div className="floating-elements">
-                  <div className="floating-badge">Focus</div>
-                  <div className="floating-badge">Track</div>
-                  <div className="floating-badge">Review</div>
+                  <div className="floating-badge">{copy.badgeFocus}</div>
+                  <div className="floating-badge">{copy.badgeTrack}</div>
+                  <div className="floating-badge">{copy.badgeReview}</div>
                 </div>
               </div>
             </section>
@@ -199,15 +238,14 @@ export default function HomePage() {
                   <div className="dash-section-head">
                     <div>
                       <div className="dash-section-title">
-                        Recommended lessons
+                        {copy.recommendedLessons}
                       </div>
                       <div className="dash-section-subtitle">
-                        High-value lesson blocks for revision, recall, and
-                        continued progress this week.
+                        {copy.recommendedSubtitle}
                       </div>
                     </div>
                     <Link className="dash-link" href="/content">
-                      Browse all
+                      {copy.browseAll}
                       <DashboardIcon name="path" />
                     </Link>
                   </div>
