@@ -1,43 +1,77 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslation } from "./translations";
 
-const videoRows = [
-  { label: "Priority call review", duration: "3:20" },
-  { label: "Mirror and signal timing", duration: "2:45" },
-  { label: "Entry speed and gap choice", duration: "2:05" },
-  { label: "Final turn commitment", duration: "3:40" },
-];
-
-const imageItems = [
-  { label: "Lane arrows", caption: "6 examples", tone: "blue" },
-  { label: "Road markings", caption: "4 close-ups", tone: "green" },
-  { label: "Junction signs", caption: "5 scenes", tone: "gold" },
-  { label: "Priority lines", caption: "3 comparisons", tone: "rose" },
-];
-
-const noteCards = [
-  { label: "Warning signs", description: "Quick recall prompts" },
-  { label: "Regulatory signs", description: "Action-based notes" },
-  { label: "Directional signs", description: "Route reminders" },
-  { label: "Safety tips", description: "Fast revision cues" },
-];
+function getLocalizedUploadDetail(upload, t) {
+  return {
+    ...upload,
+    title: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.title`,
+      upload.title,
+    ),
+    type: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.type`,
+      upload.type,
+    ),
+    intro: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.intro`,
+      upload.intro,
+    ),
+    highlights: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.highlights`,
+      upload.highlights,
+    ),
+    sections: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.sections`,
+      upload.sections,
+    ),
+    nextSteps: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.nextSteps`,
+      upload.nextSteps,
+    ),
+  };
+}
 
 export default function TeacherUploadDetail({ upload }) {
   const isVideo = upload.id === "video-upload";
   const isImage = upload.id === "image-upload";
   const isNotes = upload.id === "resource-upload";
 
+  const t = useTranslation();
+  const videoRows = t("teacherUploadDetail.videoRows", [
+    { label: "Priority call review", duration: "3:20" },
+    { label: "Mirror and signal timing", duration: "2:45" },
+    { label: "Entry speed and gap choice", duration: "2:05" },
+    { label: "Final turn commitment", duration: "3:40" },
+  ]);
+  const imageItems = t("teacherUploadDetail.imageItems", [
+    { label: "Lane arrows", caption: "6 examples", tone: "blue" },
+    { label: "Road markings", caption: "4 close-ups", tone: "green" },
+    { label: "Junction signs", caption: "5 scenes", tone: "gold" },
+    { label: "Priority lines", caption: "3 comparisons", tone: "rose" },
+  ]);
+  const noteCards = t("teacherUploadDetail.noteCards", [
+    { label: "Warning signs", description: "Quick recall prompts" },
+    { label: "Regulatory signs", description: "Action-based notes" },
+    { label: "Directional signs", description: "Route reminders" },
+    { label: "Safety tips", description: "Fast revision cues" },
+  ]);
+
+  const localizedUpload = getLocalizedUploadDetail(upload, t);
+
   return (
     <section className="upload-detail-page">
       <div className={`upload-detail-hero ${upload.accent}`}>
         <div className="upload-detail-hero-copy">
           <Link className="upload-detail-back" href="/dashboard">
-            Back to dashboard
+            {t("teacherUploadDetail.backToDashboard")}
           </Link>
           <div className="upload-detail-kicker">
-            {upload.type} / {upload.teacher}
+            {localizedUpload.type} / {localizedUpload.teacher}
           </div>
-          <h1 className="upload-detail-title">{upload.title}</h1>
-          <p className="upload-detail-summary">{upload.intro}</p>
+          <h1 className="upload-detail-title">{localizedUpload.title}</h1>
+          <p className="upload-detail-summary">{localizedUpload.intro}</p>
           <div className="upload-detail-actions">
             <Link
               className="upload-detail-primary"
@@ -49,10 +83,10 @@ export default function TeacherUploadDetail({ upload }) {
                 stroke="currentColor"
                 strokeWidth="2"
               >
-                <title>Open related lesson</title>
+                <title>{t("teacherUploadDetail.openRelatedLessonTitle")}</title>
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
-              Start Related Lesson
+              {t("teacherUploadDetail.startRelatedLesson")}
             </Link>
             <Link className="upload-detail-secondary" href="/dashboard">
               <svg
@@ -61,18 +95,18 @@ export default function TeacherUploadDetail({ upload }) {
                 stroke="currentColor"
                 strokeWidth="2"
               >
-                <title>Back to dashboard</title>
+                <title>{t("teacherUploadDetail.backToDashboardTitle")}</title>
                 <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
               </svg>
-              Back to Dashboard
+              {t("teacherUploadDetail.backToDashboard")}
             </Link>
           </div>
         </div>
 
         <div className="upload-detail-metric-grid">
-          {upload.deliverables.map((item) => (
+          {localizedUpload.deliverables.map((item) => (
             <article key={item.label} className="upload-detail-metric">
-              <span>{item.label}</span>
+              <span>{t(`teacherUploadDetail.deliverables.${item.label}`, item.label)}</span>
               <strong>{item.value}</strong>
             </article>
           ))}
@@ -84,9 +118,9 @@ export default function TeacherUploadDetail({ upload }) {
           <section className="upload-detail-card upload-detail-media-card">
             <div className="upload-detail-section-head">
               <div>
-                <div className="upload-detail-section-title">Video guide rows</div>
+                <div className="upload-detail-section-title">{t("teacherUploadDetail.videoGuideRows")}</div>
                 <div className="upload-detail-section-subtitle">
-                  Labelled video segments to review in order.
+                  {t("teacherUploadDetail.videoGuideRowsSubtitle")}
                 </div>
               </div>
             </div>
@@ -97,7 +131,7 @@ export default function TeacherUploadDetail({ upload }) {
                     <strong>{item.label}</strong>
                     <p>{item.duration}</p>
                   </div>
-                  <span>Play</span>
+                  <span>{t("teacherUploadDetail.play")}</span>
                 </article>
               ))}
             </div>
@@ -108,9 +142,9 @@ export default function TeacherUploadDetail({ upload }) {
           <section className="upload-detail-card upload-detail-media-card">
             <div className="upload-detail-section-head">
               <div>
-                <div className="upload-detail-section-title">Image review</div>
+                <div className="upload-detail-section-title">{t("teacherUploadDetail.imageReview")}</div>
                 <div className="upload-detail-section-subtitle">
-                  Visual reference cards for quick memory recall.
+                  {t("teacherUploadDetail.imageReviewSubtitle")}
                 </div>
               </div>
             </div>
@@ -135,9 +169,9 @@ export default function TeacherUploadDetail({ upload }) {
           <section className="upload-detail-card upload-detail-media-card">
             <div className="upload-detail-section-head">
               <div>
-                <div className="upload-detail-section-title">Notes and links</div>
+                <div className="upload-detail-section-title">{t("teacherUploadDetail.notesAndLinks")}</div>
                 <div className="upload-detail-section-subtitle">
-                  Compact guidance cards for reference and quick review.
+                  {t("teacherUploadDetail.notesAndLinksSubtitle")}
                 </div>
               </div>
             </div>
@@ -149,7 +183,7 @@ export default function TeacherUploadDetail({ upload }) {
                     <p>{item.description}</p>
                   </div>
                   <Link href="/dashboard" className="upload-detail-note-link">
-                    View
+                    {t("teacherUploadDetail.view")}
                   </Link>
                 </article>
               ))}
@@ -158,20 +192,20 @@ export default function TeacherUploadDetail({ upload }) {
         )}
 
         <section className="upload-detail-card upload-detail-support-card">
-          <div className="upload-detail-section-head">
+            <div className="upload-detail-section-head">
             <div>
-              <div className="upload-detail-section-title">Highlights</div>
+              <div className="upload-detail-section-title">{t("teacherUploadDetail.highlights")}</div>
               <div className="upload-detail-section-subtitle">
-                The key pieces the learner should notice before moving on.
+                {t("teacherUploadDetail.highlightsSubtitle")}
               </div>
             </div>
-            <span className="upload-detail-chip">Updated</span>
+            <span className="upload-detail-chip">{t("teacherUploadDetail.updated")}</span>
           </div>
 
           <div className="upload-detail-highlight-grid">
-            {upload.highlights.map((highlight) => (
+            {localizedUpload.highlights.map((highlight) => (
               <article key={highlight} className="upload-detail-highlight">
-                <strong>Key point</strong>
+                <strong>{t("teacherUploadDetail.keyPoint")}</strong>
                 <p>{highlight}</p>
               </article>
             ))}
@@ -182,16 +216,16 @@ export default function TeacherUploadDetail({ upload }) {
           <div className="upload-detail-section-head">
             <div>
               <div className="upload-detail-section-title">
-                Upload walkthrough
+                {t("teacherUploadDetail.uploadWalkthrough")}
               </div>
               <div className="upload-detail-section-subtitle">
-                A reusable content block that changes with the selected card.
+                {t("teacherUploadDetail.uploadWalkthroughSubtitle")}
               </div>
             </div>
           </div>
 
           <div className="upload-detail-section-grid">
-            {upload.sections.map((section) => (
+            {localizedUpload.sections.map((section) => (
               <article key={section.title} className="upload-detail-section">
                 <strong>{section.title}</strong>
                 <p>{section.body}</p>
@@ -203,15 +237,15 @@ export default function TeacherUploadDetail({ upload }) {
         <section className="upload-detail-card upload-detail-next-card">
           <div className="upload-detail-section-head">
             <div>
-              <div className="upload-detail-section-title">Next steps</div>
+              <div className="upload-detail-section-title">{t("teacherUploadDetail.nextSteps")}</div>
               <div className="upload-detail-section-subtitle">
-                Use these actions to connect the upload back to lesson progress.
+                {t("teacherUploadDetail.nextStepsSubtitle")}
               </div>
             </div>
           </div>
 
           <ol className="upload-detail-step-list">
-            {upload.nextSteps.map((step) => (
+            {localizedUpload.nextSteps.map((step) => (
               <li key={step}>{step}</li>
             ))}
           </ol>

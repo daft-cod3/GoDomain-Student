@@ -88,6 +88,177 @@ export const TRANSLATIONS = {
       recommendedLessonsTitle: "Recommended lessons",
       recommendedLessonsSubtitle:
         "High-value lesson blocks for revision, recall, and progress.",
+      teacherUploads: {
+        title: "Teacher uploads",
+        subtitle: "Essential revision content grouped as videos, images, and notes.",
+        unseen: "unseen",
+        newLabel: "New",
+        seenLabel: "Seen",
+        statusWaiting: "Waiting for review",
+        statusMarked: "Marked as seen",
+        typeNotesLinks: "Notes / links",
+        items: "items",
+        revision: "Revision",
+        uploads: {
+          "image-upload": {
+            title: "Road markings photo wall",
+            meta: "Ms. Diaz / 16 images / Updated today",
+            summary:
+              "Quick visual references for lane edges, center lines, and turn bays.",
+            action: "Open image wall",
+            type: "Image set",
+            intro:
+              "This image wall isolates the road-marking patterns learners keep missing during lane-position drills. It is built for fast visual recall before a road-marking lesson or quiz.",
+            highlights: [
+              "16 annotated road scenes showing center lines, edge lines, and stop boxes.",
+              "Close-up comparisons between legal lane guidance and common learner mistakes.",
+              "Quick caption prompts designed for short revision breaks before class.",
+            ],
+            sections: [
+              {
+                title: "What is inside",
+                body:
+                  "The pack groups markings into center lines, directional arrows, edge guidance, and stop controls so the learner can compare similar visuals without losing context.",
+              },
+              {
+                title: "How to use it",
+                body:
+                  "Scan the scene, name the marking, then say the safe response before reading the caption. That sequence builds faster recall than reading first.",
+              },
+              {
+                title: "Why it matters",
+                body:
+                  "Road markings are often ignored until the learner is already too close. This wall trains earlier recognition and calmer decisions.",
+              },
+            ],
+            nextSteps: [
+              "Open the related road-markings lesson and review the lane-arrow examples.",
+              "Use the image set before the next quick-check quiz.",
+              "Repeat the stop-box examples until the waiting position feels automatic.",
+            ],
+          },
+          "video-upload": {
+            title: "Junction decisions breakdown",
+            meta: "Mr. Chen / 12 min / Uploaded 2 hours ago",
+            summary: "A clean replay of priority calls, blind checks, and entry timing.",
+            action: "Watch breakdown",
+            type: "Video",
+            intro:
+              "This replay breaks junction handling into approach scan, right-of-way judgment, and final turn commitment so learners can see why each decision was made.",
+            highlights: [
+              "12-minute teacher narration with slowed-down junction entries.",
+              "Priority mistakes called out at the exact moment the risk begins to build.",
+              "Turn-by-turn commentary on mirror checks, gap choice, and final steering timing.",
+            ],
+            sections: [
+              {
+                title: "Chapter flow",
+                body:
+                  "The video moves from early observation to priority choice, then ends with left-turn and right-turn examples that expose the most common hesitation points.",
+              },
+              {
+                title: "Recommended routine",
+                body:
+                  "Watch once without stopping, then replay the difficult moments and answer the priority question before the teacher explains it.",
+              },
+              {
+                title: "Expected outcome",
+                body:
+                  "Learners should leave with cleaner junction timing, less rushed entry, and better awareness of hidden risks near the final turn.",
+              },
+            ],
+            nextSteps: [
+              "Replay the blind-check chapter immediately before the junction quiz.",
+              "Open the lesson page and compare the teacher examples with the written notes.",
+              "Use the messages panel if one junction case still feels unclear.",
+            ],
+          },
+          "resource-upload": {
+            title: "Traffic sign revision pack",
+            meta: "Ms. Bello / Notes + visuals / Updated today",
+            summary:
+              "Compact notes and visual prompts for warning, order, and direction signs.",
+            action: "Open revision pack",
+            type: "Resource link",
+            intro:
+              "This revision pack condenses sign categories into fast-reference notes and visual prompts so sign meaning can be checked quickly before lessons or assessments.",
+            highlights: [
+              "Short notes covering regulatory, warning, and informative signs.",
+              "Visual prompts built for faster recognition under quiz pressure.",
+              "A compact revision format for frequent repetition instead of long reading sessions.",
+            ],
+            sections: [
+              {
+                title: "Pack structure",
+                body:
+                  "The material starts with sign groups, then narrows into quick visual prompts and short explanations of what the driver must do immediately after recognition.",
+              },
+              {
+                title: "Best revision loop",
+                body:
+                  "Study the sign, name the category, state the required action, then move on. Short, repeated cycles are more effective here than one long pass.",
+              },
+              {
+                title: "Assessment support",
+                body:
+                  "The pack is designed to strengthen both visual recall and the reasoning behind each sign so exam choices feel less random.",
+              },
+            ],
+            nextSteps: [
+              "Pair this pack with the traffic-sign lesson before the next revision session.",
+              "Repeat the warning-sign group until the action response feels immediate.",
+              "Use the dashboard review cards to revisit the notes after a full lesson clear.",
+            ],
+          },
+        },
+      },
+      teacherUploadDetail: {
+        backToDashboard: "Back to dashboard",
+        backToDashboardTitle: "Return to the learner dashboard",
+        openRelatedLessonTitle: "Open related lesson",
+        startRelatedLesson: "Start related lesson",
+        videoGuideRows: "Video guide rows",
+        videoGuideRowsSubtitle: "Labelled video segments to review in order.",
+        play: "Play",
+        imageReview: "Image review",
+        imageReviewSubtitle: "Visual reference cards for quick memory recall.",
+        notesAndLinks: "Notes and links",
+        notesAndLinksSubtitle: "Compact guidance cards for reference and quick review.",
+        view: "View",
+        videoRows: [
+          { label: "Priority call review", duration: "3:20" },
+          { label: "Mirror and signal timing", duration: "2:45" },
+          { label: "Entry speed and gap choice", duration: "2:05" },
+          { label: "Final turn commitment", duration: "3:40" },
+        ],
+        imageItems: [
+          { label: "Lane arrows", caption: "6 examples", tone: "blue" },
+          { label: "Road markings", caption: "4 close-ups", tone: "green" },
+          { label: "Junction signs", caption: "5 scenes", tone: "gold" },
+          { label: "Priority lines", caption: "3 comparisons", tone: "rose" },
+        ],
+        noteCards: [
+          { label: "Warning signs", description: "Quick recall prompts" },
+          { label: "Regulatory signs", description: "Action-based notes" },
+          { label: "Directional signs", description: "Route reminders" },
+          { label: "Safety tips", description: "Fast revision cues" },
+        ],
+        highlights: "Highlights",
+        highlightsSubtitle: "The key pieces the learner should notice before moving on.",
+        updated: "Updated",
+        keyPoint: "Key point",
+        uploadWalkthrough: "Upload walkthrough",
+        uploadWalkthroughSubtitle: "A reusable content block that changes with the selected card.",
+        nextSteps: "Next steps",
+        nextStepsSubtitle: "Use these actions to connect the upload back to lesson progress.",
+        deliverables: {
+          "Runtime": "Runtime",
+          "Scenes": "Scenes",
+          "Format": "Format",
+          "Focus area": "Focus area",
+          "Best use": "Best use",
+        },
+      },
       browseAll: "Browse all",
       badgeFocus: "Focus",
       badgeTrack: "Track",
@@ -253,6 +424,35 @@ export const TRANSLATIONS = {
       backToLessonProgress: "Back to lesson progress",
       openNextTopic: "Open next topic",
       returnToLearningPath: "Return to learning path",
+      complete: "complete",
+      previousLesson: "Previous lesson",
+      nextLesson: "Next lesson",
+      resultSystem: "Result system",
+      resultSystemSubtitle: "The lesson page now tracks what the user earns and what still needs to be cleared.",
+      rewardSystem: "Reward system",
+      rewardSystemSubtitle:
+        "Each topic now shows the outcome, reward value, and what is still pending before payout.",
+      calloutFinishAll: "Finish all four steps in",
+      calloutFinishAdd:
+        "to lock in the full reward and add the lesson to dashboard review.",
+      teacherSupport: "Teacher support",
+      teacherSupportSubtitle: "Use the tools below when you need more guidance.",
+      liveClassRoom: "Live class room",
+      liveClassRoomSubtitle: "Join today's session or waiting room.",
+      messageTeacher: "Message teacher",
+      messageTeacherSubtitle: "Ask for feedback or clarification instantly.",
+      notificationsSubtitle: "Check upload alerts, reminders, and due dates.",
+      progressSnapshot: "Progress snapshot",
+      stepsComplete: "steps complete",
+      stepsRemaining: "steps remaining",
+      lessonMeta: "Lesson meta",
+      currentUnitLabel: "Current unit container for this lesson.",
+      statusLocked: "Locked",
+      statusLive: "Live",
+      lessonLockedDetail: "Unlock this lesson by finishing the earlier unit.",
+      lessonLiveDetail: "This lesson is available from the path now.",
+      openLiveLesson: "Open live lesson",
+      sendTeacherMessage: "Send teacher a message",
       currentResult: "Current result",
       stepScore: "Step score",
       dashboardReward: "Dashboard reward",
@@ -268,6 +468,22 @@ export const TRANSLATIONS = {
       nextTopicSameLesson: "Next topic inside the same lesson.",
       allTopicsCovered:
         "All lesson topics are now covered on this page set.",
+      activeLessonWorkspace: {
+        title: "Active lesson workspace",
+        subtitle: "A focused practice view for the current lesson.",
+        subtopicsAria: "Lesson subtopics",
+        subtopicsDone: "subtopics done",
+        previousSubtopic: "Previous subtopic",
+        nextSubtopic: "Next subtopic",
+        kindLabels: {
+          theory: "Theory",
+          boardDrill: "Board drill",
+          signLab: "Sign lab",
+          quickCheck: "Quick check",
+        },
+        completed: "Completed",
+        markComplete: "Mark complete",
+      },
     },
     learningStep: {
       stepBreakdown: "Step breakdown",
@@ -373,6 +589,177 @@ export const TRANSLATIONS = {
       recommendedLessonsTitle: "Loso maneno mag yore",
       recommendedLessonsSubtitle:
         "Loso mag yore mar revision, kibed, kendo ngima.",
+      teacherUploads: {
+        title: "Joma tich oketo",
+        subtitle: "Wach man one neno mar yore e video, winjo, kendo nyiso.",
+        unseen: "nochung'",
+        newLabel: "Noke",
+        seenLabel: "Neno",
+        statusWaiting: "Nono mondo ogoyo",
+        statusMarked: "Neno meno",
+        typeNotesLinks: "Nyiso / winjo",
+        items: "nyiso",
+        revision: "Twego",
+        uploads: {
+          "image-upload": {
+            title: "Tikadh mar winjo mar road markings",
+            meta: "Ms. Diaz / 16 winjo / Okelo e chieng'",
+            summary:
+              "Neno mar winjo ma nyal gi chuny lume mar lane edges, center lines, kod turn bays.",
+            action: "Lamee tikadh mar winjo",
+            type: "Tike winjo",
+            intro:
+              "Tikadh mang'eyo winjo gin gi chuny mar loso mar timo mondo loso nyisi gi winjo mar road-marking ma nyal koro loso okwore shore gi lane-position drills.",
+            highlights: [
+              "16 road scenes maneno okruok gi center lines, edge lines, kod stop boxes.",
+              "Gweth mar winjo manok gi dak kod konyo mar loso ma nyiso omiyo oromo.",
+              "Chopo mar caption man-effet mondo yimo winjo kanyo ka loso tiyo klas.",
+            ],
+            sections: [
+              {
+                title: "Gin e bedo",
+                body:
+                  "Pak ma ogi loso mar markings gi center lines, directional arrows, edge guidance, kod stop controls mondo loso nyiso yore ma kichamo kaka loso ni gi context.",
+              },
+              {
+                title: "Nitie gi",
+                body:
+                  "Royal scene, ni loso winjo, kendo neno teko mar loso mangi e tich kane mondo loso nyiso nyalo winjo mbaka okro.",
+              },
+              {
+                title: "Ang'eyo ni dong' gi",
+                body:
+                  "Winjo mar road ok gin podo mondo okonyore gi ka loso peko, to tikadh ma nyalo iseto ok onyiso mondo oyudo loso mar winjo ma nyal to.",
+              },
+            ],
+            nextSteps: [
+              "Dhi gi loso mar road-markings magoyo kendo nyiso lane-arrow examples.",
+              "Keto tikadh mar winjo ka wang' matek neno quiz mar tin.",
+              "Nyenyo gweth mar stop-box examples kando ting' weyo ka loso ni mondo nyalo oma.",
+            ],
+          },
+          "video-upload": {
+            title: "Nyang' mar tjukony gi junction",
+            meta: "Mr. Chen / 12 minuto / Okelo e 2 ngima maduong'",
+            summary: "Replay mar chuny priority calls, blind checks, kod timing mar dhi.",
+            action: "Neno replay",
+            type: "Video",
+            intro:
+              "Replay manoyo nyathini junction gi approach scan, right-of-way judgment, kendo final turn commitment mondo loso ni teko mawinjo piny niweyo.",
+            highlights: [
+              "12 minuto mar neno mar jomotino gi slowed-down junction entries.",
+              "Misto mar priority neno e tiend gi piny mar risk biro oyudo.",
+              "Neno mar turn-by-turn gi mirror checks, gap choice, kendo final steering timing.",
+            ],
+            sections: [
+              {
+                title: "Chuo mar chapter",
+                body:
+                  "Video biro nengo gi chuny mar manyalo nyiso kendo priority choice, kendo biro duo gi left-turn kod right-turn examples ma okelo gi hesitations madongo.",
+              },
+              {
+                title: "Routino man e yo",
+                body:
+                  "Neno gi chwoko kanyo to ok iyo, kendo nyal replay ma gweth chok ma tedo gidwaro ma teacher ne oyudo.",
+              },
+              {
+                title: "Neno mar to moro",
+                body:
+                  "Losore nyalo bedo gi junction timing manenore, ka nying' moko mondo okwath kamano, kendo nyiso mar risk madongo.",
+              },
+            ],
+            nextSteps: [
+              "Replay chapter mar blind-check kaka oket mondo jira gi quiz mar junction.",
+              "Dhi gi loso mar page kendo compares teacher examples gi winjo ma okelo.",
+              "Dhi gi panel mar messaji ka chuo mar junction moko nochung' gi timo.",
+            ],
+          },
+          "resource-upload": {
+            title: "Pak mar tweyo sign mar traffic",
+            meta: "Ms. Bello / Nyiso + winjo / Okelo e chieng'",
+            summary:
+              "Nyiso ma niro kod winjo mondo timo sign mar warning, order, kendo direction.",
+            action: "Lamee pak mar tweyo",
+            type: "Nyiso gi winjo",
+            intro:
+              "Pak mar revision manok nyiso kendo visual prompts mondo loso sign meaning kanyo ka loso tiyo loso mane idhi kendo e assessment.",
+            highlights: [
+              "Nyiso mondo konyo regulatory, warning, kendo informative signs.",
+              "Visual prompts manok mondo loso nyiso gi piny mar quiz.",
+              "Layout mar revision mar thurwa mondo mye winsoro kaka loso timo godu.",
+            ],
+            sections: [
+              {
+                title: "Chuo mar pack",
+                body:
+                  "Kik ma ochung' gi sign groups, kendo to iye gi visual prompts manok kod nyiso mar tigo mondo loso ni teko ma yudo.",
+              },
+              {
+                title: "Routino mar revision ma nyalo opuonj",
+                body:
+                  "Loso sign, kendo neno category mar sign, to neno teko ma loso e ngo. Chalo ma timo mar nyiso ma otho.",
+              },
+              {
+                title: "Wang' mar assessment",
+                body:
+                  "Pak ni obiro yudo mondo timo konyo loso gi visual recall kendo nyiso ma oketho ni exam choices ok nyalo kaka rach.",
+              },
+            ],
+            nextSteps: [
+              "Dhi gi pack manie gi loso mar traffic-sign kando mar revision mar tin.",
+              "Nyenyo group mar warning-sign kando teko mar loso mar yore momiyo nyako.",
+              "Dhi gi card mar dashboard review mondo nyal loso nyiso ka loso duok loso.",
+            ],
+          },
+        },
+      },
+      teacherUploadDetail: {
+        backToDashboard: "Dhi gi dashboard",
+        backToDashboardTitle: "Dhi gi dashboard mar loso",
+        openRelatedLessonTitle: "Dhi gi loso maneno",
+        startRelatedLesson: "Dhi gi loso maneno",
+        videoGuideRows: "Ng'ato mar video",
+        videoGuideRowsSubtitle: "Video mar timo gi lweny mar anyiso e chunyruok.",
+        play: "Dhi",
+        imageReview: "Tweyo winjo",
+        imageReviewSubtitle: "Card mar winjo mondo ogoyo loso gi chunyruok.",
+        notesAndLinks: "Nyiso gi winjo",
+        notesAndLinksSubtitle: "Card mar nyiso mar tigo mondo ogoyo gi loso gi chunyruok.",
+        view: "Neno",
+        videoRows: [
+          { label: "Neno mar priority call", duration: "3:20" },
+          { label: "Timing mar mirror gi signal", duration: "2:45" },
+          { label: "Teko mar speed gi gap choice", duration: "2:05" },
+          { label: "Kommitment mar final turn", duration: "3:40" },
+        ],
+        imageItems: [
+          { label: "Lane arrows", caption: "6 examples", tone: "blue" },
+          { label: "Road markings", caption: "4 close-ups", tone: "green" },
+          { label: "Junction signs", caption: "5 scenes", tone: "gold" },
+          { label: "Priority lines", caption: "3 comparisons", tone: "rose" },
+        ],
+        noteCards: [
+          { label: "Warning signs", description: "Chopo mar gin'eyo" },
+          { label: "Regulatory signs", description: "Nyiso mar teko" },
+          { label: "Directional signs", description: "Neno mar ngima" },
+          { label: "Safety tips", description: "Chopo mar revision mar tin" },
+        ],
+        highlights: "Ng'ato mag yore",
+        highlightsSubtitle: "Ng'ato ma timo mondo ng'ato ogoyo ka idhi e yore.",
+        updated: "Okelo",
+        keyPoint: "Ng'ato mag yore",
+        uploadWalkthrough: "Nyer tich mag upload",
+        uploadWalkthroughSubtitle: "Wach man oko e yo mondo gi puonj ma ogendene gi card ma ginyo.",
+        nextSteps: "Ng'ato mar ndalo",
+        nextStepsSubtitle: "Timo ng'ato maneno mondo gin'eyo upload gi ngima mar loso.",
+        deliverables: {
+          "Runtime": "Waktu",
+          "Scenes": "Ng'ato",
+          "Format": "Moko",
+          "Focus area": "Ng'ato mar gi ngima",
+          "Best use": "Teko mar yore",
+        },
+      },
       browseAll: "Rang'ni gi dwaro",
       badgeFocus: "Moko",
       badgeTrack: "Handoyo",
@@ -532,6 +919,37 @@ export const TRANSLATIONS = {
       backToLessonProgress: "Dhi gi ngima mar loso",
       openNextTopic: "Lame ndalo ma okoro",
       returnToLearningPath: "Dhi gi loso mar jami",
+      complete: "duok",
+      previousLesson: "Lworo loso mondo ogingo",
+      nextLesson: "Ndalo loso mondo ogingo",
+      resultSystem: "Sistem mar neno",
+      resultSystemSubtitle: "Loso mar iye ni piny, tero, kendo mano ma oket biro bedo e ringo.",
+      rewardSystem: "Sistem mar tero",
+      rewardSystemSubtitle:
+        "Loso mondo yudo neno mar piny, tero mar ma biro timo, kendo mano ma oket biro timo.",
+      calloutFinishAll: "Duok ng'ato marlo e",
+      calloutFinishAdd:
+        "malo mondo yudo tero mar timo kendo yudo loso e dashboard review.",
+      teacherSupport: "Doko mar jomotino",
+      teacherSupportSubtitle: "Timo tee manie kaka in nyiso madongo.",
+      liveClassRoom: "Lokal loso",
+      liveClassRoomSubtitle: "Dhi gi loso ma omedo ka ma yudo wait-room.",
+      messageTeacher: "Neno gi jomotino",
+      messageTeacherSubtitle: "Neno ka in yudo feedback kata nyiso mag timo.",
+      notificationsSubtitle: "Neno wabiro mag upload, reminders, kendo nyiso mag duok.",
+      progressSnapshot: "Ng'ato mar progresso",
+      stepsComplete: "ng'ato duok",
+      stepsRemaining: "ng'ato manie pi",
+      lessonMeta: "Ng'ato mar loso",
+      currentUnitLabel: "Yudo unit ma timo e loso ma togo.",
+      statusLocked: "Tame",
+      statusLive: "In gi chieng'",
+      lessonLockedDetail:
+        "Tame loso manie mondo loso okwong' gi unit mar ber e yo.",
+      lessonLiveDetail:
+        "Loso ni in gi e path mondo idhi kama ni oketo.",
+      openLiveLesson: "Lame loso gi chieng'",
+      sendTeacherMessage: "Neno gi jomotino",
       currentResult: "Neno mar iye",
       stepScore: "Mang'ato mar step",
       dashboardReward: "Tero mar dasibod",
@@ -547,6 +965,22 @@ export const TRANSLATIONS = {
       nextTopicSameLesson: "Ndalo maneno e loso kaka dano.",
       allTopicsCovered:
         "Nyiso mar loso ma okoro biro bedo e dala mondo biro kwano.",
+      activeLessonWorkspace: {
+        title: "Active lesson workspace",
+        subtitle: "Wach mar loso manie kaka loso ma timbe.",
+        subtopicsAria: "Lesson subtopics",
+        subtopicsDone: "ng'ato mar subtopic duok",
+        previousSubtopic: "Subtopic mag pacho",
+        nextSubtopic: "Subtopic mar pacho",
+        kindLabels: {
+          theory: "Theory",
+          boardDrill: "Board drill",
+          signLab: "Sign lab",
+          quickCheck: "Quick check",
+        },
+        completed: "Duok",
+        markComplete: "Duok modong'",
+      },
     },
     learningStep: {
       stepBreakdown: "Ng'ato mar step",

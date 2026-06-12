@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { startTransition, useEffect, useOptimistic, useState } from "react";
+import { useTranslation } from "./translations";
 import { teacherUploads } from "../data/teacher-uploads";
 
 const UNSEEN_UPLOADS_KEY = "godomain-unseen-uploads";
@@ -21,7 +22,33 @@ function persistUnseenMap(nextMap) {
   window.localStorage.setItem(UNSEEN_UPLOADS_KEY, JSON.stringify(nextMap));
 }
 
-function UploadCard({ upload, unseen, onMarkSeen }) {
+function getUploadTranslation(upload, t) {
+  return {
+    ...upload,
+    title: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.title`,
+      upload.title,
+    ),
+    meta: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.meta`,
+      upload.meta,
+    ),
+    summary: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.summary`,
+      upload.summary,
+    ),
+    action: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.action`,
+      upload.action,
+    ),
+    type: t(
+      `dashboard.teacherUploads.uploads.${upload.id}.type`,
+      upload.type,
+    ),
+  };
+}
+
+function UploadCard({ upload, unseen, onMarkSeen, t }) {
   return (
     <article
       className={`teacher-card teacher-card-link ${upload.accent}${
@@ -37,7 +64,7 @@ function UploadCard({ upload, unseen, onMarkSeen }) {
           aria-pressed={!unseen}
           onClick={() => onMarkSeen(upload.id)}
         >
-          <span>{unseen ? "New" : "Seen"}</span>
+          <span>{unseen ? t("dashboard.teacherUploads.newLabel") : t("dashboard.teacherUploads.seenLabel")}</span>
           {unseen ? <span className="teacher-new-popup">+1</span> : null}
         </button>
       </div>
@@ -51,16 +78,16 @@ function UploadCard({ upload, unseen, onMarkSeen }) {
       <div className="teacher-chip-row">
         <span className="teacher-chip">{upload.teacher}</span>
         <span className="teacher-chip">
-          {upload.deliverables[0]?.value ?? "1"} items
+          {upload.deliverables[0]?.value ?? "1"} {t("dashboard.teacherUploads.items")}
         </span>
         <span className="teacher-chip">
-          {upload.deliverables[1]?.value ?? "Revision"}
+          {upload.deliverables[1]?.value ?? t("dashboard.teacherUploads.revision")}
         </span>
       </div>
 
       <div className="teacher-card-footer">
         <span className="teacher-card-status">
-          {unseen ? "Waiting for review" : "Marked as seen"}
+          {unseen ? t("dashboard.teacherUploads.statusWaiting") : t("dashboard.teacherUploads.statusMarked")}
         </span>
         <div className="teacher-card-actions">
           <Link className="teacher-primary-action" href={upload.href}>
@@ -73,6 +100,7 @@ function UploadCard({ upload, unseen, onMarkSeen }) {
 }
 
 export default function TeacherUploadsSection() {
+  const t = useTranslation();
   const [unseenMap, setUnseenMap] = useState(() => getInitialUnseenMap());
   const [optimisticUnseenMap, setOptimisticUnseenMap] = useOptimistic(
     unseenMap,
@@ -129,34 +157,38 @@ export default function TeacherUploadsSection() {
     <section className="dash-section teacher-uploads-section">
       <div className="dash-section-head">
         <div>
-          <div className="dash-section-title">Teacher uploads</div>
+          <div className="dash-section-title">{t("dashboard.teacherUploads.title")}</div>
           <div className="dash-section-subtitle">
-            Essential revision content grouped as videos, images, and notes.
+            {t("dashboard.teacherUploads.subtitle")}
           </div>
         </div>
         <div className="teacher-uploads-summary">
           <span className="teacher-summary-pill">
             {Object.values(optimisticUnseenMap).filter((value) => value).length}{" "}
-            unseen
+            {t("dashboard.teacherUploads.unseen")}
           </span>
         </div>
       </div>
 
       <div className="teacher-grid teacher-grid-three">
-        {dashboardUploads.map((upload) => (
-          <UploadCard
-            key={upload.id}
-            upload={{
-              ...upload,
-              type:
-                upload.id === "resource-upload"
-                  ? "Notes / links"
-                  : upload.type,
-            }}
-            unseen={Boolean(optimisticUnseenMap[upload.id])}
-            onMarkSeen={handleMarkSeen}
-          />
-        ))}
+        {dashboardUploads.map((upload) => {
+          const localizedUpload = getUploadTranslation(upload, t);
+          return (
+            <UploadCard
+              key={upload.id}
+              upload={{
+                ...localizedUpload,
+                type:
+                  upload.id === "resource-upload"
+                    ? t("dashboard.teacherUploads.typeNotesLinks")
+                    : localizedUpload.type,
+              }}
+              unseen={Boolean(optimisticUnseenMap[upload.id])}
+              onMarkSeen={handleMarkSeen}
+              t={t}
+            />
+          );
+        })}
       </div>
     </section>
   );
