@@ -4,7 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { studentProfile } from "../data/student-profile";
-import { useThemePreference } from "./theme-state";
+import { useThemePreference, useLanguagePreference } from "./theme-state";
+import { useTranslation } from "./translations";
+
+const LANGUAGES = [
+  { id: "en", label: "English" },
+  { id: "luo", label: "Luo" },
+  { id: "ki", label: "Kikuyu" },
+  { id: "sw", label: "Kiswahili" },
+];
 
 function getPercent(value, capacity) {
   if (!capacity) return 0;
@@ -24,7 +32,7 @@ const STAT_META = {
     color: "#e05c7a",
     glow: "rgba(224,92,122,0.28)",
     track: "linear-gradient(90deg,#ff6b9d,#e0365a)",
-    label: "HP",
+    labelKey: "topNavbar.hpLabel",
   },
   energy: {
     icon: (
@@ -35,19 +43,21 @@ const STAT_META = {
     color: "#3ecf6e",
     glow: "rgba(62,207,110,0.28)",
     track: "linear-gradient(90deg,#58d17a,#1f9f57)",
-    label: "en",
+    labelKey: "topNavbar.energyLabel",
   },
 };
 
 function NavbarMeter({ tone, value, capacity }) {
+  const t = useTranslation();
   const meta = STAT_META[tone];
+  const label = meta.labelKey ? t(meta.labelKey) : meta.label;
   const pct = getPercent(value, capacity);
   return (
     <Link
       className={`top-navbar-meter ${tone}`}
       href="/stats"
-      aria-label={`${meta.label}: ${value}/${capacity}`}
-      title={`${meta.label}: ${value}/${capacity}`}
+      aria-label={`${label}: ${value}/${capacity}`}
+      title={`${label}: ${value}/${capacity}`}
       style={{ "--meter-glow": meta.glow, "--meter-color": meta.color }}
     >
       <span className="top-navbar-meter-icon" style={{ color: meta.color }}>
@@ -55,7 +65,7 @@ function NavbarMeter({ tone, value, capacity }) {
       </span>
       <div className="top-navbar-meter-body">
         <div className="top-navbar-meter-row">
-          <span className="top-navbar-meter-label">{meta.label}</span>
+          <span className="top-navbar-meter-label">{label}</span>
           <strong className="top-navbar-meter-val">
             {value}
             <em>/{capacity}</em>
@@ -70,7 +80,9 @@ function NavbarMeter({ tone, value, capacity }) {
 }
 
 export default function TopNavbar() {
+  const t = useTranslation();
   const { theme, mounted, toggleTheme } = useThemePreference();
+  const { language, setLanguage } = useLanguagePreference();
   const darkMode = mounted && theme === "dark";
   const [profile, setProfile] = useState(null);
 
@@ -94,18 +106,19 @@ export default function TopNavbar() {
     };
   }, []);
 
+  function handleLanguageChange(event) {
+    setLanguage(event.target.value);
+  }
+
   const effectiveProfile = profile || studentProfile;
 
   return (
-    <header
-      className="top-navbar no-search"
-      style={{ padding: "clamp(0.65rem,1.6vw,1rem) clamp(1rem,2.8vw,2rem)" }}
-    >
+    <header className="top-navbar no-search">
       <div className="top-navbar-leading">
         <Link
           className="top-navbar-brand"
           href="/"
-          aria-label="Open GoDomain dashboard"
+          aria-label={t("topNavbar.brandLabel")}
         >
           <span className="top-navbar-brand-mark">
             <Image
@@ -116,9 +129,9 @@ export default function TopNavbar() {
             />
           </span>
           <span className="top-navbar-brand-copy">
-            <span className="top-navbar-brand-label">GoDomain</span>
+            <span className="top-navbar-brand-label">{t("topNavbar.brandLabel")}</span>
             <span className="top-navbar-brand-subtitle">
-              Learning workspace
+              {t("topNavbar.brandSubtitle")}
             </span>
           </span>
         </Link>
@@ -130,7 +143,11 @@ export default function TopNavbar() {
           className={`top-navbar-theme-toggle${darkMode ? " dark" : ""}`}
           onClick={toggleTheme}
           aria-pressed={darkMode}
-          aria-label={`Switch to ${darkMode ? "light" : "dark"} mode`}
+          aria-label={
+            darkMode
+              ? t("topNavbar.themeSwitchLight")
+              : t("topNavbar.themeSwitchDark")
+          }
         >
           <span className="top-navbar-theme-icon" aria-hidden="true">
             {darkMode
@@ -151,7 +168,7 @@ export default function TopNavbar() {
                 </svg>}
           </span>
         </button>
-        <fieldset className="top-navbar-vitals" aria-label="Learner vitals">
+        <fieldset className="top-navbar-vitals" aria-label={t("topNavbar.vitalsLabel")}>
           <NavbarMeter
             tone="hp"
             value={effectiveProfile.hp}
@@ -166,8 +183,8 @@ export default function TopNavbar() {
         <Link
           className="top-navbar-coins"
           href="/stats"
-          aria-label={`Coins: ${effectiveProfile.coins}`}
-          title={`Coins: ${effectiveProfile.coins}`}
+          aria-label={`${t("topNavbar.coinsLabel")}: ${effectiveProfile.coins}`}
+          title={`${t("topNavbar.coinsLabel")}: ${effectiveProfile.coins}`}
         >
           <span className="top-navbar-coins-icon" aria-hidden="true">
             <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -195,6 +212,22 @@ export default function TopNavbar() {
             {effectiveProfile.coins}
           </strong>
         </Link>
+      </div>
+
+      <div className="top-navbar-center">
+        <div className="top-navbar-language">
+          <select
+            value={language}
+            onChange={handleLanguageChange}
+            aria-label={t("topNavbar.languageSelectorLabel")}
+          >
+            {LANGUAGES.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </header>
   );

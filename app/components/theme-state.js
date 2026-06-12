@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 export const THEME_KEY = "godomain-theme";
 export const THEME_EVENT = "godomain-theme-change";
+export const LANGUAGE_KEY = "godomain-language";
+export const LANGUAGE_EVENT = "godomain-language-change";
 
 export function resolveTheme() {
   if (typeof window === "undefined") {
@@ -26,6 +28,25 @@ export function applyTheme(theme) {
   root.setAttribute("data-theme", theme);
   window.localStorage.setItem(THEME_KEY, theme);
   window.dispatchEvent(new CustomEvent(THEME_EVENT, { detail: theme }));
+}
+
+export function resolveLanguage() {
+  if (typeof window === "undefined") {
+    return "en";
+  }
+
+  return window.localStorage.getItem(LANGUAGE_KEY) || "en";
+}
+
+export function applyLanguage(language) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const root = document.documentElement;
+  root.lang = language;
+  window.localStorage.setItem(LANGUAGE_KEY, language);
+  window.dispatchEvent(new CustomEvent(LANGUAGE_EVENT, { detail: language }));
 }
 
 export function clearStoredTheme() {
@@ -99,5 +120,49 @@ export function useThemePreference() {
     mounted,
     setTheme: updateTheme,
     toggleTheme,
+  };
+}
+
+export function useLanguagePreference() {
+  const [language, setLanguage] = useState("en");
+
+  useEffect(() => {
+    function syncLanguage(nextLanguage = resolveLanguage()) {
+      setLanguage(nextLanguage);
+      if (typeof window !== "undefined") {
+        document.documentElement.lang = nextLanguage;
+      }
+    }
+
+    function handleStorage(event) {
+      if (event.key && event.key !== LANGUAGE_KEY) {
+        return;
+      }
+      syncLanguage();
+    }
+
+    function handleLanguageEvent(event) {
+      syncLanguage(event.detail || resolveLanguage());
+    }
+
+    syncLanguage();
+
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener(LANGUAGE_EVENT, handleLanguageEvent);
+
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener(LANGUAGE_EVENT, handleLanguageEvent);
+    };
+  }, []);
+
+  function updateLanguage(nextLanguage) {
+    setLanguage(nextLanguage);
+    applyLanguage(nextLanguage);
+  }
+
+  return {
+    language,
+    setLanguage: updateLanguage,
   };
 }
