@@ -1,37 +1,40 @@
+import { useTranslation } from "../components/translations";
 import Sidebar from "../components/sidebar";
 
 const notifications = [
   {
     id: "notice-video",
-    title: "New video uploaded",
-    body: "Ms. Diaz uploaded Roundabout masterclass to today’s lesson path.",
+    titleKey: "notifications.noticeVideoTitle",
+    bodyKey: "notifications.noticeVideoBody",
     time: "2 hours ago",
     tone: "accent",
   },
   {
     id: "notice-quiz",
-    title: "Quiz reminder",
-    body: "Traffic flow checkpoint opens at 4:00 PM and closes tomorrow.",
+    titleKey: "notifications.noticeQuizTitle",
+    bodyKey: "notifications.noticeQuizBody",
     time: "Today",
     tone: "warm",
   },
   {
     id: "notice-live",
-    title: "Live class starts soon",
-    body: "Road sign revision clinic begins in 20 minutes.",
+    titleKey: "notifications.noticeLiveTitle",
+    bodyKey: "notifications.noticeLiveBody",
     time: "Today",
     tone: "cool",
   },
   {
     id: "notice-message",
-    title: "New teacher message",
-    body: "Mr. Chen sent a note about the updated sign image set.",
+    titleKey: "notifications.noticeMessageTitle",
+    bodyKey: "notifications.noticeMessageBody",
     time: "Just now",
     tone: "accent",
   },
 ];
 
 export default function NotificationsPage() {
+  const t = useTranslation();
+
   return (
     <div className="app-shell">
       <Sidebar active="dashboard" />
@@ -39,11 +42,10 @@ export default function NotificationsPage() {
         <section className="notifications-page">
           <div className="notifications-hero">
             <div>
-              <div className="notifications-eyebrow">Notifications</div>
-              <h1 className="notifications-title">Recent updates</h1>
+              <div className="notifications-eyebrow">{t("notifications.title")}</div>
+              <h1 className="notifications-title">{t("notifications.title")}</h1>
               <p className="notifications-subtitle">
-                Keep track of new uploads, live-class reminders, teacher
-                messages, and deadlines.
+                {t("notifications.subtitle")}
               </p>
             </div>
           </div>
@@ -55,8 +57,8 @@ export default function NotificationsPage() {
                 className={`notification-card ${item.tone}`}
               >
                 <div className="notification-time">{item.time}</div>
-                <div className="notification-title">{item.title}</div>
-                <p>{item.body}</p>
+                <div className="notification-title">{t(item.titleKey)}</div>
+                <p>{t(item.bodyKey)}</p>
               </article>
             ))}
           </div>

@@ -2,14 +2,14 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslation } from "../components/translations";
 
 const PROVIDERS = [
-
   {
     id: "google",
-    label: "Google",
+    labelKey: "auth.providerGoogleLabel",
+    subtitleKey: "auth.providerGoogleSubtitle",
     className: "google",
-    subtitle: "Drive with Google",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true" className="provider-icon">
         <path
@@ -33,9 +33,9 @@ const PROVIDERS = [
   },
   {
     id: "facebook",
-    label: "Facebook",
+    labelKey: "auth.providerFacebookLabel",
+    subtitleKey: "auth.providerFacebookSubtitle",
     className: "facebook",
-    subtitle: "Shift with Facebook",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true" className="provider-icon">
         <path
@@ -51,10 +51,9 @@ function LoginPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
+  const t = useTranslation();
 
   const [mode, setMode] = useState("login");
-
-
   const [resetMode, setResetMode] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -150,29 +149,26 @@ function LoginPageInner() {
 
       <div className="auth-shell">
         <aside className="auth-aside">
-          <span className="auth-side-tag">Automatic gear shifter</span>
-          <h1>Shift your learner journey into drive.</h1>
-          <p>
-            Park your lessons safely, reverse bad study habits, and accelerate
-            through your dashboard with secure access.
-          </p>
+          <span className="auth-side-tag">{t("auth.asideTag")}</span>
+          <h1>{t("auth.heading")}</h1>
+          <p>{t("auth.paragraph")}</p>
 
           <div className="auth-gear-grid">
             <div>
-              <strong>Park</strong>
-              <p>Keep your account locked until you sign in.</p>
+              <strong>{t("auth.parkTitle")}</strong>
+              <p>{t("auth.parkDescription")}</p>
             </div>
             <div>
-              <strong>Reverse</strong>
-              <p>Undo old progress trackers and refresh your session.</p>
+              <strong>{t("auth.reverseTitle")}</strong>
+              <p>{t("auth.reverseDescription")}</p>
             </div>
             <div>
-              <strong>Neutral</strong>
-              <p>Access content in read-only preview mode before logging in.</p>
+              <strong>{t("auth.neutralTitle")}</strong>
+              <p>{t("auth.neutralDescription")}</p>
             </div>
             <div>
-              <strong>Drive</strong>
-              <p>Unlock dashboard, stats, and progress data instantly.</p>
+              <strong>{t("auth.driveTitle")}</strong>
+              <p>{t("auth.driveDescription")}</p>
             </div>
           </div>
         </aside>
@@ -182,17 +178,17 @@ function LoginPageInner() {
             <div>
               <span className="auth-eyebrow">
                 {resetMode
-                  ? "Forgot password"
+                  ? t("auth.forgotPassword")
                   : mode === "register"
-                    ? "New learner registration"
-                    : "Secure sign in"}
+                    ? t("auth.registerTitle")
+                    : t("auth.loginTitle")}
               </span>
               <h2>
                 {resetMode
-                  ? "Reset your password"
+                  ? t("auth.resetHeading")
                   : mode === "register"
-                    ? "Create your account"
-                    : "Sign into GoDomain"}
+                    ? t("auth.createAccount")
+                    : t("auth.signIn")}
               </h2>
             </div>
             <button
@@ -203,48 +199,49 @@ function LoginPageInner() {
                 setMessage("");
               }}
             >
-              {mode === "login" ? "Register instead" : "Back to sign in"}
+              {mode === "login"
+                ? t("auth.buttonCreateAccount")
+                : t("auth.buttonSignIn")}
             </button>
           </div>
-
           <p className="auth-panel-copy">
             {resetMode
-              ? "Enter the email address tied to your account and we’ll send a reset link."
+              ? t("auth.panelCopyForgot")
               : mode === "register"
-                ? "Create a safer learner account with email and password access."
-                : "Use your credentials or continue with Google / Facebook to reach the dashboard."}
+                ? t("auth.panelCopyRegister")
+                : t("auth.panelCopyLogin")}
           </p>
 
           {message && <div className="auth-error">{message}</div>}
 
           <form className="auth-form" onSubmit={handleSubmit}>
             <label>
-              Email address
+              {t("auth.labelEmail")}
               <input
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
                 autoComplete="email"
-                placeholder="you@domain.com"
+                placeholder={t("auth.placeholderEmail")}
               />
             </label>
 
             {!resetMode && mode === "register" && (
               <label>
-                Display name
+                {t("auth.labelDisplayName")}
                 <input
                   type="text"
                   value={displayName}
                   onChange={(event) => setDisplayName(event.target.value)}
-                  placeholder="Your learner name"
+                  placeholder={t("auth.placeholderDisplayName")}
                 />
               </label>
             )}
 
             {!resetMode && (
               <label>
-                Password
+                {t("auth.labelPassword")}
                 <input
                   type="password"
                   value={password}
@@ -255,8 +252,8 @@ function LoginPageInner() {
                   }
                   placeholder={
                     mode === "register"
-                      ? "Create a strong password"
-                      : "Enter your password"
+                      ? t("auth.placeholderCreatePassword")
+                      : t("auth.placeholderEnterPassword")
                   }
                 />
               </label>
@@ -265,12 +262,12 @@ function LoginPageInner() {
             <div className="auth-actions">
               <button type="submit" className="auth-submit" disabled={busy}>
                 {busy
-                  ? "Processing…"
+                  ? t("auth.buttonProcessing")
                   : resetMode
-                    ? "Send reset link"
+                    ? t("auth.buttonSendResetLink")
                     : mode === "register"
-                      ? "Create account"
-                      : "Sign in"}
+                      ? t("auth.buttonCreateAccount")
+                      : t("auth.buttonSignIn")}
               </button>
               {!resetMode && (
                 <button
@@ -278,14 +275,14 @@ function LoginPageInner() {
                   className="auth-text-button"
                   onClick={() => setResetMode(true)}
                 >
-                  Forgot password?
+                  {t("auth.buttonForgotPassword")}
                 </button>
               )}
             </div>
           </form>
 
           <div className="auth-divider">
-            <span>or continue with</span>
+            <span>{t("auth.dividerText")}</span>
           </div>
 
           <div className="auth-providers">
@@ -299,18 +296,15 @@ function LoginPageInner() {
               >
                 {provider.icon}
                 <span>
-                  {provider.label}
-                  <small>{provider.subtitle}</small>
+                  {t(provider.labelKey)}
+                  <small>{t(provider.subtitleKey)}</small>
                 </span>
               </button>
             ))}
           </div>
 
           <div className="auth-footnote">
-            <span>
-              Need help? Contact your GoDomain support team if you can’t access
-              your account.
-            </span>
+            <span>{t("auth.footnote")}</span>
           </div>
         </section>
       </div>
