@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslation } from "./translations";
 import { getRoadSignHref, roadSignCategories } from "../data/road-signs";
 
 export function RoadSignGraphic({ sign }) {
@@ -151,13 +154,13 @@ export function RoadSignGraphic({ sign }) {
   );
 }
 
-function SignRow({ title, description, signs }) {
+function SignRow({ title, description, signs, t }) {
   return (
     <article className="road-sign-group">
       <div className="road-sign-group-head">
         <div className="road-sign-group-title-row">
           <div className="road-sign-group-title">{title}</div>
-          <span className="road-sign-count">{signs.length} signs</span>
+          <span className="road-sign-count">{signs.length} {t("roadSigns.signsCount")}</span>
         </div>
         <p>{description}</p>
       </div>
@@ -169,10 +172,10 @@ function SignRow({ title, description, signs }) {
                 <RoadSignGraphic sign={sign} />
               </div>
               <div className="road-sign-copy">
-                <h3>{sign.label}</h3>
-                <p>{sign.caption}</p>
+                <h3>{t(`roadSigns.signs.${sign.id}.label`, sign.label)}</h3>
+                <p>{t(`roadSigns.signs.${sign.id}.caption`, sign.caption)}</p>
               </div>
-              <span className="road-sign-link">Open sign guide</span>
+              <span className="road-sign-link">{t("roadSigns.openSignGuide")}</span>
             </Link>
           </li>
         ))}
@@ -181,19 +184,19 @@ function SignRow({ title, description, signs }) {
   );
 }
 
-function RegulatoryRows({ groups }) {
+function RegulatoryRows({ groups, t }) {
   return (
     <div className="road-sign-regulatory-rows">
       {groups.map((group) => (
         <div key={group.id} className="road-sign-regulatory-row">
           <div className="road-sign-regulatory-row-head">
             <div className="road-sign-group-title-row">
-              <div className="road-sign-group-title">{group.title}</div>
+              <div className="road-sign-group-title">{t(`roadSigns.groups.${group.id}.title`, group.title)}</div>
               <span className="road-sign-count">
-                {group.signs.length} signs
+                {group.signs.length} {t("roadSigns.signsCount")}
               </span>
             </div>
-            <p>{group.description}</p>
+            <p>{t(`roadSigns.groups.${group.id}.description`, group.description)}</p>
           </div>
           <ul className="road-sign-row" aria-label={group.title}>
             {group.signs.map((sign) => (
@@ -206,10 +209,10 @@ function RegulatoryRows({ groups }) {
                     <RoadSignGraphic sign={sign} />
                   </div>
                   <div className="road-sign-copy">
-                    <h3>{sign.label}</h3>
-                    <p>{sign.caption}</p>
+                    <h3>{t(`roadSigns.signs.${sign.id}.label`, sign.label)}</h3>
+                    <p>{t(`roadSigns.signs.${sign.id}.caption`, sign.caption)}</p>
                   </div>
-                  <span className="road-sign-link">Open sign guide</span>
+                  <span className="road-sign-link">{t("roadSigns.openSignGuide")}</span>
                 </Link>
               </li>
             ))}
@@ -221,17 +224,17 @@ function RegulatoryRows({ groups }) {
 }
 
 export default function RoadSign() {
+  const t = useTranslation();
   return (
     <section className="dash-section road-signs-section">
       <div className="dash-section-head road-signs-head">
         <div>
-          <div className="dash-section-title">Road Signs Reference</div>
+          <div className="dash-section-title">{t("roadSigns.title")}</div>
           <div className="dash-section-subtitle">
-            Master traffic signs with a fast, swipeable visual guide built for
-            quick recall and focused revision.
+            {t("roadSigns.subtitle")}
           </div>
         </div>
-        <div className="road-signs-note">Swipe each row to browse faster</div>
+        <div className="road-signs-note">{t("roadSigns.swipeNote")}</div>
       </div>
 
       {roadSignCategories.map((category) => (
@@ -241,23 +244,24 @@ export default function RoadSign() {
         >
           <div className="road-sign-category-head">
             <div className="road-sign-category-title-row">
-              <div className="road-sign-category-title">{category.title}</div>
+              <div className="road-sign-category-title">{t(`roadSigns.categories.${category.id}.title`, category.title)}</div>
               <span className="road-sign-count">
-                {category.groups.length} groups
+                {category.groups.length} {t("roadSigns.groupsCount")}
               </span>
             </div>
-            <p>{category.description}</p>
+            <p>{t(`roadSigns.categories.${category.id}.description`, category.description)}</p>
           </div>
 
           {category.id === "regulatory"
-            ? <RegulatoryRows groups={category.groups} />
+            ? <RegulatoryRows groups={category.groups} t={t} />
             : <div className="road-sign-category-scroll">
                 {category.groups.map((group) => (
                   <SignRow
                     key={group.id}
-                    title={group.title}
-                    description={group.description}
+                    title={t(`roadSigns.groups.${group.id}.title`, group.title)}
+                    description={t(`roadSigns.groups.${group.id}.description`, group.description)}
                     signs={group.signs}
+                    t={t}
                   />
                 ))}
               </div>}

@@ -124,6 +124,72 @@ function DashboardIcon({ name }) {
 export default function HomePage() {
   const t = useTranslation();
 
+  const popularLessons = [
+    {
+      id: "controls",
+      title: t("dashboard.popularLessons.controls.title"),
+      meta: t("dashboard.popularLessons.controls.meta"),
+      tag: t("dashboard.popularLessons.controls.tag"),
+      href: getLearningDayHref("unit-1-lesson-1"),
+      art: "art-lilac",
+    },
+    {
+      id: "signs",
+      title: t("dashboard.popularLessons.signs.title"),
+      meta: t("dashboard.popularLessons.signs.meta"),
+      tag: t("dashboard.popularLessons.signs.tag"),
+      href: getLearningDayHref("unit-1-lesson-2"),
+      art: "art-peach",
+    },
+    {
+      id: "junctions",
+      title: t("dashboard.popularLessons.junctions.title"),
+      meta: t("dashboard.popularLessons.junctions.meta"),
+      tag: t("dashboard.popularLessons.junctions.tag"),
+      href: getLearningDayHref("unit-1-lesson-4"),
+      art: "art-mint",
+    },
+    {
+      id: "hazard",
+      title: t("dashboard.popularLessons.hazard.title"),
+      meta: t("dashboard.popularLessons.hazard.meta"),
+      tag: t("dashboard.popularLessons.hazard.tag"),
+      href: getLearningDayHref("unit-1-lesson-5"),
+      art: "art-sky",
+    },
+  ];
+
+  const recentActivity = [
+    {
+      title: t("dashboard.recentActivity.unit1.title"),
+      body: t("dashboard.recentActivity.unit1.body"),
+      time: t("dashboard.recentActivity.unit1.time"),
+      tag: t("dashboard.recentActivity.unit1.tag"),
+      short: "U1",
+    },
+    {
+      title: t("dashboard.recentActivity.mentor.title"),
+      body: t("dashboard.recentActivity.mentor.body"),
+      time: t("dashboard.recentActivity.mentor.time"),
+      tag: t("dashboard.recentActivity.mentor.tag"),
+      short: "MS",
+    },
+    {
+      title: t("dashboard.recentActivity.badge.title"),
+      body: t("dashboard.recentActivity.badge.body"),
+      time: t("dashboard.recentActivity.badge.time"),
+      tag: t("dashboard.recentActivity.badge.tag"),
+      short: "BD",
+    },
+    {
+      title: t("dashboard.recentActivity.quiz.title"),
+      body: t("dashboard.recentActivity.quiz.body"),
+      time: t("dashboard.recentActivity.quiz.time"),
+      tag: t("dashboard.recentActivity.quiz.tag"),
+      short: "QZ",
+    },
+  ];
+
   return (
     <div className="app-shell">
       <DashboardSidebar active="dashboard" />

@@ -114,6 +114,8 @@ export default function TopNavbar() {
 
   return (
     <header className="top-navbar no-search">
+
+      {/* LEFT — logo */}
       <div className="top-navbar-leading">
         <Link
           className="top-navbar-brand"
@@ -129,7 +131,9 @@ export default function TopNavbar() {
             />
           </span>
           <span className="top-navbar-brand-copy">
-            <span className="top-navbar-brand-label">{t("topNavbar.brandLabel")}</span>
+            <span className="top-navbar-brand-label">
+              {t("topNavbar.brandLabel")}
+            </span>
             <span className="top-navbar-brand-subtitle">
               {t("topNavbar.brandSubtitle")}
             </span>
@@ -137,7 +141,25 @@ export default function TopNavbar() {
         </Link>
       </div>
 
-      <div className="top-navbar-stats">
+      {/* CENTER — language selector */}
+      <div className="top-navbar-center">
+        <div className="top-navbar-language">
+          <select
+            value={language}
+            onChange={handleLanguageChange}
+            aria-label={t("topNavbar.languageSelectorLabel")}
+          >
+            {LANGUAGES.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* RIGHT — vitals, coins */}
+      <div className="top-navbar-stats top-navbar-stats-right">
         <button
           type="button"
           className={`top-navbar-theme-toggle${darkMode ? " dark" : ""}`}
@@ -214,21 +236,10 @@ export default function TopNavbar() {
         </Link>
       </div>
 
-      <div className="top-navbar-center">
-        <div className="top-navbar-language">
-          <select
-            value={language}
-            onChange={handleLanguageChange}
-            aria-label={t("topNavbar.languageSelectorLabel")}
-          >
-            {LANGUAGES.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+
+      {/* RIGHT — vitals, coins (theme toggle + meters already inside) */}
+
+
     </header>
   );
 }
