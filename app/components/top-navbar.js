@@ -141,8 +141,88 @@ export default function TopNavbar() {
         </Link>
       </div>
 
-      {/* CENTER — language selector */}
+      {/* CENTER — vitals, coins, theme toggle */}
       <div className="top-navbar-center">
+        <div className="top-navbar-stats">
+          <button
+            type="button"
+            className={`top-navbar-theme-toggle${darkMode ? " dark" : ""}`}
+            onClick={toggleTheme}
+            aria-pressed={darkMode}
+            aria-label={
+              darkMode
+                ? t("topNavbar.themeSwitchLight")
+                : t("topNavbar.themeSwitchDark")
+            }
+          >
+            <span className="top-navbar-theme-icon" aria-hidden="true">
+              {darkMode
+                ? <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path
+                      d="M13.8 2.8a6.8 6.8 0 1 0 3.4 12.7A7.5 7.5 0 1 1 13.8 2.8Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                : <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <circle cx="10" cy="10" r="3.1" fill="currentColor" />
+                    <path
+                      d="M10 2.2V4.1M10 15.9v1.9M17.8 10h-1.9M4.1 10H2.2M15.5 4.5 14.1 5.9M5.9 14.1 4.5 15.5M15.5 15.5 14.1 14.1M5.9 5.9 4.5 4.5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>}
+            </span>
+          </button>
+          <fieldset className="top-navbar-vitals" aria-label={t("topNavbar.vitalsLabel")}>
+            <NavbarMeter
+              tone="hp"
+              value={effectiveProfile.hp}
+              capacity={effectiveProfile.hpCapacity}
+            />
+            <NavbarMeter
+              tone="energy"
+              value={effectiveProfile.energy}
+              capacity={effectiveProfile.energyCapacity}
+            />
+          </fieldset>
+          <Link
+            className="top-navbar-coins"
+            href="/stats"
+            aria-label={`${t("topNavbar.coinsLabel")}: ${effectiveProfile.coins}`}
+            title={`${t("topNavbar.coinsLabel")}: ${effectiveProfile.coins}`}
+          >
+            <span className="top-navbar-coins-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="8"
+                  fill="#ffd166"
+                  stroke="#f59f00"
+                  strokeWidth="1.5"
+                />
+                <text
+                  x="10"
+                  y="14"
+                  textAnchor="middle"
+                  fontSize="9"
+                  fontWeight="800"
+                  fill="#7b4d00"
+                >
+                  $
+                </text>
+              </svg>
+            </span>
+            <strong className="top-navbar-coins-val">
+              {effectiveProfile.coins}
+            </strong>
+          </Link>
+        </div>
+      </div>
+
+      {/* RIGHT — language selector */}
+      <div className="top-navbar-leading">
         <div className="top-navbar-language">
           <select
             value={language}
@@ -157,88 +237,6 @@ export default function TopNavbar() {
           </select>
         </div>
       </div>
-
-      {/* RIGHT — vitals, coins */}
-      <div className="top-navbar-stats top-navbar-stats-right">
-        <button
-          type="button"
-          className={`top-navbar-theme-toggle${darkMode ? " dark" : ""}`}
-          onClick={toggleTheme}
-          aria-pressed={darkMode}
-          aria-label={
-            darkMode
-              ? t("topNavbar.themeSwitchLight")
-              : t("topNavbar.themeSwitchDark")
-          }
-        >
-          <span className="top-navbar-theme-icon" aria-hidden="true">
-            {darkMode
-              ? <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <path
-                    d="M13.8 2.8a6.8 6.8 0 1 0 3.4 12.7A7.5 7.5 0 1 1 13.8 2.8Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              : <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <circle cx="10" cy="10" r="3.1" fill="currentColor" />
-                  <path
-                    d="M10 2.2V4.1M10 15.9v1.9M17.8 10h-1.9M4.1 10H2.2M15.5 4.5 14.1 5.9M5.9 14.1 4.5 15.5M15.5 15.5 14.1 14.1M5.9 5.9 4.5 4.5"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>}
-          </span>
-        </button>
-        <fieldset className="top-navbar-vitals" aria-label={t("topNavbar.vitalsLabel")}>
-          <NavbarMeter
-            tone="hp"
-            value={effectiveProfile.hp}
-            capacity={effectiveProfile.hpCapacity}
-          />
-          <NavbarMeter
-            tone="energy"
-            value={effectiveProfile.energy}
-            capacity={effectiveProfile.energyCapacity}
-          />
-        </fieldset>
-        <Link
-          className="top-navbar-coins"
-          href="/stats"
-          aria-label={`${t("topNavbar.coinsLabel")}: ${effectiveProfile.coins}`}
-          title={`${t("topNavbar.coinsLabel")}: ${effectiveProfile.coins}`}
-        >
-          <span className="top-navbar-coins-icon" aria-hidden="true">
-            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <circle
-                cx="10"
-                cy="10"
-                r="8"
-                fill="#ffd166"
-                stroke="#f59f00"
-                strokeWidth="1.5"
-              />
-              <text
-                x="10"
-                y="14"
-                textAnchor="middle"
-                fontSize="9"
-                fontWeight="800"
-                fill="#7b4d00"
-              >
-                $
-              </text>
-            </svg>
-          </span>
-          <strong className="top-navbar-coins-val">
-            {effectiveProfile.coins}
-          </strong>
-        </Link>
-      </div>
-
-
-      {/* RIGHT — vitals, coins (theme toggle + meters already inside) */}
-
 
     </header>
   );
