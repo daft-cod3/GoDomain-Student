@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getLearningDayHref, getSubLessonHref, learningUnits } from "..";
+import { useTranslation } from "../../components/translations";
 import {
   deriveLearningProgress,
   hydrateLearningProgress,
   persistLearningProgress,
 } from "../progress-store";
 
-const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const ICON_SEQUENCE = ["star", "star", "headphones", "mic", "star"];
 
 function getCompletedSteps(lesson) {
@@ -153,12 +153,12 @@ function Tooltip({ href, label }) {
 }
 
 /* ── Unit banner ── */
-function UnitBanner({ unit }) {
+function UnitBanner({ unit, t }) {
   return (
     <section className="lp-banner">
       <div className="lp-banner-copy lp-text-panel">
         <span className="lp-banner-eyebrow lp-text-box">
-          {unit.label} / {unit.completedLessons} of {unit.lessons.length} lessons
+          {unit.label} / {unit.completedLessons} {t("learningPath.of")} {unit.lessons.length} {t("learningPath.lessons")}
         </span>
         <h2 className="lp-banner-title lp-text-box">{unit.title}</h2>
         <p className="lp-banner-guide lp-text-box">{unit.summary}</p>
@@ -174,13 +174,20 @@ function UnitBanner({ unit }) {
 }
 
 /* ── Single lesson node ── */
-function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
+function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson, t }) {
   const done = lesson.progress === 100;
   const locked = !done && lesson.isLocked;
   const future = !done && !isCurrent && !locked && lesson.progress === 0;
   const inert = locked;
   const offset = lessonIndex % 2 === 0 ? -72 : 72;
-  const day = DAYS[lessonIndex] ?? `Day ${lessonIndex + 1}`;
+  const DAYS = [
+    t("learningPath.monday"),
+    t("learningPath.tuesday"),
+    t("learningPath.wednesday"),
+    t("learningPath.thursday"),
+    t("learningPath.friday"),
+  ];
+  const day = DAYS[lessonIndex] ?? `${t("learningPath.day")} ${lessonIndex + 1}`;
   const completedSteps = getCompletedSteps(lesson);
   const totalSteps = lesson.lessons.length || 4;
   const filledSegments = done ? 4 : Math.min(4, Math.round((completedSteps / totalSteps) * 4));
@@ -203,18 +210,16 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
     future ? "lp-node--future" : "",
   ].filter(Boolean).join(" ");
 
-  const isMonday = lessonIndex === 0;
   const showStart = isCurrent && !done;
   const showReview = done && isCurrent;
 
-  // Clicking a circle goes to the subLearn page for the first step
   const firstStepId = lesson.lessons[0]?.id;
   const subLearnHref = firstStepId ? getSubLessonHref(lesson.id, firstStepId) : getLearningDayHref(lesson.id);
 
   return (
     <div className="lp-node-wrap" style={{ "--lp-x": `${offset}px` }}>
-      {showStart && <Tooltip href={subLearnHref} label="START" />}
-      {showReview && <Tooltip href={subLearnHref} label="REVIEW" />}
+      {showStart && <Tooltip href={subLearnHref} label={t("learningPath.start")} />}
+      {showReview && <Tooltip href={subLearnHref} label={t("learningPath.review")} />}
 
       <button
         type="button"
@@ -224,13 +229,13 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
           if (inert) return;
           navigateLesson(lesson.id);
         }}
-        aria-label={`${day}: ${lesson.title}${inert ? " unavailable" : ""}`}
+        aria-label={`${day}: ${lesson.title}${inert ? ` ${t("learningPath.unavailable")}` : ""}`}
         title={
           inert
-            ? `${day} is locked`
+            ? `${day} ${t("learningPath.isLocked")}`
             : showStart
-              ? `Start ${day}: ${lesson.title}`
-              : `Open ${day}: ${lesson.title}`
+              ? `${t("learningPath.startLabel")} ${day}: ${lesson.title}`
+              : `${t("learningPath.openLabel")} ${day}: ${lesson.title}`
         }
         disabled={inert}
         style={{
@@ -247,11 +252,10 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
           <NodeIcon type={iconType} color={iconColor} />
         </span>
         {showStart && (
-          <span className="lp-node-label lp-node-label-pulse">START</span>
+          <span className="lp-node-label lp-node-label-pulse">{t("learningPath.start")}</span>
         )}
       </button>
 
-      {/* Stars below the lesson circle */}
       <div className="lp-node-stars lp-node-stars-interactive">
         <Stars earned={starRating} />
       </div>
@@ -262,7 +266,7 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
 }
 
 /* ── Full unit path section ── */
-function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
+function UnitSection({ unit, currentLessonId, onNavigateLesson, t }) {
   const chestUnlocked = unit.progress > 0;
   const chestClaimed = unit.progress === 100;
   const lessonsLeft = unit.lessons.filter((l) => l.progress < 100).length;
@@ -271,7 +275,7 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
 
   return (
     <div className="lp-unit">
-      <UnitBanner unit={unit} />
+      <UnitBanner unit={unit} t={t} />
       <div className="lp-path">
         {unit.lessons.map((lesson, i) => {
           const isCurrent = lesson.id === currentLessonId;
@@ -284,6 +288,7 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
                   lessonIndex={i}
                   isCurrent={isCurrent}
                   navigateLesson={onNavigateLesson}
+                  t={t}
                 />
                 {i === MASCOT_AT && (
                   <div className="lp-side lp-side--right">
@@ -295,7 +300,7 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
                   <div className="lp-side lp-side--left">
                     <Chest unlocked={chestUnlocked} claimed={chestClaimed} />
                     {!chestClaimed && (
-                      <span className="lp-chest-hint lp-text-box">{lessonsLeft} to unlock</span>
+                      <span className="lp-chest-hint lp-text-box">{lessonsLeft} {t("learningPath.toUnlock")}</span>
                     )}
                   </div>
                 )}
@@ -313,7 +318,7 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
                   <NodeIcon type="trophy" color="#b0b8c4" />
                 </span>
               </div>
-              <span className="lp-node-day lp-text-box">Unit end</span>
+              <span className="lp-node-day lp-text-box">{t("learningPath.unitEnd")}</span>
             </div>
           </div>
         </div>
@@ -340,6 +345,7 @@ const _initCur = getCurrentLesson(_init);
 /* ── Root shell ── */
 export default function LearningPathShell() {
   const router = useRouter();
+  const t = useTranslation();
   const [units, setUnits] = useState(() => _init);
   const [hydrated, setHydrated] = useState(false);
   const [activeUnitIndex, setActiveUnitIndex] = useState(0);
@@ -350,7 +356,6 @@ export default function LearningPathShell() {
     const h = hydrateLearningProgress(learningUnits);
     const cur = getCurrentLesson(h);
     setUnits(h);
-    // Default to Unit 1 for new users; otherwise go to the unit with the current lesson
     const unitIndex = h.findIndex((unit) =>
       unit.lessons.some((lesson) => lesson.id === cur?.id),
     );
@@ -369,23 +374,20 @@ export default function LearningPathShell() {
   const pct = totalSteps ? Math.round((completedSteps / totalSteps) * 100) : 0;
   const activeUnit = units[activeUnitIndex] ?? units[0];
 
-  // Allow navigating to any unit (not just completed ones)
   const canGoPrev = activeUnitIndex > 0;
   const canGoNext = activeUnitIndex < units.length - 1;
 
   return (
     <div className="lp-shell">
-      {/* Top progress bar */}
       <div className="lp-topbar">
         <div className="lp-topbar-track">
           <div className="lp-topbar-fill" style={{ width: `${pct}%` }} />
         </div>
         <span className="lp-topbar-label lp-text-box">
-          {pct}% · {completedLessons}/{totalLessons} lessons
+          {pct}% · {completedLessons}/{totalLessons} {t("learningPath.lessons")}
         </span>
       </div>
 
-      {/* Unit path */}
       <div className="lp-units">
         {activeUnit
           ? <UnitSection
@@ -401,11 +403,11 @@ export default function LearningPathShell() {
                   router.push(getLearningDayHref(lessonId));
                 }
               }}
+              t={t}
             />
           : null}
       </div>
 
-      {/* Unit navigation controls */}
       <div className="lp-unit-controls">
         <button
           type="button"
@@ -413,10 +415,10 @@ export default function LearningPathShell() {
           disabled={!canGoPrev}
           onClick={() => setActiveUnitIndex((i) => Math.max(0, i - 1))}
         >
-          Previous
+          {t("learningPath.previous")}
         </button>
         <span className="lp-unit-nav-status lp-text-box">
-          Unit {activeUnitIndex + 1} of {units.length}
+          {t("learningPath.unit")} {activeUnitIndex + 1} {t("learningPath.of")} {units.length}
         </span>
         <button
           type="button"
@@ -424,7 +426,7 @@ export default function LearningPathShell() {
           disabled={!canGoNext}
           onClick={() => setActiveUnitIndex((i) => Math.min(units.length - 1, i + 1))}
         >
-          Next
+          {t("learningPath.next")}
         </button>
       </div>
     </div>

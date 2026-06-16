@@ -16454,3 +16454,34 @@ html[data-theme="dark"] .sl-aside-step {
     grid-template-columns: 1fr;
   }
 }
+
+/* Navbar column alignment: stats=left, language=center, logo=right */
+.top-navbar-leading {
+  justify-self: end;
+}
+
+.top-navbar-stats {
+  justify-self: start;
+}
+
+.top-navbar-center {
+  justify-self: center;
+}
+
+/* Language selector pinned to true grid center */
+.top-navbar {
+  grid-template-columns: auto 1fr auto;
+  position: relative;
+}
+
+.top-navbar-center {
+  position: static;
+  transform: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+  width: auto;
+  z-index: auto;
+  justify-self: center;
+}

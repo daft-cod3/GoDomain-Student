@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "../../components/translations";
 import { LessonIcon } from "../icons";
 import { LEARNING_PROGRESS_KEY } from "../progress-store";
 
@@ -35,11 +36,12 @@ function writeCompletedStepIds(lessonId, completedStepIds) {
 }
 
 function KindBadge({ kind }) {
+  const t = useTranslation();
   const map = {
-    theory: { label: "Theory", color: "#3b82f6" },
-    board:  { label: "Board drill", color: "#10b981" },
-    signs:  { label: "Sign lab", color: "#f59e0b" },
-    quiz:   { label: "Quick check", color: "#8b5cf6" },
+    theory: { label: t("activeLessonWorkspace.kindLabels.theory", "Theory"), color: "#3b82f6" },
+    board:  { label: t("activeLessonWorkspace.kindLabels.boardDrill", "Board drill"), color: "#10b981" },
+    signs:  { label: t("activeLessonWorkspace.kindLabels.signLab", "Sign lab"), color: "#f59e0b" },
+    quiz:   { label: t("activeLessonWorkspace.kindLabels.quickCheck", "Quick check"), color: "#8b5cf6" },
   };
   const meta = map[kind] ?? { label: kind, color: "#6b7280" };
   return (
@@ -71,6 +73,7 @@ function ProgressRing({ pct }) {
 }
 
 export default function ActiveLessonWorkspace({ lesson }) {
+  const t = useTranslation();
   const initialCompletedIds = useMemo(
     () => new Set(lesson.lessons.filter((e) => e.completed).map((e) => e.id)),
     [lesson.lessons],
@@ -128,15 +131,15 @@ export default function ActiveLessonWorkspace({ lesson }) {
       {/* Header */}
       <div className="alw-header">
         <div className="alw-header-left">
-          <span className="alw-eyebrow">Active lesson workspace</span>
+          <span className="alw-eyebrow">{t("activeLessonWorkspace.title")}</span>
           <h2 className="alw-title">{lesson.title}</h2>
-          <p className="alw-subtitle">{lesson.subtitle}</p>
+          <p className="alw-subtitle">{t("activeLessonWorkspace.subtitle")}</p>
         </div>
         <div className="alw-header-right">
           <ProgressRing pct={progress} />
           <div className="alw-score-meta">
             <strong>{completedCount}/{total}</strong>
-            <span>subtopics done</span>
+            <span>{t("activeLessonWorkspace.subtopicsDone")}</span>
           </div>
         </div>
       </div>
@@ -147,7 +150,7 @@ export default function ActiveLessonWorkspace({ lesson }) {
       </div>
 
       {/* Subtopic tab strip */}
-      <div className="alw-tab-strip" role="tablist" aria-label="Lesson subtopics">
+      <div className="alw-tab-strip" role="tablist" aria-label={t("activeLessonWorkspace.subtopicsAria")}>
         {lesson.lessons.map((entry, index) => {
           const isActive = entry.id === selectedStep?.id;
           const isDone = completedIds.has(entry.id);
@@ -219,18 +222,18 @@ export default function ActiveLessonWorkspace({ lesson }) {
                 className="alw-nav-btn"
                 onClick={goPrev}
                 disabled={selectedIndex === 0}
-                aria-label="Previous subtopic"
+                aria-label={t("activeLessonWorkspace.previousSubtopic")}
               >
-                ← Prev
+                ← {t("activeLessonWorkspace.previousSubtopic")}
               </button>
               <button
                 type="button"
                 className="alw-nav-btn"
                 onClick={goNext}
                 disabled={selectedIndex === total - 1}
-                aria-label="Next subtopic"
+                aria-label={t("activeLessonWorkspace.nextSubtopic")}
               >
-                Next →
+                {t("activeLessonWorkspace.nextSubtopic")} →
               </button>
             </div>
             <button
