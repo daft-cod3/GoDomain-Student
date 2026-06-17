@@ -1,0 +1,164 @@
+Model Town Training Board
+
+A tighter training board for route reading, sign placement, and parking practice without bulky visual clutter.
+
+Dholuo translation:
+
+Bango mane adwaro kuom kuonjo ka winjo n’uwo piny (road reading), kok susto mondo ok maplani ng’ambo (sign placement), to jogo piny kuom jo-park ng’ambo joma dhi (parking practice) gi dho timo gi chako marac.
+
+Compact training board
+Bango manono (bango manono mar ende) kuom adaok.
+
+Read the board like a route map before moving off.
+Ebo bango gi kitini mane u-mapa lok ng’ato othuok (route map) ka otira ka ok nyaka kwenda.
+
+Pick up lane flow, sign positions, and junction controls early.
+Lowa dhoot kod mare piny kuom lane, ni kok susto, kod hukum mana ebo winjo ng’ato ji amondi ni junction gi but chien.
+
+Use the board to rehearse observation and parking in a lower-risk space.
+Tich mar mare kuom bango mondo u-rehearse observation (kuonjo) kod parkir gi ndiri piny ma romo kendo ngo mana nyim.
+
+Feature 01
+Controlled junctions
+
+Spot stop, give-way, and merge points early.
+Lowa ma ok-pile (stop), m-giwayo (give way), kod ma u-nyalo lut ni butet—lowa ewinji ka ok yie.
+
+Practise priority decisions before live-road sessions.
+Yeyi chuma ma u-mak nyaka ko order (priority) ka ok gikenti live-road.
+
+Use turning pockets without cutting the junction.
+Yeyi turning pocket kuom tich mamoko gi m-biro kuom junction.
+
+Feature 02
+Lane guidance
+
+Read lane arrows before you move over.
+Kuo winjo lane arrows ka ok gima (move over).
+
+Position early instead of drifting late.
+Biro kuom mane e-winjo kare—to m-otim dala mar kod otamu.
+
+Use edge markings to hold a clean line.
+Tiem maler e-piny (edge markings) mondo u-tha ni ayiela lweg.
+
+Feature 03
+Crossing points
+
+Tighten scans near zebra and school crossings.
+Kore (tighten) kuonjo ka u-jong gi zebra crossing to school crossing.
+
+Reduce speed before bus-stop activity zones.
+Ke dho timo/kwergi speed ka u-pinyore loko ma bende ka bayo bus-stop.
+
+Cover the brake where people may step out.
+Guna brake ka romo adier ting’ru ma ng’ato angima.
+
+Feature 04
+Parking drills
+
+Repeat angle and reverse parking in marked bays.
+Yeyi angle parking kod reverse parking kuom marked bays.
+
+Work on slow steering and bay alignment.
+Yeyi steering manono (slow) kod kuwe bay ma lwal.
+
+Build a routine before the real test route.
+To chiko nyuto (routine) ka ok gima gi route mane gi test.
+
+Road option
+One-way 4-lane traffic
+4 lanes
+
+Quick read
+
+All four lanes move in the same direction.
+Lame yath-one (all four lanes) nyalo to gi pare ma tim.
+
+The focus is steady lane discipline and clean changes.
+Winjo mane loyo: lane discipline ma toroko kod chinge ma i-ot i.
+
+Set up early for turns, bays, and pedestrian points.
+Biro kare mondo ok nyalo turns, bays, kod pedestrian points.
+
+Lane 1
+Forward movement
+
+Use it for early positioning near the kerb.
+Yeyi kendo lane 1 mondo ok loch kare ng’ato kod kerb.
+
+Good for bay access and calm entry control.
+I-more mondo ok nyalo bay access to jo-kontrol ma min.
+
+Lane 2
+Forward movement
+
+Main through lane once the vehicle is settled.
+Gi lane 2, nyalo gik nyand chak kuom through lane ka gari ocheng.
+
+Hold steady speed and avoid unnecessary drift.
+Dho steady speed to m-giyo drift ma m-need.
+
+Lane 3
+Forward movement
+
+Use for measured lane changes only.
+Yeyi lane 3 ka nyalo lane change ma uwinji.
+
+Prepare here before the next board feature.
+Pinyore chiemo ebar e-ng’ato ka next board feature.
+
+Lane 4
+Forward movement
+
+Outer setup lane for wider turn preparation.
+Lane 4 ni lane outer mondo u-prepare kuom turn ma mil.
+
+Merge back in smoothly, one lane at a time.
+Geni merge kod lweg ma itar—gi lane emiyo emiyo.
+
+Practice list
+
+Use the entry sign, lane arrows, and no-entry control at the far end to keep the flow one-directional.
+Guna entry sign, lane arrows, kod no-entry control kuom nyand piny ni flow one direction.
+
+Practise early mirror checks before moving across lanes because late drift is the main mistake on this layout.
+Yeyi kuon mirror check ka ok gima—mana mistake ma mawu: drift dala mame.
+
+Prepare for service bays, pedestrian points, and parking access without cutting across two lanes at once.
+To prepare kuom service bays, pedestrian points, kod parking access—to m-otwo cut across two lanes amoko.
+
+The safest option is always to move one lane at a time and finish all observations before the lane change starts.
+Jonde ma win: nyalo move gi lane emiyo emiyo, to pinyere kuonjo yath kendo lane change etiyo.
+
+Road option
+Two-way 3-lane traffic
+3 lanes
+
+Quick read
+
+Traffic moves in both directions on this layout.
+Gari gi traffic nyalo nyam gi pare oyier (both directions) gi duto.
+
+Respect the opposing lane at all times.
+Tich i kodi opposing lane ka nyalo e-gi.
+
+Use the center lane briefly for controlled turning only.
+Guna center lane gi tiang’ gima—kuom turning ma controlled.
+
+Forward lane
+Forward movement
+
+This is your live lane for steady travel.
+Lane mana: forward lane—ni lane ma nyalo u-kenda.
+
+Stay stable before the next junction or crossing.
+To stay stable ka u-pinyore chiemo ki junction to crossing.
+
+Center lane
+Shared turn flow
+
+Shared space for holding or turning briefly.
+Center lane ni piny mana one osum—holding to turning gi gima tiang’.
+
+Never use it as a normal cruising lane.
