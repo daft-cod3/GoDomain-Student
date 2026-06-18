@@ -5410,6 +5410,34 @@ html[data-theme="dark"] .settings-profile-detail-card:hover {
   gap: 0.38rem;
 }
 
+/* Language toggle should be centered & visible (not in the right cluster) */
+.nb2-root header.nb2-root {
+  display: flex;
+  align-items: center;
+}
+
+.top-navbar-controls {
+  display: flex;
+}
+
+.top-navbar-language-toggle {
+  display: flex;
+}
+
+/* Ensure the language toggle isn't hidden behind layout/overflow */
+.top-navbar-language-toggle,
+.top-navbar-language-menu {
+  position: relative;
+  z-index: 50;
+  overflow: visible;
+}
+
+/* When placed as the only control, keep it centered */
+.top-navbar-language-toggle:has(.top-navbar-language-menu[hidden]) {
+  justify-content: center;
+}
+
+
 .top-navbar-theme-toggle,
 .top-navbar-meter,
 .top-navbar-coins {
