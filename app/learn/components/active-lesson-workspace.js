@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "../../components/translations";
 import { LessonIcon } from "../icons";
 import { LEARNING_PROGRESS_KEY } from "../progress-store";
 
@@ -23,7 +22,10 @@ function writeCompletedStepIds(lessonId, completedStepIds) {
       window.localStorage.getItem(LEARNING_PROGRESS_KEY) ?? "{}",
     );
     const lessons = Array.isArray(payload.lessons) ? payload.lessons : [];
-    const nextLesson = { id: lessonId, completedStepIds: Array.from(completedStepIds) };
+    const nextLesson = {
+      id: lessonId,
+      completedStepIds: Array.from(completedStepIds),
+    };
     const exists = lessons.some((l) => l.id === lessonId);
     const nextLessons = exists
       ? lessons.map((l) => (l.id === lessonId ? nextLesson : l))
@@ -36,19 +38,15 @@ function writeCompletedStepIds(lessonId, completedStepIds) {
 }
 
 function KindBadge({ kind }) {
-  const t = useTranslation();
   const map = {
-    theory: { label: t("activeLessonWorkspace.kindLabels.theory", "Theory"), color: "#3b82f6" },
-    board:  { label: t("activeLessonWorkspace.kindLabels.boardDrill", "Board drill"), color: "#10b981" },
-    signs:  { label: t("activeLessonWorkspace.kindLabels.signLab", "Sign lab"), color: "#f59e0b" },
-    quiz:   { label: t("activeLessonWorkspace.kindLabels.quickCheck", "Quick check"), color: "#8b5cf6" },
+    theory: { label: "Theory", color: "#3b82f6" },
+    board: { label: "Board drill", color: "#10b981" },
+    signs: { label: "Sign lab", color: "#f59e0b" },
+    quiz: { label: "Quick check", color: "#8b5cf6" },
   };
   const meta = map[kind] ?? { label: kind, color: "#6b7280" };
   return (
-    <span
-      className="alw-kind-badge"
-      style={{ "--badge-color": meta.color }}
-    >
+    <span className="alw-kind-badge" style={{ "--badge-color": meta.color }}>
       {meta.label}
     </span>
   );
@@ -62,18 +60,70 @@ function ProgressRing({ pct }) {
     <svg className="alw-ring" viewBox="0 0 72 72" aria-hidden="true">
       <circle cx="36" cy="36" r={r} className="alw-ring-track" />
       <circle
-        cx="36" cy="36" r={r}
+        cx="36"
+        cy="36"
+        r={r}
         className="alw-ring-fill"
         strokeDasharray={`${dash} ${circ}`}
         strokeDashoffset={circ * 0.25}
       />
-      <text x="36" y="40" textAnchor="middle" className="alw-ring-text">{pct}%</text>
+      <text x="36" y="40" textAnchor="middle" className="alw-ring-text">
+        {pct}%
+      </text>
     </svg>
   );
 }
 
+function RoadOptionShowcase({ options }) {
+  const [hoveredId, setHoveredId] = useState(null);
+
+  if (!options.length) return null;
+
+  return (
+    <div className="alw-ros" aria-label="Model town board road options">
+      <div className="alw-ros-head">
+        <span className="alw-ros-kicker">Animated route set</span>
+        <h4 className="alw-ros-title">Model town board road options</h4>
+        <span className="alw-ros-count">{options.length} illustrations</span>
+      </div>
+
+      <div className="alw-ros-grid">
+        {options.map((option, index) => (
+          <section
+            key={option.id}
+            className={`alw-ros-card${hoveredId === option.id ? " alw-ros-card--hovered" : ""}`}
+            onMouseEnter={() => setHoveredId(option.id)}
+            onMouseLeave={() => setHoveredId(null)}
+            onFocus={() => setHoveredId(option.id)}
+            onBlur={() => setHoveredId(null)}
+            tabIndex={0}
+          >
+            <div className="alw-ros-card-label-row">
+              <span className="alw-ros-card-index">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="alw-ros-card-label">{option.label}</span>
+            </div>
+
+            <div className="alw-ros-card-media">
+              <img
+                src={option.image}
+                alt={`${option.label} model town board route animation`}
+                loading={index < 4 ? "eager" : "lazy"}
+                className="alw-ros-card-gif"
+              />
+              <div className="alw-ros-card-media-shine" aria-hidden="true" />
+            </div>
+
+            <p className="alw-ros-card-text">{option.text}</p>
+          </section>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ActiveLessonWorkspace({ lesson }) {
-  const t = useTranslation();
   const initialCompletedIds = useMemo(
     () => new Set(lesson.lessons.filter((e) => e.completed).map((e) => e.id)),
     [lesson.lessons],
@@ -81,6 +131,7 @@ export default function ActiveLessonWorkspace({ lesson }) {
   const [selectedStepId, setSelectedStepId] = useState(lesson.lessons[0]?.id);
   const [completedIds, setCompletedIds] = useState(initialCompletedIds);
   const [justCompleted, setJustCompleted] = useState(null);
+  const [optimisticStepId, setOptimisticStepId] = useState(null);
 
   useEffect(() => {
     const stored = readCompletedStepIds(lesson.id);
@@ -92,23 +143,33 @@ export default function ActiveLessonWorkspace({ lesson }) {
     lesson.lessons.findIndex((e) => e.id === selectedStepId),
   );
   const selectedStep = lesson.lessons[selectedIndex] ?? lesson.lessons[0];
+  const optimisticStep = lesson.lessons.find(
+    (entry) => entry.id === justCompleted,
+  );
   const completedCount = completedIds.size;
   const total = lesson.lessons.length;
   const progress = total ? Math.round((completedCount / total) * 100) : 0;
-  const isSelectedComplete = selectedStep ? completedIds.has(selectedStep.id) : false;
+  const isSelectedComplete = selectedStep
+    ? completedIds.has(selectedStep.id)
+    : false;
 
   // Find the matching topic content from overviewTopics
   const topicContent = lesson.overviewTopics?.[selectedIndex] ?? null;
 
   function completeSelectedStep() {
-    if (!selectedStep) return;
+    if (!selectedStep || completedIds.has(selectedStep.id)) return;
+    setOptimisticStepId(selectedStep.id);
     setJustCompleted(selectedStep.id);
-    setTimeout(() => setJustCompleted(null), 1200);
+    setTimeout(() => {
+      setJustCompleted(null);
+      setOptimisticStepId(null);
+    }, 1200);
     setCompletedIds((current) => {
       const next = new Set(current);
       next.add(selectedStep.id);
       writeCompletedStepIds(lesson.id, next);
-      const nextStep = lesson.lessons.find((e) => !next.has(e.id)) ?? selectedStep;
+      const nextStep =
+        lesson.lessons.find((e) => !next.has(e.id)) ?? selectedStep;
       setSelectedStepId(nextStep.id);
       return next;
     });
@@ -119,11 +180,13 @@ export default function ActiveLessonWorkspace({ lesson }) {
   }
 
   function goPrev() {
-    if (selectedIndex > 0) setSelectedStepId(lesson.lessons[selectedIndex - 1].id);
+    if (selectedIndex > 0)
+      setSelectedStepId(lesson.lessons[selectedIndex - 1].id);
   }
 
   function goNext() {
-    if (selectedIndex < total - 1) setSelectedStepId(lesson.lessons[selectedIndex + 1].id);
+    if (selectedIndex < total - 1)
+      setSelectedStepId(lesson.lessons[selectedIndex + 1].id);
   }
 
   return (
@@ -131,15 +194,17 @@ export default function ActiveLessonWorkspace({ lesson }) {
       {/* Header */}
       <div className="alw-header">
         <div className="alw-header-left">
-          <span className="alw-eyebrow">{t("activeLessonWorkspace.title")}</span>
+          <span className="alw-eyebrow">Active lesson workspace</span>
           <h2 className="alw-title">{lesson.title}</h2>
-          <p className="alw-subtitle">{t("activeLessonWorkspace.subtitle")}</p>
+          <p className="alw-subtitle">{lesson.subtitle}</p>
         </div>
         <div className="alw-header-right">
           <ProgressRing pct={progress} />
           <div className="alw-score-meta">
-            <strong>{completedCount}/{total}</strong>
-            <span>{t("activeLessonWorkspace.subtopicsDone")}</span>
+            <strong>
+              {completedCount}/{total}
+            </strong>
+            <span>subtopics done</span>
           </div>
         </div>
       </div>
@@ -150,7 +215,11 @@ export default function ActiveLessonWorkspace({ lesson }) {
       </div>
 
       {/* Subtopic tab strip */}
-      <div className="alw-tab-strip" role="tablist" aria-label={t("activeLessonWorkspace.subtopicsAria")}>
+      <div
+        className="alw-tab-strip"
+        role="tablist"
+        aria-label="Lesson subtopics"
+      >
         {lesson.lessons.map((entry, index) => {
           const isActive = entry.id === selectedStep?.id;
           const isDone = completedIds.has(entry.id);
@@ -160,17 +229,27 @@ export default function ActiveLessonWorkspace({ lesson }) {
               type="button"
               role="tab"
               aria-selected={isActive}
-              className={`alw-tab${isActive ? " alw-tab--active" : ""}${isDone ? " alw-tab--done" : ""}`}
+              className={`alw-tab${isActive ? " alw-tab--active" : ""}${isDone ? " alw-tab--done" : ""}${optimisticStepId === entry.id ? " alw-tab--optimistic" : ""}`}
               onClick={() => goToStep(entry.id)}
               title={entry.title}
             >
-              <span className="alw-tab-num">{String(index + 1).padStart(2, "0")}</span>
-              <span className="alw-tab-icon"><LessonIcon kind={entry.kind} /></span>
+              <span className="alw-tab-num">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="alw-tab-icon">
+                <LessonIcon kind={entry.kind} />
+              </span>
               <span className="alw-tab-label">{entry.title}</span>
               {isDone && (
                 <span className="alw-tab-check" aria-hidden="true">
-                  <svg viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M3 8.5l3.5 3.5L13 5"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </span>
               )}
@@ -192,7 +271,9 @@ export default function ActiveLessonWorkspace({ lesson }) {
               <span className="alw-panel-counter">
                 Subtopic {selectedIndex + 1} of {total}
               </span>
-              <span className="alw-panel-duration">⏱ {selectedStep.duration}</span>
+              <span className="alw-panel-duration">
+                ⏱ {selectedStep.duration}
+              </span>
             </div>
           </div>
 
@@ -214,6 +295,10 @@ export default function ActiveLessonWorkspace({ lesson }) {
             </div>
           )}
 
+          {lesson.roadOptionIllustrations?.length
+            ? <RoadOptionShowcase options={lesson.roadOptionIllustrations} />
+            : null}
+
           {/* Actions */}
           <div className="alw-actions">
             <div className="alw-nav-btns">
@@ -222,18 +307,18 @@ export default function ActiveLessonWorkspace({ lesson }) {
                 className="alw-nav-btn"
                 onClick={goPrev}
                 disabled={selectedIndex === 0}
-                aria-label={t("activeLessonWorkspace.previousSubtopic")}
+                aria-label="Previous subtopic"
               >
-                ← {t("activeLessonWorkspace.previousSubtopic")}
+                ← Prev
               </button>
               <button
                 type="button"
                 className="alw-nav-btn"
                 onClick={goNext}
                 disabled={selectedIndex === total - 1}
-                aria-label={t("activeLessonWorkspace.nextSubtopic")}
+                aria-label="Next subtopic"
               >
-                {t("activeLessonWorkspace.nextSubtopic")} →
+                Next →
               </button>
             </div>
             <button
@@ -242,18 +327,27 @@ export default function ActiveLessonWorkspace({ lesson }) {
               onClick={completeSelectedStep}
               disabled={isSelectedComplete}
             >
-              {isSelectedComplete ? (
-                <>
-                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                    <path d="M4 10.5l4.5 4.5L16 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  Completed
-                </>
-              ) : (
-                "Mark complete"
-              )}
+              {isSelectedComplete
+                ? <>
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                      <path
+                        d="M4 10.5l4.5 4.5L16 6"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    Completed
+                  </>
+                : "Mark complete"}
             </button>
           </div>
+          {optimisticStep && (
+            <output className="alw-optimistic-status" aria-live="polite">
+              {optimisticStep.title} saved
+            </output>
+          )}
         </div>
       )}
     </section>

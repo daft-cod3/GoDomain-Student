@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getLearningDayHref, getSubLessonHref, learningUnits } from "..";
-import { useTranslation } from "../../components/translations";
+import { getLearningDayHref, learningUnits } from "..";
 import {
   deriveLearningProgress,
   hydrateLearningProgress,
   persistLearningProgress,
 } from "../progress-store";
 
+const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const ICON_SEQUENCE = ["star", "star", "headphones", "mic", "star"];
 
 function getCompletedSteps(lesson) {
@@ -41,7 +41,12 @@ function IconCheck() {
 function IconHeadphones({ color }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <path d="M6 17C6 10.4 10.5 5 16 5s10 5.4 10 12" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+      <path
+        d="M6 17C6 10.4 10.5 5 16 5s10 5.4 10 12"
+        stroke={color}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
       <rect x="4" y="17" width="6" height="9" rx="3" fill={color} />
       <rect x="22" y="17" width="6" height="9" rx="3" fill={color} />
     </svg>
@@ -51,17 +56,47 @@ function IconMic({ color }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
       <rect x="11" y="4" width="10" height="14" rx="5" fill={color} />
-      <path d="M7 16c0 5 4 9 9 9s9-4 9-9" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
-      <line x1="16" y1="25" x2="16" y2="29" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
-      <line x1="11" y1="29" x2="21" y2="29" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+      <path
+        d="M7 16c0 5 4 9 9 9s9-4 9-9"
+        stroke={color}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="16"
+        y1="25"
+        x2="16"
+        y2="29"
+        stroke={color}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="11"
+        y1="29"
+        x2="21"
+        y2="29"
+        stroke={color}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 function IconTrophy({ color }) {
   return (
-    <svg viewBox="0 0 32 32" fill="none" stroke={color} strokeWidth="2" aria-hidden="true">
+    <svg
+      viewBox="0 0 32 32"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      aria-hidden="true"
+    >
       <path d="M10 5H22V12C22 15.9 19.3 19 16 19C12.7 19 10 15.9 10 12V5Z" />
-      <path d="M10 6H5V9C5 12.8 7.7 16 11 17M22 6H27V9C27 12.8 24.3 16 21 17" strokeLinecap="round" />
+      <path
+        d="M10 6H5V9C5 12.8 7.7 16 11 17M22 6H27V9C27 12.8 24.3 16 21 17"
+        strokeLinecap="round"
+      />
       <path d="M16 19V25M11 28H21" strokeLinecap="round" />
     </svg>
   );
@@ -69,7 +104,12 @@ function IconTrophy({ color }) {
 function IconLock({ color }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <path d="M10 14V11C10 7.7 12.7 5 16 5s6 2.7 6 6v3" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+      <path
+        d="M10 14V11C10 7.7 12.7 5 16 5s6 2.7 6 6v3"
+        stroke={color}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
       <rect x="7" y="14" width="18" height="13" rx="3.5" fill={color} />
     </svg>
   );
@@ -88,13 +128,20 @@ function NodeIcon({ type, color }) {
 /* ── Owl mascot ── */
 function OwlMascot({ active }) {
   return (
-    <div className={`lp-owl${active ? " lp-owl--active" : ""}`} aria-hidden="true">
+    <div
+      className={`lp-owl${active ? " lp-owl--active" : ""}`}
+      aria-hidden="true"
+    >
       <div className="lp-owl-body">
         <div className="lp-owl-wing lp-owl-wing--l" />
         <div className="lp-owl-wing lp-owl-wing--r" />
         <div className="lp-owl-face">
-          <div className="lp-owl-eye lp-owl-eye--l"><div className="lp-owl-pupil" /></div>
-          <div className="lp-owl-eye lp-owl-eye--r"><div className="lp-owl-pupil" /></div>
+          <div className="lp-owl-eye lp-owl-eye--l">
+            <div className="lp-owl-pupil" />
+          </div>
+          <div className="lp-owl-eye lp-owl-eye--r">
+            <div className="lp-owl-pupil" />
+          </div>
           <div className="lp-owl-beak" />
         </div>
         <div className="lp-owl-belly" />
@@ -113,7 +160,13 @@ function Stars({ earned = 0 }) {
   return (
     <div className="lp-stars" role="img" aria-label={`${earned} of 3 stars`}>
       {[0, 1, 2].map((i) => (
-        <svg key={i} viewBox="0 0 22 22" width="22" height="22" aria-hidden="true">
+        <svg
+          key={i}
+          viewBox="0 0 22 22"
+          width="22"
+          height="22"
+          aria-hidden="true"
+        >
           <path
             d="M11 2.5l2.6 5.5 6 .9-4.3 4.2 1 6L11 16.2l-5.3 2.9 1-6L2.4 8.9l6-.9z"
             fill={i < earned ? "#fbbf24" : "none"}
@@ -128,11 +181,18 @@ function Stars({ earned = 0 }) {
 
 /* ── Chest ── */
 function Chest({ unlocked, claimed }) {
-  const cls = ["lp-chest", unlocked && "lp-chest--open", claimed && "lp-chest--claimed"]
-    .filter(Boolean).join(" ");
+  const cls = [
+    "lp-chest",
+    unlocked && "lp-chest--open",
+    claimed && "lp-chest--claimed",
+  ]
+    .filter(Boolean)
+    .join(" ");
   return (
     <div className={cls} aria-hidden="true">
-      <div className="lp-chest-lid"><div className="lp-chest-lid-band" /></div>
+      <div className="lp-chest-lid">
+        <div className="lp-chest-lid-band" />
+      </div>
       <div className="lp-chest-body">
         <div className="lp-chest-body-band" />
         <div className="lp-chest-lock" />
@@ -146,19 +206,22 @@ function Chest({ unlocked, claimed }) {
 function Tooltip({ href, label }) {
   return (
     <div className="lp-tooltip">
-      <Link className="lp-tooltip-cta lp-text-box" href={href}>{label}</Link>
+      <Link className="lp-tooltip-cta lp-text-box" href={href}>
+        {label}
+      </Link>
       <div className="lp-tooltip-arrow" />
     </div>
   );
 }
 
 /* ── Unit banner ── */
-function UnitBanner({ unit, t }) {
+function UnitBanner({ unit }) {
   return (
     <section className="lp-banner">
       <div className="lp-banner-copy lp-text-panel">
         <span className="lp-banner-eyebrow lp-text-box">
-          {unit.label} / {unit.completedLessons} {t("learningPath.of")} {unit.lessons.length} {t("learningPath.lessons")}
+          {unit.label} / {unit.completedLessons} of {unit.lessons.length}{" "}
+          lessons
         </span>
         <h2 className="lp-banner-title lp-text-box">{unit.title}</h2>
         <p className="lp-banner-guide lp-text-box">{unit.summary}</p>
@@ -174,32 +237,36 @@ function UnitBanner({ unit, t }) {
 }
 
 /* ── Single lesson node ── */
-function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson, t }) {
+function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
   const done = lesson.progress === 100;
   const locked = !done && lesson.isLocked;
-  const future = !done && !isCurrent && !locked && lesson.progress === 0;
   const inert = locked;
-  const offset = lessonIndex % 2 === 0 ? -72 : 72;
-  const DAYS = [
-    t("learningPath.monday"),
-    t("learningPath.tuesday"),
-    t("learningPath.wednesday"),
-    t("learningPath.thursday"),
-    t("learningPath.friday"),
-  ];
-  const day = DAYS[lessonIndex] ?? `${t("learningPath.day")} ${lessonIndex + 1}`;
+  /* Static zigzag offset — purely visual, nodes never move */
+  const offset = lessonIndex % 2 === 0 ? -56 : 56;
+  const day = DAYS[lessonIndex] ?? `Day ${lessonIndex + 1}`;
   const completedSteps = getCompletedSteps(lesson);
   const totalSteps = lesson.lessons.length || 4;
-  const filledSegments = done ? 4 : Math.min(4, Math.round((completedSteps / totalSteps) * 4));
+  const filledSegments = done
+    ? 4
+    : Math.min(4, Math.round((completedSteps / totalSteps) * 4));
   const segmentColor = "#58cc02";
   const emptySegmentColor = "#d1d5db";
 
-  const starRating = completedSteps === 0 ? 0 : Math.min(3, Math.ceil((completedSteps / totalSteps) * 3));
+  const starRating =
+    completedSteps === 0
+      ? 0
+      : Math.min(3, Math.ceil((completedSteps / totalSteps) * 3));
 
   let iconType = ICON_SEQUENCE[lessonIndex % ICON_SEQUENCE.length];
   let iconColor = "#c4c9d4";
-  if (done) { iconType = "check"; iconColor = "#fff"; }
-  if (inert) { iconType = "lock"; iconColor = "#94a3b8"; }
+  if (done) {
+    iconType = "check";
+    iconColor = "#fff";
+  }
+  if (inert) {
+    iconType = "lock";
+    iconColor = "#94a3b8";
+  }
   if (isCurrent && !done) iconColor = "#fff";
 
   const cls = [
@@ -207,35 +274,36 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson, t }) {
     done ? "lp-node--done" : "",
     isCurrent && !done ? "lp-node--current" : "",
     locked ? "lp-node--locked" : "",
-    future ? "lp-node--future" : "",
-  ].filter(Boolean).join(" ");
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   const showStart = isCurrent && !done;
   const showReview = done && isCurrent;
 
-  const firstStepId = lesson.lessons[0]?.id;
-  const subLearnHref = firstStepId ? getSubLessonHref(lesson.id, firstStepId) : getLearningDayHref(lesson.id);
+  // Navigation: lesson click opens the active lesson workspace.
+  const lessonHref = getLearningDayHref(lesson.id);
 
   return (
     <div className="lp-node-wrap" style={{ "--lp-x": `${offset}px` }}>
-      {showStart && <Tooltip href={subLearnHref} label={t("learningPath.start")} />}
-      {showReview && <Tooltip href={subLearnHref} label={t("learningPath.review")} />}
+      {showStart && <Tooltip href={lessonHref} label="START" />}
+      {showReview && <Tooltip href={lessonHref} label="REVIEW" />}
 
       <button
         type="button"
-        className={`lp-node-interactive ${cls}`}
+        className={`lp-node-btn ${cls}`}
         data-current={showStart ? "true" : "false"}
         onClick={() => {
           if (inert) return;
-          navigateLesson(lesson.id);
+          navigateLesson(lessonHref);
         }}
-        aria-label={`${day}: ${lesson.title}${inert ? ` ${t("learningPath.unavailable")}` : ""}`}
+        aria-label={`${day}: ${lesson.title}${inert ? " unavailable" : ""}`}
         title={
           inert
-            ? `${day} ${t("learningPath.isLocked")}`
+            ? `${day} is locked`
             : showStart
-              ? `${t("learningPath.startLabel")} ${day}: ${lesson.title}`
-              : `${t("learningPath.openLabel")} ${day}: ${lesson.title}`
+              ? `Start ${day}: ${lesson.title}`
+              : `Open ${day}: ${lesson.title}`
         }
         disabled={inert}
         style={{
@@ -245,28 +313,25 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson, t }) {
           "--seg-4": filledSegments >= 4 ? segmentColor : emptySegmentColor,
         }}
       >
-        {showStart && (
-          <span className="lp-node-ring lp-node-ring-animated" aria-hidden="true" />
-        )}
-        <span className="lp-node-icon lp-node-icon-interactive">
+        {showStart && <span className="lp-node-ring" aria-hidden="true" />}
+        <span className="lp-node-icon">
           <NodeIcon type={iconType} color={iconColor} />
         </span>
-        {showStart && (
-          <span className="lp-node-label lp-node-label-pulse">{t("learningPath.start")}</span>
-        )}
+        {showStart && <span className="lp-node-start-label">START</span>}
       </button>
 
-      <div className="lp-node-stars lp-node-stars-interactive">
+      {/* Stars below the lesson circle */}
+      <div className="lp-node-stars">
         <Stars earned={starRating} />
       </div>
 
-      <span className="lp-node-day lp-node-day-interactive lp-text-box">{day}</span>
+      <span className="lp-node-day lp-text-box">{day}</span>
     </div>
   );
 }
 
 /* ── Full unit path section ── */
-function UnitSection({ unit, currentLessonId, onNavigateLesson, t }) {
+function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
   const chestUnlocked = unit.progress > 0;
   const chestClaimed = unit.progress === 100;
   const lessonsLeft = unit.lessons.filter((l) => l.progress < 100).length;
@@ -275,7 +340,7 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson, t }) {
 
   return (
     <div className="lp-unit">
-      <UnitBanner unit={unit} t={t} />
+      <UnitBanner unit={unit} />
       <div className="lp-path">
         {unit.lessons.map((lesson, i) => {
           const isCurrent = lesson.id === currentLessonId;
@@ -288,7 +353,6 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson, t }) {
                   lessonIndex={i}
                   isCurrent={isCurrent}
                   navigateLesson={onNavigateLesson}
-                  t={t}
                 />
                 {i === MASCOT_AT && (
                   <div className="lp-side lp-side--right">
@@ -300,7 +364,9 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson, t }) {
                   <div className="lp-side lp-side--left">
                     <Chest unlocked={chestUnlocked} claimed={chestClaimed} />
                     {!chestClaimed && (
-                      <span className="lp-chest-hint lp-text-box">{lessonsLeft} {t("learningPath.toUnlock")}</span>
+                      <span className="lp-chest-hint lp-text-box">
+                        {lessonsLeft} to unlock
+                      </span>
                     )}
                   </div>
                 )}
@@ -318,7 +384,7 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson, t }) {
                   <NodeIcon type="trophy" color="#b0b8c4" />
                 </span>
               </div>
-              <span className="lp-node-day lp-text-box">{t("learningPath.unitEnd")}</span>
+              <span className="lp-node-day lp-text-box">Unit end</span>
             </div>
           </div>
         </div>
@@ -329,23 +395,35 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson, t }) {
 
 /* ── Helpers ── */
 function getCurrentLesson(units) {
-  for (const unit of units) {
-    for (const lesson of unit.lessons) {
+  const allLessons = units.flatMap((u) => u.lessons);
+  const hasStoredProgress = allLessons.some((lesson) => lesson.progress > 0);
+
+  // Default to Monday (first lesson of first unit) when no progress
+  if (!hasStoredProgress) {
+    return units[0]?.lessons[0] ?? null;
+  }
+
+  // Resume at the latest unlocked incomplete lesson.
+  for (let unitIndex = units.length - 1; unitIndex >= 0; unitIndex -= 1) {
+    const unit = units[unitIndex];
+    for (
+      let lessonIndex = unit.lessons.length - 1;
+      lessonIndex >= 0;
+      lessonIndex -= 1
+    ) {
+      const lesson = unit.lessons[lessonIndex];
       if (!lesson.isLocked && lesson.progress < 100) return lesson;
     }
   }
   // All done — return last lesson for review
-  const allLessons = units.flatMap((u) => u.lessons);
   return allLessons[allLessons.length - 1] ?? null;
 }
 
 const _init = deriveLearningProgress(learningUnits);
-const _initCur = getCurrentLesson(_init);
 
 /* ── Root shell ── */
 export default function LearningPathShell() {
   const router = useRouter();
-  const t = useTranslation();
   const [units, setUnits] = useState(() => _init);
   const [hydrated, setHydrated] = useState(false);
   const [activeUnitIndex, setActiveUnitIndex] = useState(0);
@@ -356,6 +434,7 @@ export default function LearningPathShell() {
     const h = hydrateLearningProgress(learningUnits);
     const cur = getCurrentLesson(h);
     setUnits(h);
+    // Default to Unit 1 for new users; otherwise go to the unit with the current lesson
     const unitIndex = h.findIndex((unit) =>
       unit.lessons.some((lesson) => lesson.id === cur?.id),
     );
@@ -374,40 +453,37 @@ export default function LearningPathShell() {
   const pct = totalSteps ? Math.round((completedSteps / totalSteps) * 100) : 0;
   const activeUnit = units[activeUnitIndex] ?? units[0];
 
+  // Allow navigating to any unit (not just completed ones)
   const canGoPrev = activeUnitIndex > 0;
   const canGoNext = activeUnitIndex < units.length - 1;
 
   return (
     <div className="lp-shell">
+      {/* Top progress bar */}
       <div className="lp-topbar">
         <div className="lp-topbar-track">
           <div className="lp-topbar-fill" style={{ width: `${pct}%` }} />
         </div>
         <span className="lp-topbar-label lp-text-box">
-          {pct}% · {completedLessons}/{totalLessons} {t("learningPath.lessons")}
+          {pct}% · {completedLessons}/{totalLessons} lessons
         </span>
       </div>
 
+      {/* Unit path */}
       <div className="lp-units">
         {activeUnit
           ? <UnitSection
               key={activeUnit.id}
               unit={activeUnit}
               currentLessonId={currentLesson?.id ?? ""}
-              onNavigateLesson={(lessonId) => {
-                const lesson = activeUnit.lessons.find((l) => l.id === lessonId);
-                const firstStepId = lesson?.lessons[0]?.id;
-                if (firstStepId) {
-                  router.push(getSubLessonHref(lessonId, firstStepId));
-                } else {
-                  router.push(getLearningDayHref(lessonId));
-                }
+              onNavigateLesson={(lessonHref) => {
+                router.push(lessonHref);
               }}
-              t={t}
             />
           : null}
       </div>
 
+      {/* Unit navigation controls */}
       <div className="lp-unit-controls">
         <button
           type="button"
@@ -415,18 +491,20 @@ export default function LearningPathShell() {
           disabled={!canGoPrev}
           onClick={() => setActiveUnitIndex((i) => Math.max(0, i - 1))}
         >
-          {t("learningPath.previous")}
+          Previous
         </button>
         <span className="lp-unit-nav-status lp-text-box">
-          {t("learningPath.unit")} {activeUnitIndex + 1} {t("learningPath.of")} {units.length}
+          Unit {activeUnitIndex + 1} of {units.length}
         </span>
         <button
           type="button"
           className="lp-unit-nav-btn"
           disabled={!canGoNext}
-          onClick={() => setActiveUnitIndex((i) => Math.min(units.length - 1, i + 1))}
+          onClick={() =>
+            setActiveUnitIndex((i) => Math.min(units.length - 1, i + 1))
+          }
         >
-          {t("learningPath.next")}
+          Next
         </button>
       </div>
     </div>

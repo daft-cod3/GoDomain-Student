@@ -1,12 +1,12 @@
 import Sidebar from "../components/sidebar";
-import StatsLive from "../components/stats-live";
+import Stats from "../components/stats";
 
 export default function StatsPage() {
   return (
     <div className="app-shell">
       <Sidebar active="stats" />
       <main className="main-content">
-        <StatsLive />
+        <Stats />
       </main>
     </div>
   );

@@ -70,9 +70,7 @@ export function deriveLearningProgress(units) {
 
     return {
       ...unit,
-      unlocked: lessons.some(
-        (lesson) => !lesson.isLocked || lesson.progress > 0,
-      ),
+      unlocked: lessons.some((lesson) => !lesson.isLocked || lesson.progress > 0),
       isComplete,
       lessons,
       completedLessons,
@@ -141,32 +139,6 @@ export function persistLearningProgress(units) {
     LEARNING_PROGRESS_KEY,
     JSON.stringify(buildProgressPayload(units)),
   );
-}
-
-export function getStoredLearningProgress() {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  try {
-    const stored = window.localStorage.getItem(LEARNING_PROGRESS_KEY);
-    return stored ? JSON.parse(stored) : null;
-  } catch {
-    return null;
-  }
-}
-
-export async function syncLearningProgress(payload) {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  await fetch("/api/progress", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-    credentials: "same-origin",
-  });
 }
 
 export function getCompletedLessons(units) {

@@ -3,12 +3,47 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getLearningDayHref, learningUnits } from "..";
-import { useTranslation } from "../../components/translations";
 import { JourneyIcon } from "../icons";
 import {
   getCompletedLessons,
   hydrateLearningProgress,
 } from "../progress-store";
+
+const reviewResources = [
+  {
+    id: "notes",
+    label: "Notes",
+    action: "Open notes",
+    tone: "blue",
+    href: (lesson) => getLearningDayHref(lesson.id),
+    summary: (lesson) => `Condensed notes and checkpoints for ${lesson.title}.`,
+  },
+  {
+    id: "video",
+    label: "Video",
+    action: "Watch recap",
+    tone: "green",
+    href: () => "/live",
+    summary: (lesson) => `Replay the short walkthrough for ${lesson.label}.`,
+  },
+  {
+    id: "images",
+    label: "Images",
+    action: "View pack",
+    tone: "mix",
+    href: (lesson) => getLearningDayHref(lesson.id),
+    summary: () => "Open the visual pack for signs, markings, and boards.",
+  },
+  {
+    id: "resources",
+    label: "Resources",
+    action: "More resources",
+    tone: "gold",
+    href: () => "/content",
+    summary: () =>
+      "Jump back into the path and browse related revision material.",
+  },
+];
 
 function getFeaturedUnit(unitSummaries) {
   return (
@@ -34,11 +69,20 @@ function getLessonActivityStreak(lessons) {
   return streak;
 }
 
-function getUnitState(unit, t) {
-  if (!unit) return t("contentReview.stateWaiting");
-  if (unit.progress === 100) return t("contentReview.stateCleared");
-  if (unit.progress > 0) return t("contentReview.stateLive");
-  return t("contentReview.stateQueued");
+function getUnitState(unit) {
+  if (!unit) {
+    return "Waiting";
+  }
+
+  if (unit.progress === 100) {
+    return "Cleared";
+  }
+
+  if (unit.progress > 0) {
+    return "Live now";
+  }
+
+  return "Queued";
 }
 
 function getShortLessonLabel(label, index) {
@@ -200,8 +244,8 @@ function UnitProgressGraph({ unit }) {
   );
 }
 
-function FeaturedUnitCard({ unit, t }) {
-  const state = getUnitState(unit, t);
+function FeaturedUnitCard({ unit }) {
+  const state = getUnitState(unit);
   const completedLessons = unit.lessons.filter(
     (lesson) => lesson.progress === 100,
   ).length;
@@ -214,7 +258,7 @@ function FeaturedUnitCard({ unit, t }) {
     <article className="review-unit-row">
       <div className="review-unit-row-main">
         <div>
-          <div className="review-card-kicker">{t("contentReview.currentUnit")}</div>
+          <div className="review-card-kicker">Current unit</div>
           <div className="review-unit-spotlight-title">
             {unit.label}: {unit.title}
           </div>
@@ -228,15 +272,15 @@ function FeaturedUnitCard({ unit, t }) {
       <div className="review-unit-row-stats">
         <span>
           <strong>{completedLessons}/{unit.lessons.length}</strong>
-          {t("contentReview.lessons")}
+          lessons
         </span>
         <span>
           <strong>{unit.completedSubLessons}/{unit.totalSubLessons}</strong>
-          {t("contentReview.steps")}
+          steps
         </span>
         <span>
           <strong>{strongestLesson?.progress ?? 0}%</strong>
-          {t("contentReview.best")}
+          best
         </span>
       </div>
 
@@ -250,9 +294,9 @@ function FeaturedUnitCard({ unit, t }) {
               className="review-unit-action"
               href={getLearningDayHref(unit.nextLesson.id)}
             >
-              {t("contentReview.open")} {unit.nextLesson.label}
+              Open {unit.nextLesson.label}
             </Link>
-          : <strong>{t("contentReview.revisionReady")}</strong>}
+          : <strong>Revision ready</strong>}
       </div>
     </article>
   );
@@ -314,7 +358,6 @@ function loadReviewData() {
 }
 
 export default function ContentReview() {
-  const t = useTranslation();
   const [reviewData, setReviewData] = useState({
     averageScore: 0,
     completedLessons: [],
@@ -332,91 +375,56 @@ export default function ContentReview() {
   const { averageScore, completedLessons, featuredUnit, totalTopicsCovered } =
     reviewData;
 
-  const reviewResources = [
-    {
-      id: "notes",
-      label: t("contentReview.resourceNotes"),
-      action: t("contentReview.resourceNotesAction"),
-      tone: "blue",
-      href: (lesson) => getLearningDayHref(lesson.id),
-      summary: (lesson) => `${t("contentReview.resourceNotesSummary")} ${lesson.title}.`,
-    },
-    {
-      id: "video",
-      label: t("contentReview.resourceVideo"),
-      action: t("contentReview.resourceVideoAction"),
-      tone: "green",
-      href: () => "/live",
-      summary: (lesson) => `${t("contentReview.resourceVideoSummary")} ${lesson.label}.`,
-    },
-    {
-      id: "images",
-      label: t("contentReview.resourceImages"),
-      action: t("contentReview.resourceImagesAction"),
-      tone: "mix",
-      href: (lesson) => getLearningDayHref(lesson.id),
-      summary: () => t("contentReview.resourceImagesSummary"),
-    },
-    {
-      id: "resources",
-      label: t("contentReview.resourceResources"),
-      action: t("contentReview.resourceResourcesAction"),
-      tone: "gold",
-      href: () => "/content",
-      summary: () => t("contentReview.resourceResourcesSummary"),
-    },
-  ];
-
   return (
     <section className="dash-section review-section">
       <div className="dash-section-head">
         <div>
-          <div className="dash-section-title">{t("contentReview.title")}</div>
+          <div className="dash-section-title">Student review</div>
           <div className="dash-section-subtitle">
-            {t("contentReview.subtitle")}
+            Unit momentum, completed lessons, and revision entry points.
           </div>
         </div>
         <Link className="dash-link" href="/content">
-          {t("contentReview.openPath")}
+          Open path
         </Link>
       </div>
 
       <div className="review-overview-bar compact">
         <article className="review-overview-stat">
-          <span>{t("contentReview.statCompleted")}</span>
+          <span>Completed</span>
           <strong>{completedLessons.length}</strong>
         </article>
         <article className="review-overview-stat">
-          <span>{t("contentReview.statScore")}</span>
+          <span>Score</span>
           <strong>{averageScore}%</strong>
         </article>
         <article className="review-overview-stat">
-          <span>{t("contentReview.statTopics")}</span>
+          <span>Topics</span>
           <strong>{totalTopicsCovered}</strong>
         </article>
         <article className="review-overview-stat">
-          <span>{t("contentReview.statUnit")}</span>
+          <span>Unit</span>
           <strong>{featuredUnit?.label ?? "—"}</strong>
         </article>
       </div>
 
       {featuredUnit
-        ? <FeaturedUnitCard unit={featuredUnit} t={t} />
+        ? <FeaturedUnitCard unit={featuredUnit} />
         : <div className="review-progress-empty">
-            <strong>{t("contentReview.noUnitActivity")}</strong>
-            <p>{t("contentReview.noUnitActivityHint")}</p>
+            <strong>No unit activity yet.</strong>
+            <p>Start a lesson and the unit snapshot will appear here.</p>
           </div>}
 
       <div className="review-stack">
         <div className="review-progress-head">
           <div>
-            <div className="review-progress-title">{t("contentReview.contentReviewTitle")}</div>
+            <div className="review-progress-title">Content review</div>
             <div className="review-progress-subtitle">
-              {t("contentReview.contentReviewSubtitle")}
+              Completed lessons with quick revision actions.
             </div>
           </div>
           <span className="review-progress-chip">
-            {completedLessons.length} {t("contentReview.ready")}
+            {completedLessons.length} ready
           </span>
         </div>
 
@@ -433,11 +441,11 @@ export default function ContentReview() {
                   <div className="review-row-metrics">
                     <span>
                       <JourneyIcon name={lesson.icon} />
-                      {lesson.lessons.length} {t("contentReview.pts")}
+                      {lesson.lessons.length} pts
                     </span>
                     <span>
                       {lesson.overviewTopics?.length ?? lesson.lessons.length}{" "}
-                      {t("contentReview.topics")}
+                      topics
                     </span>
                     <span>100%</span>
                   </div>
@@ -457,8 +465,10 @@ export default function ContentReview() {
               ))}
             </div>
           : <div className="review-empty-card">
-              <strong>{t("contentReview.noReviewCards")}</strong>
-              <p>{t("contentReview.noReviewCardsHint")}</p>
+              <strong>No review cards yet.</strong>
+              <p>
+                Finish all sub-lessons in any lesson to unlock a review card.
+              </p>
             </div>}
       </div>
     </section>
