@@ -116,76 +116,168 @@ const lessonBlueprints = [
       ],
     },
     {
-      title: "Switching On And Stopping The Vehicle",
+      title: "Model Town Board Road Options",
       subtitle:
-        "Switching on a motor vehicle, categories of road signs, gear changing, and the full stopping routine.",
+        "Read each model town board road option, choose the correct lane, and follow the marked route through junctions, roundabouts, and exits.",
       icon: "star",
-      focus: "Vehicle startup",
+      focus: "Board road options",
       overviewTitle: "Lesson 2 content",
       overviewSummary:
-        "This lesson moves from vehicle preparation into startup, gear control, road-sign categories, and the correct stopping routine.",
+        "This lesson uses animated model town board road options to show how a learner should read the route code, position early, follow lane arrows, and exit cleanly without drifting into the wrong lane.",
       overviewTopics: [
         {
-          title: "Switching on a motor vehicle",
+          title: "Reading road option codes",
           points: [
-            "Check seating position, mirrors, gear position, and handbrake before starting the engine.",
-            "Insert the key or use the start system only when the vehicle is secure and ready to move.",
-            "Confirm the dashboard indicators, engine sound, and control feel before beginning the drive.",
+            "Each model town board option uses a route code that tells the learner which road entry and road exit to follow.",
+            "Read the code before moving so the first lane choice is made early instead of being corrected late.",
+            "The GIF loops below help connect each code to the exact route shown on the board.",
           ],
         },
         {
-          title: "Categories of road signs",
+          title: "Lane position and entry",
           points: [
-            "Regulatory signs give rules and restrictions that must be obeyed.",
-            "Warning signs alert the driver to hazards or changes ahead.",
-            "Informative signs provide guidance about direction, services, and road support points.",
+            "Approach the board route in the correct lane before reaching the roundabout or junction mouth.",
+            "Use the road arrows, broken lines, and lane separators to keep the vehicle committed to the chosen option.",
+            "A stable entry keeps the route smooth and prevents last-second lane crossing.",
           ],
         },
         {
-          title: "How to change gears",
+          title: "Roundabout and junction choice",
           points: [
-            "Release the accelerator, press the clutch fully, and select the correct gear without forcing the lever.",
-            "Release the clutch gradually and add accelerator smoothly so the vehicle does not jerk or stall.",
-            "Choose gears according to speed, slope, and traffic situation rather than changing too late.",
+            "Watch how each option enters, circulates, and leaves the roundabout while maintaining lane discipline.",
+            "Signal and steer only after the route is confirmed by the marked road option.",
+            "The safest choice is the one that follows the board markings without cutting across another lane.",
           ],
         },
         {
-          title: "Stopping a motor vehicle",
+          title: "Exit, parking, and completion",
           points: [
-            "Check mirrors first, then signal if needed and slow down progressively.",
-            "Use the brake in good time and press the clutch near the final stop to avoid stalling.",
-            "Secure the vehicle with neutral and handbrake when the stop is complete.",
+            "After leaving the selected route, straighten the vehicle and prepare for the next instruction.",
+            "Use the parking bays, crossings, and side-road markings as reference points for controlled completion.",
+            "Repeat the GIF options until the route code, lane position, and final exit can be described without hesitation.",
           ],
+        },
+      ],
+      roadOptionIllustrations: [
+        {
+          id: "mtb31",
+          label: "Option 3-1",
+          image: "/MTBgifs/MTB31.gif",
+          text: "Displays the 3-1 board route, showing the vehicle committing to the marked lane, reading the roundabout arrows, and leaving by the selected exit without crossing lane boundaries.",
+        },
+        {
+          id: "mtb312",
+          label: "Option 3-1-2",
+          image: "/MTBgifs/MTB312.gif",
+          text: "Shows the extended 3-1-2 option, where the learner must keep the first decision stable and prepare early for the follow-up road choice after the initial exit.",
+        },
+        {
+          id: "mtb32",
+          label: "Option 3-2",
+          image: "/MTBgifs/MTB32.gif",
+          text: "Illustrates the 3-2 route with emphasis on approaching from the correct lane, holding a smooth curve through the board, and exiting only when the selected road is reached.",
+        },
+        {
+          id: "mtb331",
+          label: "Option 3-3-1",
+          image: "/MTBgifs/MTB331.gif",
+          text: "Demonstrates a multi-stage 3-3-1 route, helping the learner identify when to stay circulating and when to leave for the final instructed road option.",
+        },
+        {
+          id: "mtb332",
+          label: "Option 3-3-2",
+          image: "/MTBgifs/MTB332.gif",
+          text: "Displays the 3-3-2 variation, showing how a small change in the final route code changes the exit decision while the entry routine remains controlled.",
+        },
+        {
+          id: "mtb411",
+          label: "Option 4-1-1",
+          image: "/MTBgifs/MTB411.gif",
+          text: "Shows the 4-1-1 path from a different board approach, reinforcing early lane selection, lane discipline, and a clean finish at the instructed road.",
+        },
+        {
+          id: "mtb412",
+          label: "Option 4-1-2",
+          image: "/MTBgifs/MTB412.gif",
+          text: "Illustrates the 4-1-2 option, where the learner tracks the same entry family but adjusts the final choice to match the second road instruction.",
+        },
+        {
+          id: "mtb421",
+          label: "Option 4-2-1",
+          image: "/MTBgifs/MTB421.gif",
+          text: "Demonstrates the 4-2-1 route, highlighting controlled approach speed, clear road positioning, and route confirmation before the vehicle exits.",
+        },
+        {
+          id: "mtb422",
+          label: "Option 4-2-2",
+          image: "/MTBgifs/MTB422.gif",
+          text: "Displays the 4-2-2 road option, showing how to hold the vehicle in the planned lane and complete the second-road choice without late steering corrections.",
+        },
+        {
+          id: "mtb431",
+          label: "Option 4-3-1",
+          image: "/MTBgifs/MTB431.gif",
+          text: "Shows the 4-3-1 route, useful for practising a longer board read where the learner must keep scanning ahead while staying inside the correct lane path.",
+        },
+        {
+          id: "mtb432",
+          label: "Option 4-3-2",
+          image: "/MTBgifs/MTB432.gif",
+          text: "Illustrates the 4-3-2 variation, connecting the visible road arrows to the final exit choice so the learner does not confuse similar-looking routes.",
+        },
+        {
+          id: "mtb441",
+          label: "Option 4-4-1",
+          image: "/MTBgifs/MTB441.gif",
+          text: "Demonstrates the 4-4-1 option with a longer decision sequence, reinforcing patience, lane holding, and a precise exit at the instructed road.",
+        },
+        {
+          id: "mtb442",
+          label: "Option 4-4-2",
+          image: "/MTBgifs/MTB442.gif",
+          text: "Displays the 4-4-2 board path, showing how the final digit changes the finish while the learner keeps the earlier lane routine consistent.",
+        },
+        {
+          id: "mtb443",
+          label: "Option 4-4-3",
+          image: "/MTBgifs/MTB443.gif",
+          text: "Shows the 4-4-3 option, helping learners compare exit timing against the nearby 4-4 routes and avoid leaving the roundabout too early.",
+        },
+        {
+          id: "mtb444",
+          label: "Option 4-4-4",
+          image: "/MTBgifs/MTB444.gif",
+          text: "Illustrates the full 4-4-4 road option, where the learner follows the longest same-road family and completes only when the marked route reaches its final exit.",
         },
       ],
       steps: [
         {
           kind: "theory",
-          title: "Switching on a motor vehicle",
+          title: "Reading road option codes",
           duration: "8 min",
           detail:
-            "Follow the safe startup routine from seating checks to engine ignition and dashboard confirmation.",
+            "Learn how the model town board road option codes describe the entry, path, and exit the vehicle must follow.",
         },
         {
-          kind: "signs",
-          title: "Categories of road signs",
+          kind: "board",
+          title: "Lane position and entry",
           duration: "7 min",
           detail:
-            "Learn the difference between regulatory, warning, and informative signs and what each category tells the driver.",
+            "Use the board markings and arrows to choose the correct lane before entering the route.",
         },
         {
           kind: "board",
-          title: "How to change gears",
+          title: "Roundabout and junction choice",
           duration: "9 min",
           detail:
-            "Use the clutch and gear lever together correctly so gear changes stay smooth and controlled.",
+            "Follow each option through roundabouts and junctions while keeping the vehicle inside the planned lane.",
         },
         {
           kind: "board",
-          title: "Stopping a motor vehicle",
+          title: "Exit, parking, and completion",
           duration: "8 min",
           detail:
-            "Practise the full stopping routine using mirrors, braking, clutch timing, neutral, and handbrake control.",
+            "Finish each road option cleanly by exiting at the correct road, straightening the vehicle, and preparing for the next instruction.",
         },
       ],
     },
@@ -517,40 +609,12 @@ const lessonBlueprints = [
 
 const completionBlueprint = {};
 
-const subLessonBlueprints = [
-  {
-    kind: "theory",
-    suffix: "notes",
-    duration: "8 min",
-    detail: "Read the concept summary and lock the key rules in memory.",
-  },
-  {
-    kind: "board",
-    suffix: "board drill",
-    duration: "10 min",
-    detail: "Use a guided board example to map the correct driving response.",
-  },
-  {
-    kind: "signs",
-    suffix: "sign lab",
-    duration: "6 min",
-    detail: "Match visual cues to the right action before moving on.",
-  },
-  {
-    kind: "quiz",
-    suffix: "quick check",
-    duration: "5 min",
-    detail: "Finish a short quiz to confirm the lesson is sticking.",
-  },
-];
-
 function createSubLessons(unit, lessonNumber, focus, lessonBlueprint) {
   const completedCount = completionBlueprint[unit.id]?.[lessonNumber - 1] ?? 0;
-  const stepTemplates = lessonBlueprint.steps ?? subLessonBlueprints;
 
-  return stepTemplates.map((template, index) => ({
+  return (lessonBlueprint.steps ?? []).map((template, index) => ({
     id: `${unit.id}-lesson-${lessonNumber}-step-${index + 1}`,
-    title: template.title ?? `${focus} ${template.suffix}`,
+    title: template.title ?? `${focus} step ${index + 1}`,
     kind: template.kind,
     duration: template.duration,
     detail: template.detail,
@@ -581,6 +645,7 @@ function createLesson(unit, lessonBlueprint, lessonNumber, globalIndex) {
     overviewTitle: lessonBlueprint.overviewTitle,
     overviewSummary: lessonBlueprint.overviewSummary,
     overviewTopics: lessonBlueprint.overviewTopics,
+    roadOptionIllustrations: lessonBlueprint.roadOptionIllustrations,
     lessons,
   };
 }
@@ -661,17 +726,4 @@ export function getLearningStep(dayId, stepId) {
 
 export function getLearningStepHref(dayId, stepId) {
   return `/content/${dayId}/steps/${stepId}`;
-}
-
-export function getSubLessonHref(lessonId, stepId) {
-  return `/subLearn/${lessonId}/${stepId}`;
-}
-
-export function getSubLessonIds() {
-  return learningDays.flatMap((lesson) =>
-    lesson.lessons.map((step) => ({
-      lessonId: lesson.id,
-      stepId: step.id,
-    })),
-  );
 }

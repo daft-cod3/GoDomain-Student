@@ -2,242 +2,145 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { studentProfile } from "../data/student-profile";
-import { useThemePreference, useLanguagePreference } from "./theme-state";
-import { useTranslation } from "./translations";
-
-const LANGUAGES = [
-  { id: "en", label: "English" },
-  { id: "luo", label: "Luo" },
-  { id: "ki", label: "Kikuyu" },
-  { id: "sw", label: "Kiswahili" },
-];
+import LanguageToggle from "./language-toggle";
+import { useThemePreference } from "./theme-state";
 
 function getPercent(value, capacity) {
   if (!capacity) return 0;
   return Math.round((value / capacity) * 100);
 }
 
-const STAT_META = {
-  hp: {
-    icon: (
-      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <path
-          d="M10 17s-7-4.35-7-9a4 4 0 0 1 7-2.65A4 4 0 0 1 17 8c0 4.65-7 9-7 9z"
-          fill="currentColor"
-        />
-      </svg>
-    ),
-    color: "#e05c7a",
-    glow: "rgba(224,92,122,0.28)",
-    track: "linear-gradient(90deg,#ff6b9d,#e0365a)",
-    labelKey: "topNavbar.hpLabel",
-  },
-  energy: {
-    icon: (
-      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <path d="M11 2L4 11h6l-1 7 7-9h-6l1-7z" fill="currentColor" />
-      </svg>
-    ),
-    color: "#3ecf6e",
-    glow: "rgba(62,207,110,0.28)",
-    track: "linear-gradient(90deg,#58d17a,#1f9f57)",
-    labelKey: "topNavbar.energyLabel",
-  },
-};
-
-function NavbarMeter({ tone, value, capacity }) {
-  const t = useTranslation();
-  const meta = STAT_META[tone];
-  const label = meta.labelKey ? t(meta.labelKey) : meta.label;
+/* ── compact stat bar (HP / Energy) ── */
+function StatBar({ label, value, capacity, color, track, icon, href }) {
   const pct = getPercent(value, capacity);
   return (
-    <Link
-      className={`top-navbar-meter ${tone}`}
-      href="/stats"
-      aria-label={`${label}: ${value}/${capacity}`}
-      title={`${label}: ${value}/${capacity}`}
-      style={{ "--meter-glow": meta.glow, "--meter-color": meta.color }}
-    >
-      <span className="top-navbar-meter-icon" style={{ color: meta.color }}>
-        {meta.icon}
+    <Link className="nb2-stat" href={href} aria-label={`${label}: ${value}/${capacity}`} style={{ "--nb2-color": color }}>
+      <span className="nb2-stat-icon" aria-hidden="true" style={{ color }}>
+        {icon}
       </span>
-      <div className="top-navbar-meter-body">
-        <div className="top-navbar-meter-row">
-          <span className="top-navbar-meter-label">{label}</span>
-          <strong className="top-navbar-meter-val">
-            {value}
-            <em>/{capacity}</em>
-          </strong>
+      <div className="nb2-stat-body">
+        <div className="nb2-stat-row">
+          <span className="nb2-stat-label">{label}</span>
+          <strong className="nb2-stat-val">{value}<em>/{capacity}</em></strong>
         </div>
-        <div className="top-navbar-meter-track" aria-hidden="true">
-          <span style={{ width: `${pct}%`, background: meta.track }} />
+        <div className="nb2-stat-track" aria-hidden="true">
+          <span className="nb2-stat-fill" style={{ width: `${pct}%`, background: track }} />
         </div>
       </div>
     </Link>
   );
 }
 
+const HP_ICON = (
+  <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+    <path d="M10 17.5S2.5 13 2.5 7.5a4 4 0 0 1 7.5-1.9A4 4 0 0 1 17.5 7.5C17.5 13 10 17.5 10 17.5z" />
+  </svg>
+);
+
+const ENERGY_ICON = (
+  <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+    <path d="M11 2L4 11h6l-1 7 7-9h-6l1-7z" />
+  </svg>
+);
+
+const COIN_ICON = (
+  <svg viewBox="0 0 22 22" fill="none" width="22" height="22" aria-hidden="true">
+    <circle cx="11" cy="11" r="9.5" fill="#ffd166" stroke="#f59f00" strokeWidth="1.5" />
+    <text x="11" y="15.2" textAnchor="middle" fontSize="9" fontWeight="800" fill="#7b4d00">$</text>
+  </svg>
+);
+
 export default function TopNavbar() {
-  const t = useTranslation();
   const { theme, mounted, toggleTheme } = useThemePreference();
-  const { language, setLanguage } = useLanguagePreference();
   const darkMode = mounted && theme === "dark";
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    let active = true;
-    fetch("/api/profile")
-      .then((res) => {
-        if (!res.ok) return null;
-        return res.json();
-      })
-      .then((data) => {
-        if (active && data) {
-          setProfile(data);
-        }
-      })
-      .catch(() => {
-        // keep fallback profile
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  function handleLanguageChange(event) {
-    setLanguage(event.target.value);
-  }
-
-  const effectiveProfile = profile || studentProfile;
 
   return (
-    <header className="top-navbar no-search">
+    <header className="nb2-root">
 
-      {/* LEFT — logo */}
-      <div className="top-navbar-leading">
-        <Link
-          className="top-navbar-brand"
-          href="/"
-          aria-label={t("topNavbar.brandLabel")}
+      {/* ── Brand (left) ── */}
+      <Link className="nb2-brand" href="/" aria-label="GoDomain home">
+        <span className="nb2-brand-logo">
+          <Image src="/godomain-logo.svg" alt="GoDomain" width={30} height={30} />
+        </span>
+        <span className="nb2-brand-copy">
+          <span className="nb2-brand-name">GoDomain</span>
+          <span className="nb2-brand-sub">Learning workspace</span>
+        </span>
+      </Link>
+
+      {/* ── Vitals: HP + Energy side-by-side (centre-left) ── */}
+      <div className="nb2-vitals">
+        <StatBar
+          label="HP"
+          value={studentProfile.hp}
+          capacity={studentProfile.hpCapacity}
+          color="#e05c7a"
+          track="linear-gradient(90deg,#ff6b9d,#e0365a)"
+          icon={HP_ICON}
+          href="/stats"
+        />
+        <StatBar
+          label="EN"
+          value={studentProfile.energy}
+          capacity={studentProfile.energyCapacity}
+          color="#3ecf6e"
+          track="linear-gradient(90deg,#58d17a,#1f9f57)"
+          icon={ENERGY_ICON}
+          href="/stats"
+        />
+      </div>
+
+      {/* ── Right cluster: Language · Theme · Coins ── */}
+      <div className="nb2-controls">
+
+        {/* Language toggle */}
+        <div className="nb2-ctrl-wrap">
+          <LanguageToggle />
+        </div>
+
+        {/* Theme toggle */}
+        <button
+          type="button"
+          className={`nb2-theme${darkMode ? " nb2-theme--dark" : ""}`}
+          onClick={toggleTheme}
+          aria-pressed={darkMode}
+          aria-label={`Switch to ${darkMode ? "light" : "dark"} mode`}
+          title={`Switch to ${darkMode ? "light" : "dark"} mode`}
+          data-no-translate
         >
-          <span className="top-navbar-brand-mark">
-            <Image
-              src="/godomain-logo.svg"
-              alt="GoDomain logo"
-              width={30}
-              height={30}
-            />
-          </span>
-          <span className="top-navbar-brand-copy">
-            <span className="top-navbar-brand-label">
-              {t("topNavbar.brandLabel")}
-            </span>
-            <span className="top-navbar-brand-subtitle">
-              {t("topNavbar.brandSubtitle")}
+          <span className="nb2-theme-track" aria-hidden="true">
+            <span className="nb2-theme-thumb">
+              {darkMode ? (
+                <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12">
+                  <path d="M17.5 10.8A7.5 7.5 0 1 1 9.2 2.5 5.8 5.8 0 0 0 17.5 10.8z" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12">
+                  <circle cx="10" cy="10" r="3.5" />
+                  <path d="M10 2v2M10 16v2M3.5 3.5l1.4 1.4M15.1 15.1l1.4 1.4M2 10h2M16 10h2M3.5 16.5l1.4-1.4M15.1 4.9l1.4-1.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                </svg>
+              )}
             </span>
           </span>
+          <span className="nb2-theme-label">{darkMode ? "Dark" : "Light"}</span>
+        </button>
+
+        {/* Coins */}
+        <Link
+          className="nb2-coins"
+          href="/stats"
+          aria-label={`Coins: ${studentProfile.coins}`}
+          title={`Coins: ${studentProfile.coins}`}
+        >
+          <span className="nb2-coins-icon" aria-hidden="true">{COIN_ICON}</span>
+          <div className="nb2-coins-body">
+            <strong className="nb2-coins-val">{studentProfile.coins}</strong>
+            <span className="nb2-coins-label">coins</span>
+          </div>
         </Link>
-      </div>
 
-      {/* CENTER — vitals, coins, theme toggle */}
-      <div className="top-navbar-center">
-        <div className="top-navbar-stats">
-          <button
-            type="button"
-            className={`top-navbar-theme-toggle${darkMode ? " dark" : ""}`}
-            onClick={toggleTheme}
-            aria-pressed={darkMode}
-            aria-label={
-              darkMode
-                ? t("topNavbar.themeSwitchLight")
-                : t("topNavbar.themeSwitchDark")
-            }
-          >
-            <span className="top-navbar-theme-icon" aria-hidden="true">
-              {darkMode
-                ? <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                    <path
-                      d="M13.8 2.8a6.8 6.8 0 1 0 3.4 12.7A7.5 7.5 0 1 1 13.8 2.8Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                : <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                    <circle cx="10" cy="10" r="3.1" fill="currentColor" />
-                    <path
-                      d="M10 2.2V4.1M10 15.9v1.9M17.8 10h-1.9M4.1 10H2.2M15.5 4.5 14.1 5.9M5.9 14.1 4.5 15.5M15.5 15.5 14.1 14.1M5.9 5.9 4.5 4.5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>}
-            </span>
-          </button>
-          <fieldset className="top-navbar-vitals" aria-label={t("topNavbar.vitalsLabel")}>
-            <NavbarMeter
-              tone="hp"
-              value={effectiveProfile.hp}
-              capacity={effectiveProfile.hpCapacity}
-            />
-            <NavbarMeter
-              tone="energy"
-              value={effectiveProfile.energy}
-              capacity={effectiveProfile.energyCapacity}
-            />
-          </fieldset>
-          <Link
-            className="top-navbar-coins"
-            href="/stats"
-            aria-label={`${t("topNavbar.coinsLabel")}: ${effectiveProfile.coins}`}
-            title={`${t("topNavbar.coinsLabel")}: ${effectiveProfile.coins}`}
-          >
-            <span className="top-navbar-coins-icon" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                <circle
-                  cx="10"
-                  cy="10"
-                  r="8"
-                  fill="#ffd166"
-                  stroke="#f59f00"
-                  strokeWidth="1.5"
-                />
-                <text
-                  x="10"
-                  y="14"
-                  textAnchor="middle"
-                  fontSize="9"
-                  fontWeight="800"
-                  fill="#7b4d00"
-                >
-                  $
-                </text>
-              </svg>
-            </span>
-            <strong className="top-navbar-coins-val">
-              {effectiveProfile.coins}
-            </strong>
-          </Link>
-        </div>
       </div>
-
-      {/* RIGHT — language selector */}
-      <div className="top-navbar-leading">
-        <div className="top-navbar-language">
-          <select
-            value={language}
-            onChange={handleLanguageChange}
-            aria-label={t("topNavbar.languageSelectorLabel")}
-          >
-            {LANGUAGES.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
     </header>
   );
 }

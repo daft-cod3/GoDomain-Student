@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { resolveTheme, resolveLanguage, THEME_EVENT, THEME_KEY } from "./theme-state";
+import { resolveTheme, THEME_EVENT, THEME_KEY } from "./theme-state";
 
 export default function ThemeProvider({ children }) {
   useEffect(() => {
@@ -10,10 +10,6 @@ export default function ThemeProvider({ children }) {
 
     function syncTheme() {
       root.setAttribute("data-theme", resolveTheme());
-    }
-
-    function syncLanguage() {
-      root.lang = resolveLanguage();
     }
 
     function handleStorage(event) {
@@ -37,7 +33,6 @@ export default function ThemeProvider({ children }) {
     }
 
     syncTheme();
-    syncLanguage();
 
     const readyFrame = window.requestAnimationFrame(() => {
       root.setAttribute("data-theme-ready", "true");

@@ -1,6 +1,7 @@
 import "./globals.css";
 import ThemeProvider from "./components/theme-provider";
 import TopNavbar from "./components/top-navbar";
+import { LanguageProvider } from "./i18n/language-provider";
 
 export const metadata = {
   title: "GoDomain Learning Path",
@@ -40,10 +41,12 @@ export default function RootLayout({ children }) {
       </head>
       <body suppressHydrationWarning className="antialiased">
         <ThemeProvider>
-          <div className="root-layout">
-            <TopNavbar />
-            <div className="root-content">{children}</div>
-          </div>
+          <LanguageProvider>
+            <div className="root-layout">
+              <TopNavbar />
+              <div className="root-content">{children}</div>
+            </div>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

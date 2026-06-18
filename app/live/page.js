@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { useTranslation } from "../components/translations";
 import Sidebar from "../components/sidebar";
 
 const liveSessions = [
@@ -9,7 +8,7 @@ const liveSessions = [
     title: "Road sign revision clinic",
     teacher: "Ms. Diaz",
     time: "10:30 AM - 11:15 AM",
-    ctaKey: "joinClass",
+    cta: "Join class",
   },
   {
     id: "session-next",
@@ -17,7 +16,7 @@ const liveSessions = [
     title: "Traffic flow Q&A",
     teacher: "Ms. Omar",
     time: "12:00 PM - 12:45 PM",
-    ctaKey: "enterWaitingRoom",
+    cta: "Enter waiting room",
   },
 ];
 
@@ -37,8 +36,6 @@ const liveMeetings = [
 ];
 
 export default function LivePage() {
-  const t = useTranslation();
-
   return (
     <div className="app-shell">
       <Sidebar active="dashboard" />
@@ -46,18 +43,21 @@ export default function LivePage() {
         <section className="live-page">
           <div className="live-hero">
             <div>
-              <div className="live-eyebrow">{t("live.eyebrow")}</div>
-              <h1 className="live-title">{t("live.title")}</h1>
-              <p className="live-subtitle">{t("live.subtitle")}</p>
+              <div className="live-eyebrow">Live lessons</div>
+              <h1 className="live-title">Classes and meetings</h1>
+              <p className="live-subtitle">
+                Join scheduled live classes, enter teacher meetings, and keep up
+                with the latest session room links.
+              </p>
             </div>
             <Link className="live-hero-link" href="/messages">
-              {t("live.cta")}
+              Message your teacher
             </Link>
           </div>
 
           <div className="live-grid">
             <section className="live-card">
-              <div className="live-card-title">{t("live.todayClasses")}</div>
+              <div className="live-card-title">Today&apos;s live classes</div>
               <div className="live-session-list">
                 {liveSessions.map((session) => (
                   <article key={session.id} className="live-session">
@@ -68,7 +68,7 @@ export default function LivePage() {
                     <div className="live-session-title">{session.title}</div>
                     <div className="live-session-meta">{session.teacher}</div>
                     <Link className="live-session-action" href="/dashboard">
-                      {t(`live.${session.ctaKey}`)}
+                      {session.cta}
                     </Link>
                   </article>
                 ))}
@@ -76,7 +76,7 @@ export default function LivePage() {
             </section>
 
             <aside className="live-card">
-              <div className="live-card-title">{t("live.meetings")}</div>
+              <div className="live-card-title">Meetings</div>
               <div className="live-meeting-list">
                 {liveMeetings.map((meeting) => (
                   <article key={meeting.id} className="live-meeting">

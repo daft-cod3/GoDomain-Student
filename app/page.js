@@ -1,6 +1,3 @@
-"use client";
-
-import { useTranslation } from "./components/translations";
 import Link from "next/link";
 import ModelTownBoard from "./components/modelTownBoard";
 import RoadSign from "./components/roadSign";
@@ -122,74 +119,6 @@ function DashboardIcon({ name }) {
 }
 
 export default function HomePage() {
-  const t = useTranslation();
-
-  const popularLessons = [
-    {
-      id: "controls",
-      title: t("dashboard.popularLessons.controls.title"),
-      meta: t("dashboard.popularLessons.controls.meta"),
-      tag: t("dashboard.popularLessons.controls.tag"),
-      href: getLearningDayHref("unit-1-lesson-1"),
-      art: "art-lilac",
-    },
-    {
-      id: "signs",
-      title: t("dashboard.popularLessons.signs.title"),
-      meta: t("dashboard.popularLessons.signs.meta"),
-      tag: t("dashboard.popularLessons.signs.tag"),
-      href: getLearningDayHref("unit-1-lesson-2"),
-      art: "art-peach",
-    },
-    {
-      id: "junctions",
-      title: t("dashboard.popularLessons.junctions.title"),
-      meta: t("dashboard.popularLessons.junctions.meta"),
-      tag: t("dashboard.popularLessons.junctions.tag"),
-      href: getLearningDayHref("unit-1-lesson-4"),
-      art: "art-mint",
-    },
-    {
-      id: "hazard",
-      title: t("dashboard.popularLessons.hazard.title"),
-      meta: t("dashboard.popularLessons.hazard.meta"),
-      tag: t("dashboard.popularLessons.hazard.tag"),
-      href: getLearningDayHref("unit-1-lesson-5"),
-      art: "art-sky",
-    },
-  ];
-
-  const recentActivity = [
-    {
-      title: t("dashboard.recentActivity.unit1.title"),
-      body: t("dashboard.recentActivity.unit1.body"),
-      time: t("dashboard.recentActivity.unit1.time"),
-      tag: t("dashboard.recentActivity.unit1.tag"),
-      short: "U1",
-    },
-    {
-      title: t("dashboard.recentActivity.mentor.title"),
-      body: t("dashboard.recentActivity.mentor.body"),
-      time: t("dashboard.recentActivity.mentor.time"),
-      tag: t("dashboard.recentActivity.mentor.tag"),
-      short: "MS",
-    },
-    {
-      title: t("dashboard.recentActivity.badge.title"),
-      body: t("dashboard.recentActivity.badge.body"),
-      time: t("dashboard.recentActivity.badge.time"),
-      tag: t("dashboard.recentActivity.badge.tag"),
-      short: "BD",
-    },
-    {
-      title: t("dashboard.recentActivity.quiz.title"),
-      body: t("dashboard.recentActivity.quiz.body"),
-      time: t("dashboard.recentActivity.quiz.time"),
-      tag: t("dashboard.recentActivity.quiz.tag"),
-      short: "QZ",
-    },
-  ];
-
   return (
     <div className="app-shell">
       <DashboardSidebar active="dashboard" />
@@ -198,34 +127,41 @@ export default function HomePage() {
           <div className="dashboard-panel">
             <section className="dash-hero">
               <div className="dash-hero-content">
-                <div className="dash-hero-tag">{t("dashboard.heroTag")}</div>
-                <h1 className="dash-hero-title">{t("dashboard.heroTitle")}</h1>
-                <p className="dash-hero-subtitle">{t("dashboard.heroSubtitle")}</p>
+                <div className="dash-hero-tag">Learner dashboard</div>
+                <h1 className="dash-hero-title">
+                  A focused overview for lessons, uploads, and live driving
+                  progress.
+                </h1>
+                <p className="dash-hero-subtitle">
+                  Keep revision, instructor uploads, current unit momentum, and
+                  recent milestones in one clear workspace designed for steady
+                  practice and quick review.
+                </p>
                 <div className="dash-hero-actions">
                   <Link className="dash-hero-button primary" href="/content">
                     <DashboardIcon name="path" />
-                    {t("dashboard.primaryAction")}
+                    Open learning path
                   </Link>
                   <Link className="dash-hero-button secondary" href="/stats">
                     <DashboardIcon name="stats" />
-                    {t("dashboard.secondaryAction")}
+                    View learner profile
                   </Link>
                 </div>
                 <div className="dash-hero-metrics">
                   <article className="dash-hero-metric">
-                    <span className="dash-hero-metric-label">{t("dashboard.progressLabel")}</span>
+                    <span className="dash-hero-metric-label">Progress</span>
                     <strong className="dash-hero-metric-value">
                       {studentProfile.progress}%
                     </strong>
                   </article>
                   <article className="dash-hero-metric">
-                    <span className="dash-hero-metric-label">{t("dashboard.roadHoursLabel")}</span>
+                    <span className="dash-hero-metric-label">Road hours</span>
                     <strong className="dash-hero-metric-value">
                       {studentProfile.roadHours}
                     </strong>
                   </article>
                   <article className="dash-hero-metric">
-                    <span className="dash-hero-metric-label">{t("dashboard.nextSessionLabel")}</span>
+                    <span className="dash-hero-metric-label">Next session</span>
                     <strong className="dash-hero-metric-value">
                       {studentProfile.nextSession}
                     </strong>
@@ -246,9 +182,9 @@ export default function HomePage() {
                   <span />
                 </div>
                 <div className="floating-elements">
-                  <div className="floating-badge">{t("dashboard.badgeFocus")}</div>
-                  <div className="floating-badge">{t("dashboard.badgeTrack")}</div>
-                  <div className="floating-badge">{t("dashboard.badgeReview")}</div>
+                  <div className="floating-badge">Focus</div>
+                  <div className="floating-badge">Track</div>
+                  <div className="floating-badge">Review</div>
                 </div>
               </div>
             </section>
@@ -263,14 +199,15 @@ export default function HomePage() {
                   <div className="dash-section-head">
                     <div>
                       <div className="dash-section-title">
-                        {t("dashboard.recommendedLessonsTitle")}
+                        Recommended lessons
                       </div>
                       <div className="dash-section-subtitle">
-                        {t("dashboard.recommendedLessonsSubtitle")}
+                        High-value lesson blocks for revision, recall, and
+                        continued progress this week.
                       </div>
                     </div>
                     <Link className="dash-link" href="/content">
-                      {t("dashboard.browseAll")}
+                      Browse all
                       <DashboardIcon name="path" />
                     </Link>
                   </div>
@@ -295,13 +232,14 @@ export default function HomePage() {
                 <section className="dash-section">
                   <div className="dash-section-head">
                     <div>
-                      <div className="dash-section-title">{t("dashboard.recentActivityTitle")}</div>
+                      <div className="dash-section-title">Recent activity</div>
                       <div className="dash-section-subtitle">
-                        {t("dashboard.recentActivitySubtitle")}
+                        Recent milestones, sessions, and assessments connected
+                        to the learner record.
                       </div>
                     </div>
                     <Link className="dash-link" href="/stats">
-                      {t("dashboard.viewReport")}
+                      View report
                       <DashboardIcon name="stats" />
                     </Link>
                   </div>

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import {
   getLearningDayHref,
   getLearningStep,
-  getSubLessonHref,
+  getLearningStepHref,
   learningDays,
 } from "../../../../learn";
 import { LessonIcon } from "../../../../learn/icons";
@@ -261,7 +261,7 @@ export default async function LearningStepPage({ params }) {
                 {nextStep
                   ? <Link
                       className="lesson-secondary-link"
-                      href={getSubLessonHref(lesson.id, nextStep.id)}
+                      href={getLearningStepHref(lesson.id, nextStep.id)}
                     >
                       Open next topic
                     </Link>

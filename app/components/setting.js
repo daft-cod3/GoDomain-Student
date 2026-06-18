@@ -7,7 +7,6 @@ import {
   studentProfile,
 } from "../data/student-profile";
 import { useThemePreference } from "./theme-state";
-import { useTranslation } from "./translations";
 
 function ToggleButton({ active, onClick, label }) {
   return (
@@ -65,7 +64,6 @@ function GlassCard({ children, className = "", hover = true, style }) {
 
 export default function Setting() {
   const { theme, mounted, toggleTheme } = useThemePreference();
-  const t = useTranslation();
   const [lessonReminders, setLessonReminders] = useState(true);
   const [mentorSharing, setMentorSharing] = useState(true);
   const [autoSave, setAutoSave] = useState(true);
@@ -74,30 +72,30 @@ export default function Setting() {
   const darkMode = mounted && theme === "dark";
 
   const tabs = [
-    { id: "workspace", label: t("settings.tabWorkspace") },
-    { id: "preferences", label: t("settings.tabPreferences") },
-    { id: "modules", label: t("settings.tabModules") },
-    { id: "tools", label: t("settings.tabTools") },
+    { id: "workspace", label: "Workspace" },
+    { id: "preferences", label: "Preferences" },
+    { id: "modules", label: "Modules" },
+    { id: "tools", label: "Tools" },
   ];
 
   const preferenceControls = [
     {
-      title: t("settings.preferenceLessonReminders"),
-      description: t("settings.preferenceLessonRemindersDesc"),
+      title: "Lesson reminders",
+      description: "Receive updates for upcoming sessions, reviews, and instructor uploads.",
       active: lessonReminders,
       onToggle: () => setLessonReminders((prev) => !prev),
       icon: "🔔",
     },
     {
-      title: t("settings.preferenceMentorSharing"),
-      description: t("settings.preferenceMentorSharingDesc"),
+      title: "Mentor sharing",
+      description: "Allow your instructor to monitor your learner dashboard and feedback trail.",
       active: mentorSharing,
       onToggle: () => setMentorSharing((prev) => !prev),
       icon: "👥",
     },
     {
-      title: t("settings.preferenceAutoSave"),
-      description: t("settings.preferenceAutoSaveDesc"),
+      title: "Auto-save progress",
+      description: "Keep lesson state, profile actions, and revision activity saved as you work.",
       active: autoSave,
       onToggle: () => setAutoSave((prev) => !prev),
       icon: "💾",
@@ -107,38 +105,38 @@ export default function Setting() {
   const workspaceChips = [
     studentProfile.track,
     studentProfile.nextSession,
-    `${studentProfile.attendance} ${t("settings.themeTitle")}`,
+    `${studentProfile.attendance} attendance`,
   ];
 
   const settingPreferences = [
     {
-      label: t("settings.themeTitle"),
-      value: darkMode ? t("settings.themeValueDark") : t("settings.themeValueLight"),
-      hint: t("settings.themeSubtitle"),
+      label: "Theme mode",
+      value: darkMode ? "Dark mode active" : "Light mode active",
+      hint: "The full interface updates instantly when you switch theme.",
       interactive: true,
       active: darkMode,
       onToggle: toggleTheme,
       icon: darkMode ? "🌙" : "☀️",
     },
     {
-      label: t("settings.profilePageLabel"),
-      value: t("settings.profilePageValue"),
-      hint: t("settings.profilePageHint"),
+      label: "Profile page",
+      value: "Professional learner view",
+      hint: "Profile and progress data now sit in a polished adaptive layout.",
       icon: "👤",
     },
     {
-      label: t("settings.alertsLabel"),
-      value: lessonReminders ? t("settings.alertsValueOn") : t("settings.alertsValueOff"),
-      hint: t("settings.alertsHint"),
+      label: "Alerts",
+      value: lessonReminders ? "Lesson reminders on" : "Lesson reminders off",
+      hint: "Uploads, deadlines, and live sessions remain visible when enabled.",
       interactive: true,
       active: lessonReminders,
       onToggle: () => setLessonReminders((prev) => !prev),
       icon: "🔔",
     },
     {
-      label: t("settings.mentorSharingLabel"),
-      value: mentorSharing ? t("settings.mentorSharingValueEnabled") : t("settings.mentorSharingValueEnabled"),
-      hint: t("settings.mentorSharingHint"),
+      label: "Mentor sharing",
+      value: mentorSharing ? "Enabled" : "Disabled",
+      hint: "Your assigned mentor can review learner progress when enabled.",
       interactive: true,
       active: mentorSharing,
       onToggle: () => setMentorSharing((prev) => !prev),
@@ -148,13 +146,13 @@ export default function Setting() {
 
   return (
     <section className="settings-page-v2">
-      {/* Page header */}
+      
       <div className="settings-page-hero">
         <div className="settings-page-hero-copy">
-          <span className="settings-page-eyebrow">{t("settings.heroEyebrow")}</span>
-          <h1 className="settings-page-title">{t("settings.title")}</h1>
+          <span className="settings-page-eyebrow">Configuration</span>
+          <h1 className="settings-page-title">Settings</h1>
           <p className="settings-page-subtitle">
-            {t("settings.subtitle")}
+            Manage your workspace, preferences, and learning tools.
           </p>
         </div>
         <div className="settings-page-hero-chips">
@@ -164,7 +162,7 @@ export default function Setting() {
         </div>
       </div>
 
-      {/* Tab bar */}
+      
       <div className="settings-tab-bar" role="tablist">
         {tabs.map((tab) => (
           <button
@@ -181,18 +179,18 @@ export default function Setting() {
         ))}
       </div>
 
-      {/* Workspace tab */}
+      
       {activeTab === "workspace" && (
         <div className="settings-tab-content settings-enhanced">
-          {/* Theme toggle */}
+          
           <GlassCard className="settings-theme-block">
             <div className="settings-theme-row">
               <div className="settings-theme-icon-wrap">
                 <ThemeIllustration darkMode={darkMode} />
               </div>
               <div className="settings-theme-copy">
-                <h3>{darkMode ? t("settings.themeValueDark") : t("settings.themeValueLight")}</h3>
-                <p>{t("settings.themeSubtitle")}</p>
+                <h3>{darkMode ? "Dark mode" : "Light mode"}</h3>
+                <p>Switch between bright and low-glare interface.</p>
               </div>
               <ToggleButton
                 active={darkMode}
@@ -202,7 +200,7 @@ export default function Setting() {
             </div>
           </GlassCard>
 
-          {/* Preference controls */}
+        
           <div className="settings-prefs-grid">
             {preferenceControls.map((item, i) => (
               <GlassCard key={item.title} className="settings-pref-card" style={{ "--delay": `${i * 60}ms` }}>
@@ -222,7 +220,7 @@ export default function Setting() {
         </div>
       )}
 
-      {/* Preferences tab */}
+    
       {activeTab === "preferences" && (
         <div className="settings-tab-content settings-enhanced">
           <div className="settings-detail-grid">
@@ -251,7 +249,7 @@ export default function Setting() {
         </div>
       )}
 
-      {/* Modules tab */}
+    
       {activeTab === "modules" && (
         <div className="settings-tab-content settings-enhanced">
           <GlassCard className="settings-modules-card" hover={false}>
@@ -280,7 +278,7 @@ export default function Setting() {
         </div>
       )}
 
-      {/* Tools tab */}
+      
       {activeTab === "tools" && (
         <div className="settings-tab-content settings-enhanced">
           <div className="settings-tools-grid">
