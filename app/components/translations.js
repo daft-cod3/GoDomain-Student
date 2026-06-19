@@ -1140,15 +1140,15 @@ export const TRANSLATIONS = {
       signsCount: "alambi",
       groupsCount: "oganda",
       categories: {
-        regulatory: { title: "Chike", description: "Chike matek kod yore mar teko mar yoo e yoo manie gi ngima." },
-        warning: { title: "Ywayo", description: "Neno mokogi mar chandruok, pondo mar yoo, kod kama pek." },
-        informative: { title: "Nyiso", description: "Alambi ma nyiso tiend tich, gige, kod kony mar wuoth." },
+        regulatory: { title: "Regulatory", description: "Mandatory instructions and right-of-way rules used on active roads." },
+        warning: { title: "Warning", description: "Advance notice of hazards, changes in alignment, and risk points." },
+        informative: { title: "Informative", description: "Signs that point out services, facilities, and travel support." },
       },
       groups: {
         priority: { title: "Teko Mar Dhiye", description: "Alambi ma loso teko mar dhiye e aora kod kama gidhi romoro." },
         prohibitory: { title: "Ogeyo", description: "Chike matek ma ogeyo wuoth, teko mar ngʼato, kod dongruok." },
-        "warning-core": { title: "Alambi mag Ywayo", description: "Alambi mag chandruok ma dwaro dhiye mapiyo kod neno matek." },
-        "informative-core": { title: "Alambi mag Nyiso", description: "Kony mar tiend tich kod yoo mondo idhiy maber." },
+        "warning-core": { title: "Warning signs", description: "Hazard signs that require a slower and more observant approach." },
+        "informative-core": { title: "Informative signs", description: "Service and direction support for smooth route decisions." },
       },
       signs: {
         stop: { label: "Stop", caption: "Chung' motegno kapok idhi e aora." },
