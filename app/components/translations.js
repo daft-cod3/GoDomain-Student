@@ -1,4 +1,4 @@
-import { useLanguagePreference } from "./theme-state";
+import { useLanguage } from "../i18n/language-provider";
 
 export const TRANSLATIONS = {
   en: {
@@ -1247,6 +1247,6 @@ export function getTranslation(language, key, fallback) {
 }
 
 export function useTranslation() {
-  const { language } = useLanguagePreference();
+  const { language } = useLanguage();
   return (key, fallback) => getTranslation(language, key, fallback);
 }
