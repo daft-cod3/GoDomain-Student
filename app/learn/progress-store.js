@@ -141,6 +141,36 @@ export function persistLearningProgress(units) {
   );
 }
 
+export async function syncLearningProgress({
+  lessonId,
+  completedStepIds = [],
+  progressPercent,
+}) {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const response = await fetch("/api/progress/migrate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      lessons: [
+        {
+          id: lessonId,
+          completedStepIds,
+          progressPercent,
+        },
+      ],
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Progress sync failed: ${response.status}`);
+  }
+
+  return response.json().catch(() => null);
+}
+
 export function getCompletedLessons(units) {
   return units
     .flatMap((unit) => unit.lessons)
