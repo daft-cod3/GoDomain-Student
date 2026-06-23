@@ -674,7 +674,6 @@
   "largeFiles": [],
   "dependencies": {
     "production": [
-      "@supabase/supabase-js",
       "next",
       "pg",
       "react",
@@ -686,7 +685,7 @@
       "babel-plugin-react-compiler",
       "tailwindcss"
     ],
-    "total": 9
+    "total": 8
   },
   "complexity": {
     "averageFileSize": 127.02912621359224,
