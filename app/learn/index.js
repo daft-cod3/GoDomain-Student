@@ -708,10 +708,6 @@ export function getLearningDayHref(dayId) {
   return `/content/${dayId}`;
 }
 
-export function getSubLessonHref(dayId, stepId) {
-  return `/subLearn/${dayId}/${stepId}`;
-}
-
 export function getLearningStep(dayId, stepId) {
   const lesson = getLearningDay(dayId);
 
