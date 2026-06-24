@@ -19,39 +19,45 @@ export default function SubLearnIndexPage() {
         </Link>
       </div>
 
-      {learningUnits.map((unit) => {
-        const completedLessons = unit.lessons.filter((lesson) =>
-          lesson.lessons.every((step) => step.completed),
-        ).length;
+      {learningUnits
+        .filter((unit) => unit && unit.id && Array.isArray(unit.lessons))
+        .map((unit) => {
+          const safeLessons = unit.lessons.filter(
+            (lesson) => lesson && lesson.id && Array.isArray(lesson.lessons),
+          );
 
-        return (
-          <section key={unit.id} className="sl-index-unit">
-            <div className="sl-index-unit-head">
-              <div className="sl-index-unit-info">
-                <span className="sl-index-unit-label">{unit.label}</span>
-                <h2 className="sl-index-unit-title">{unit.title}</h2>
-                <p className="sl-index-unit-summary">{unit.summary}</p>
-              </div>
-              <div className="sl-index-unit-stats">
-                <span className="sl-index-unit-stat">
-                  <strong>{completedLessons}</strong>
-                  <em>/{unit.lessons.length} done</em>
-                </span>
-                <span className="sl-index-unit-stat">
-                  <strong>{unit.progress ?? 0}%</strong>
-                  <em>progress</em>
-                </span>
-              </div>
-            </div>
+          const completedLessons = safeLessons.filter((lesson) =>
+            lesson.lessons.every((step) => step?.completed),
+          ).length;
 
-            <div className="sl-index-cards">
-              {unit.lessons.map((lesson) => (
-                <LearnCard key={lesson.id} lesson={lesson} />
-              ))}
-            </div>
-          </section>
-        );
-      })}
+          return (
+            <section key={unit.id} className="sl-index-unit">
+              <div className="sl-index-unit-head">
+                <div className="sl-index-unit-info">
+                  <span className="sl-index-unit-label">{unit.label}</span>
+                  <h2 className="sl-index-unit-title">{unit.title}</h2>
+                  <p className="sl-index-unit-summary">{unit.summary}</p>
+                </div>
+                <div className="sl-index-unit-stats">
+                  <span className="sl-index-unit-stat">
+                    <strong>{completedLessons}</strong>
+                    <em>/{safeLessons.length} done</em>
+                  </span>
+                  <span className="sl-index-unit-stat">
+                    <strong>{unit.progress ?? 0}%</strong>
+                    <em>progress</em>
+                  </span>
+                </div>
+              </div>
+
+              <div className="sl-index-cards">
+                {safeLessons.map((lesson) => (
+                  <LearnCard key={lesson.id} lesson={lesson} />
+                ))}
+              </div>
+            </section>
+          );
+        })}
     </main>
   );
 }
