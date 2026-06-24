@@ -273,6 +273,7 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
     "lp-node",
     done ? "lp-node--done" : "",
     isCurrent && !done ? "lp-node--current" : "",
+    !done && !locked && completedSteps > 0 ? "lp-node--progress" : "",
     locked ? "lp-node--locked" : "",
   ]
     .filter(Boolean)

@@ -60,7 +60,10 @@ function StatPill({ label, value, capacity, color, icon }) {
   const pct = getPercent(value, capacity);
 
   return (
-    <div className="prof-stat-pill" style={{ "--pill-color": color }}>
+    <div
+      className="prof-stat-pill"
+      style={{ "--pill-color": color, "--pill-pct": `${pct}%` }}
+    >
       <span className="prof-stat-pill-icon">{icon}</span>
       <div className="prof-stat-pill-body">
         <strong>{capacity ? `${value}/${capacity}` : value}</strong>
@@ -76,8 +79,8 @@ function StatPill({ label, value, capacity, color, icon }) {
             >
               <i
                 style={{
-                  width: `${pct}%`,
-                  background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 58%, #ffffff))`,
+                  height: `${pct}%`,
+                  background: `linear-gradient(180deg, color-mix(in srgb, ${color} 58%, #ffffff), ${color})`,
                 }}
               />
             </div>
@@ -153,6 +156,24 @@ function AchBadge({ a, index }) {
   );
 }
 
+function StreakStar({ done }) {
+  return (
+    <svg viewBox="0 0 32 32" className="prof-streak-star" aria-hidden="true">
+      <path d="M16 3.5l3.85 7.8 8.65 1.25-6.25 6.08 1.48 8.6L16 23.18l-7.73 4.05 1.48-8.6-6.25-6.08 8.65-1.25z" />
+      {done
+        ? <path
+            d="M11.2 16.4l3.05 3.05 6.65-7.1"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2.3"
+          />
+        : null}
+    </svg>
+  );
+}
+
 function StreakButtons() {
   const [selected, setSelected] = useState("Thu");
   const days = [
@@ -177,8 +198,9 @@ function StreakButtons() {
             className={`prof-streak-day${day.done ? " done" : ""}${selected === day.label ? " active" : ""}`}
             onClick={() => setSelected(day.label)}
             aria-pressed={selected === day.label}
+            aria-label={`${day.label} streak day ${day.done ? "completed" : "locked"}`}
           >
-            {day.label}
+            <StreakStar done={day.done} />
           </button>
         ))}
       </div>
@@ -219,13 +241,6 @@ const STAT_PILLS = [
     capacity: studentProfile.coinCapacity,
     color: "#f59f00",
     icon: "$",
-  },
-  {
-    id: "streak",
-    label: "Streak",
-    value: `${studentProfile.streak || 7} days`,
-    color: "#267cff",
-    icon: "ST",
   },
 ];
 
@@ -345,13 +360,15 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="prof-pills-row">
-        {STAT_PILLS.map((p) => (
-          <StatPill key={p.id} {...p} />
-        ))}
-      </div>
+      <div className="prof-vitals-streak-row">
+        <fieldset className="prof-pills-row" aria-label="Learner balances">
+          {STAT_PILLS.map((p) => (
+            <StatPill key={p.id} {...p} />
+          ))}
+        </fieldset>
 
-      <StreakButtons />
+        <StreakButtons />
+      </div>
 
       <div className="prof-overall">
         <div className="prof-overall-head">

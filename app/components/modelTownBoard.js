@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { getRoadSignHref, roadSigns } from "../data/road-signs";
 import { RoadSignGraphic } from "./roadSign";
 
@@ -336,6 +339,15 @@ function PointList({ items, ordered = false, compact = false, tone = "blue" }) {
 }
 
 export default function ModelTownBoard() {
+  const [activeFeature, setActiveFeature] = useState(
+    modelTownFeatures[0].title,
+  );
+  const [activeRoute, setActiveRoute] = useState(modelTownRoutes[0].id);
+  const [activeSign, setActiveSign] = useState(modelTownSignPoints[0]?.sign.id);
+  const [activeParking, setActiveParking] = useState(
+    modelTownParkingGuides[0].id,
+  );
+
   return (
     <section className="dash-section model-town-section">
       <div className="dash-section-head model-town-head">
@@ -355,7 +367,13 @@ export default function ModelTownBoard() {
 
       <div className="model-town-feature-grid model-town-scroll-row">
         {modelTownFeatures.map((feature, index) => (
-          <article key={feature.title} className="model-town-feature-card">
+          <article
+            key={feature.title}
+            className="model-town-feature-card"
+            data-active={activeFeature === feature.title ? "true" : "false"}
+            onMouseEnter={() => setActiveFeature(feature.title)}
+            onFocus={() => setActiveFeature(feature.title)}
+          >
             <div className="model-town-feature-top">
               <span className="model-town-mini-kicker">Feature</span>
               <span className="model-town-feature-index">
@@ -370,7 +388,13 @@ export default function ModelTownBoard() {
 
       <div className="model-town-layout-grid model-town-scroll-row">
         {modelTownRoutes.map((route) => (
-          <article key={route.id} className="model-town-layout-card">
+          <article
+            key={route.id}
+            className="model-town-layout-card"
+            data-active={activeRoute === route.id ? "true" : "false"}
+            onMouseEnter={() => setActiveRoute(route.id)}
+            onFocus={() => setActiveRoute(route.id)}
+          >
             <div className="model-town-card-head">
               <div>
                 <span className="model-town-mini-kicker">Road option</span>
@@ -444,6 +468,9 @@ export default function ModelTownBoard() {
               key={sign.id}
               className="model-town-sign-card"
               href={getRoadSignHref(sign.id)}
+              data-active={activeSign === sign.id ? "true" : "false"}
+              onMouseEnter={() => setActiveSign(sign.id)}
+              onFocus={() => setActiveSign(sign.id)}
             >
               <div className={`model-town-sign-figure ${sign.family}`}>
                 <RoadSignGraphic sign={sign} />
@@ -480,7 +507,13 @@ export default function ModelTownBoard() {
 
         <div className="model-town-parking-grid model-town-scroll-row">
           {modelTownParkingGuides.map((guide) => (
-            <article key={guide.id} className="model-town-parking-card">
+            <article
+              key={guide.id}
+              className="model-town-parking-card"
+              data-active={activeParking === guide.id ? "true" : "false"}
+              onMouseEnter={() => setActiveParking(guide.id)}
+              onFocus={() => setActiveParking(guide.id)}
+            >
               <div className="model-town-card-head">
                 <div>
                   <span className="model-town-mini-kicker">Parking option</span>
