@@ -138,12 +138,22 @@ export default function SubLessonPage() {
   const router = useRouter();
   const { lessonId, stepId } = params;
 
-  const lesson = useMemo(() => getLearningDay(lessonId), [lessonId]);
-  const stepIndex = useMemo(
-    () => lesson?.lessons.findIndex((s) => s.id === stepId) ?? 0,
-    [lesson, stepId],
+  // Ensure route params are usable strings.
+  const safeLessonId = typeof lessonId === "string" ? lessonId : "";
+  const safeStepId = typeof stepId === "string" ? stepId : "";
+
+  const lesson = useMemo(
+    () => (safeLessonId ? getLearningDay(safeLessonId) : null),
+    [safeLessonId],
   );
-  const step = lesson?.lessons[stepIndex] ?? null;
+
+  const stepIndex = useMemo(() => {
+    if (!lesson || !Array.isArray(lesson.lessons)) return 0;
+    const idx = lesson.lessons.findIndex((s) => s?.id === safeStepId);
+    return idx >= 0 ? idx : 0;
+  }, [lesson, safeStepId]);
+
+  const step = lesson?.lessons?.[stepIndex] ?? null;
 
   const [completedIds, setCompletedIds] = useState(() => new Set());
   const [viewMode, setViewMode] = useState("2d"); // "2d" | "3d" | "notes"
@@ -165,7 +175,7 @@ export default function SubLessonPage() {
     );
   }
 
-  const total = lesson.lessons.length;
+  const total = Array.isArray(lesson?.lessons) ? lesson.lessons.length : 0;
   const completedCount = completedIds.size;
   const progress = total ? Math.round((completedCount / total) * 100) : 0;
   const isDone = completedIds.has(step.id);
@@ -174,8 +184,10 @@ export default function SubLessonPage() {
       ? 0
       : Math.min(3, Math.ceil((completedCount / total) * 3));
 
-  const prevStep = stepIndex > 0 ? lesson.lessons[stepIndex - 1] : null;
-  const nextStep = stepIndex < total - 1 ? lesson.lessons[stepIndex + 1] : null;
+  const safeLessons = Array.isArray(lesson?.lessons) ? lesson.lessons : [];
+
+  const prevStep = stepIndex > 0 ? safeLessons[stepIndex - 1] : null;
+  const nextStep = stepIndex < safeLessons.length - 1 ? safeLessons[stepIndex + 1] : null;
 
   // Find matching topic from overviewTopics
   const topic = lesson.overviewTopics?.[stepIndex] ?? null;
@@ -301,18 +313,19 @@ export default function SubLessonPage() {
 
       {/* ── Subtopic strip ── */}
       <div className="sl-subtopic-strip">
-        {lesson.lessons.map((s, i) => (
-          <SubtopicCard
-            key={s.id}
-            step={s}
-            index={i}
-            total={total}
-            lessonId={lesson.id}
-            isActive={s.id === step.id}
-            isDone={completedIds.has(s.id)}
-            onClick={() => goToStep(s.id)}
-          />
-        ))}
+        {Array.isArray(lesson?.lessons) &&
+          lesson.lessons.map((s, i) => (
+            <SubtopicCard
+              key={s.id}
+              step={s}
+              index={i}
+              total={total}
+              lessonId={lesson.id}
+              isActive={s.id === step.id}
+              isDone={completedIds.has(s.id)}
+              onClick={() => goToStep(s.id)}
+            />
+          ))}
       </div>
 
       {/* ── Main content grid ── */}

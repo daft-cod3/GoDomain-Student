@@ -103,12 +103,23 @@ export function SubtopicCard({
 
 /* Full lesson card shown on the subLearn index page */
 export default function LearnCard({ lesson, currentStepId }) {
-  const completedCount = lesson.lessons.filter((s) => s.completed).length;
-  const total = lesson.lessons.length;
+  const safeLessons = Array.isArray(lesson?.lessons)
+    ? lesson.lessons.filter((s) => s && s.id)
+    : [];
+
+  if (!lesson?.id || safeLessons.length === 0) {
+    return null;
+  }
+
+  const completedCount = safeLessons.filter((s) => s?.completed).length;
+  const total = safeLessons.length;
   const progress = total ? Math.round((completedCount / total) * 100) : 0;
+
   const nextStep =
-    lesson.lessons.find((s) => !s.completed) ?? lesson.lessons[0];
+    safeLessons.find((s) => !s?.completed) ?? safeLessons[0];
   const activeStepId = currentStepId ?? nextStep?.id;
+
+  const ctaStepId = nextStep?.id ?? safeLessons[0]?.id;
 
   return (
     <article className="lc-card">
@@ -144,7 +155,7 @@ export default function LearnCard({ lesson, currentStepId }) {
 
       {/* Subtopic list */}
       <div className="lc-steps">
-        {lesson.lessons.map((step, i) => (
+        {safeLessons.map((step, i) => (
           <Link
             key={step.id}
             href={getSubLessonHref(lesson.id, step.id)}
@@ -170,7 +181,7 @@ export default function LearnCard({ lesson, currentStepId }) {
 
       {/* CTA */}
       <Link
-        href={getSubLessonHref(lesson.id, nextStep?.id ?? lesson.lessons[0].id)}
+        href={getSubLessonHref(lesson.id, ctaStepId)}
         className="lc-card-cta"
       >
         {progress === 100
