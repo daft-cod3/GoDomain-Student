@@ -12,7 +12,7 @@ import {
 import { JourneyIcon, LessonIcon } from "../../../learn/icons";
 import {
   LEARNING_PROGRESS_KEY,
-  syncLearningProgress,
+  persistLearningProgress,
 } from "../../../learn/progress-store";
 import TwoDModel from "../../components/2dmodel";
 import ThreeDModel from "../../components/3dmodel";
@@ -211,13 +211,18 @@ export default function SubLessonPage() {
       writeCompletedIds(lesson.id, next);
 
       const progressPercent = total ? Math.round((next.size / total) * 100) : 0;
-      syncLearningProgress({
-        lessonId: lesson.id,
-        completedStepIds: Array.from(next),
-        progressPercent,
-      }).catch(() => {
-        // Keep local progress if the network call fails.
-      });
+      // Persist progress locally (the progress-store module currently exposes persistLearningProgress/hydrateLearningProgress)
+      persistLearningProgress([
+        {
+          id: lesson.id,
+          lessons: lesson.lessons.map((entry) => ({
+            id: entry.id,
+            completed: next.has(entry.id),
+          })),
+        },
+      ]);
+
+      void progressPercent;
 
       return next;
     });
