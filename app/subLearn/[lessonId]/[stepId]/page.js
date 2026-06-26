@@ -187,7 +187,8 @@ export default function SubLessonPage() {
   const safeLessons = Array.isArray(lesson?.lessons) ? lesson.lessons : [];
 
   const prevStep = stepIndex > 0 ? safeLessons[stepIndex - 1] : null;
-  const nextStep = stepIndex < safeLessons.length - 1 ? safeLessons[stepIndex + 1] : null;
+  const nextStep =
+    stepIndex < safeLessons.length - 1 ? safeLessons[stepIndex + 1] : null;
 
   // Find matching topic from overviewTopics
   const topic = lesson.overviewTopics?.[stepIndex] ?? null;
@@ -200,18 +201,61 @@ export default function SubLessonPage() {
       ? learningDays[lessonIndex + 1]
       : null;
 
-  function markComplete() {
+  async function postProgressToBackend({
+    lessonId,
+    completedStepIds,
+    progressPercent,
+  }) {
+    // Only wire backend on localhost as requested.
+    if (typeof window === "undefined") return { ok: false, reason: "ssr" };
+
+    const hostname = window.location?.hostname;
+    const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
+    if (!isLocalhost) return { ok: false, reason: "non-localhost" };
+
+    const res = await fetch("/api/progress/migrate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        lessons: [
+          {
+            id: lessonId,
+            completedStepIds,
+            progressPercent,
+          },
+        ],
+      }),
+    });
+
+    if (!res.ok) {
+      let msg = "Request failed";
+      try {
+        const data = await res.json();
+        msg = data?.error || data?.message || msg;
+      } catch {
+        // ignore
+      }
+      return { ok: false, reason: msg };
+    }
+
+    return { ok: true };
+  }
+
+  async function markComplete() {
     if (isDone) return;
     setJustCompleted(true);
     setTimeout(() => setJustCompleted(false), 1400);
 
+    // Optimistic update for immediate UI response.
+    let nextSet;
     setCompletedIds((prev) => {
       const next = new Set(prev);
       next.add(step.id);
       writeCompletedIds(lesson.id, next);
 
       const progressPercent = total ? Math.round((next.size / total) * 100) : 0;
-      // Persist progress locally (the progress-store module currently exposes persistLearningProgress/hydrateLearningProgress)
+
+      // Persist progress locally for non-localhost and for immediate UX.
       persistLearningProgress([
         {
           id: lesson.id,
@@ -222,10 +266,31 @@ export default function SubLessonPage() {
         },
       ]);
 
+      nextSet = next;
       void progressPercent;
-
       return next;
     });
+
+    // Backend sync only on localhost.
+    const completedStepIds = Array.from(nextSet ?? completedIds).concat(
+      nextSet?.has(step.id) ? [] : [step.id],
+    );
+    const uniqueCompletedStepIds = Array.from(new Set(completedStepIds));
+    const progressPercent = total
+      ? Math.round((uniqueCompletedStepIds.length / total) * 100)
+      : 0;
+
+    const r = await postProgressToBackend({
+      lessonId: lesson.id,
+      completedStepIds: uniqueCompletedStepIds,
+      progressPercent,
+    });
+
+    // If backend succeeded, re-hydrate UI from localStorage to match backend.
+    // (Backend also computed progressPercent; localStorage is our current client-side mirror.)
+    if (r?.ok) {
+      setCompletedIds(readCompletedIds(lesson.id));
+    }
   }
 
   function goToStep(id) {
