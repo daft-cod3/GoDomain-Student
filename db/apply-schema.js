@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -57,14 +57,34 @@ function parseDatabaseUrl(url) {
       username: parsed.username,
     };
   } catch (err) {
-    return { raw: url, error: err.message };
+    return { raw: '<unparseable DATABASE_URL>', error: err.message };
   }
+}
+
+function maskDatabaseUrl(url) {
+  try {
+    const parsed = new URL(url);
+    if (parsed.password) {
+      parsed.password = '***';
+    }
+    return parsed.toString();
+  } catch {
+    return '<unparseable DATABASE_URL>';
+  }
+}
+
+function requiresSsl(connectionString = '') {
+  return (
+    connectionString.includes('supabase.co') ||
+    connectionString.includes('pooler.supabase.com') ||
+    connectionString.includes('sslmode=require')
+  );
 }
 
 async function main() {
   const databaseUrl = getEnv('DATABASE_URL');
 
-  console.log('Loaded DATABASE_URL:', databaseUrl);
+  console.log('Loaded DATABASE_URL:', maskDatabaseUrl(databaseUrl));
   const parsed = parseDatabaseUrl(databaseUrl);
   console.log('Parsed database URL:', JSON.stringify(parsed, null, 2));
 
@@ -81,7 +101,7 @@ async function main() {
 
   const pool = new Pool({
     connectionString: databaseUrl,
-    ssl: { rejectUnauthorized: false },
+    ssl: requiresSsl(databaseUrl) ? { rejectUnauthorized: false } : undefined,
     connectionTimeoutMillis: 20_000,
   });
 
@@ -121,4 +141,3 @@ main().catch((err) => {
   console.error('Failed to apply schema:', err.message || err);
   process.exitCode = 1;
 });
-

@@ -60,3 +60,52 @@ CREATE TABLE IF NOT EXISTS activities (
   metadata JSONB DEFAULT '{}'::jsonb,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- ------------------------------
+-- Lesson/Unit/Step content tables
+-- ------------------------------
+
+CREATE TABLE IF NOT EXISTS learning_units (
+  unit_id TEXT PRIMARY KEY,
+  unit_number INTEGER,
+  label TEXT NOT NULL,
+  title TEXT NOT NULL,
+  summary TEXT,
+  unlocked BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS lessons (
+  lesson_id TEXT PRIMARY KEY,
+  unit_id TEXT NOT NULL REFERENCES learning_units(unit_id) ON DELETE CASCADE,
+  unit_number INTEGER,
+  unit_label TEXT,
+  lesson_number INTEGER,
+  label TEXT NOT NULL,
+  title TEXT NOT NULL,
+  subtitle TEXT,
+  icon TEXT,
+  is_locked BOOLEAN NOT NULL DEFAULT FALSE,
+  overview_title TEXT,
+  overview_summary TEXT
+);
+
+-- Stores the subtopics/steps that appear under each lesson.
+CREATE TABLE IF NOT EXISTS lesson_steps (
+  lesson_id TEXT NOT NULL REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+  step_id TEXT PRIMARY KEY,
+  step_number INTEGER NOT NULL,
+  kind TEXT,
+  title TEXT NOT NULL,
+  duration TEXT,
+  detail TEXT NOT NULL
+);
+
+-- The “TopicPanel” for each step.
+CREATE TABLE IF NOT EXISTS lesson_overview_topics (
+  step_id TEXT NOT NULL REFERENCES lesson_steps(step_id) ON DELETE CASCADE,
+  step_number INTEGER NOT NULL,
+  topic_title TEXT,
+  topic_points TEXT[] NOT NULL DEFAULT '{}',
+  PRIMARY KEY (step_id)
+);
+
