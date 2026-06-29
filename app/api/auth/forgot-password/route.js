@@ -1,27 +1,26 @@
-import { query } from "../../../../lib/db.js";
+﻿import { createClient } from "../../../../lib/server.js";
 
 export async function POST(request) {
+  const supabase = await createClient();
   const body = await request.json();
   const email = (body.email || "").trim().toLowerCase();
 
   if (!email) {
-    return new Response(JSON.stringify({ error: "Email is required." }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json({ error: "Email is required." }, { status: 400 });
   }
 
-  await query("SELECT id FROM users WHERE email = $1", [email]);
+  const origin = request.headers.get("origin") || new URL(request.url).origin;
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${origin}/login`,
+  });
 
-  return new Response(
-    JSON.stringify({
-      success: true,
-      message:
-        "If this address is registered, a password reset message has been sent. Check your inbox or spam folder.",
-    }),
-    {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    },
-  );
+  if (error) {
+    return Response.json({ error: error.message }, { status: 400 });
+  }
+
+  return Response.json({
+    success: true,
+    message:
+      "If this address is registered, a password reset message has been sent. Check your inbox or spam folder.",
+  });
 }

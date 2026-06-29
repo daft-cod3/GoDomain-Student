@@ -1,36 +1,26 @@
-import { verifyPassword, createSession, createSessionCookie } from "../../../../lib/auth.js";
-import { query } from "../../../../lib/db.js";
+﻿import { createClient } from "../../../../lib/server.js";
 
 export async function POST(request) {
+  const supabase = await createClient();
   const body = await request.json();
   const email = (body.email || "").trim().toLowerCase();
   const password = body.password || "";
 
   if (!email || !password) {
-    return new Response(JSON.stringify({ error: "Email and password are required." }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json(
+      { error: "Email and password are required." },
+      { status: 400 },
+    );
   }
 
-  const result = await query("SELECT * FROM users WHERE email = $1", [email]);
-  const user = result.rows[0];
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (!user || !verifyPassword(password, user.password_hash, user.password_salt)) {
-    return new Response(JSON.stringify({ error: "Invalid email or password." }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (error) {
+    return Response.json(
+      { error: error.message || "Invalid email or password." },
+      { status: 401 },
+    );
   }
 
-  const token = await createSession(user.id);
-  const cookie = createSessionCookie(token);
-
-  return new Response(JSON.stringify({ success: true }), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-      "Set-Cookie": cookie,
-    },
-  });
+  return Response.json({ success: true });
 }

@@ -1,21 +1,12 @@
-import { parseCookies, revokeSession, createSessionCookie } from "../../../../lib/auth.js";
+﻿import { createClient } from "../../../../lib/server.js";
 
-export async function POST(request) {
-  const cookieHeader = request.headers.get("cookie") || "";
-  const cookies = parseCookies(cookieHeader);
-  const token = cookies.session;
+export async function POST() {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signOut();
 
-  if (token) {
-    await revokeSession(token);
+  if (error) {
+    return Response.json({ error: error.message }, { status: 400 });
   }
 
-  const expiredCookie = `session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
-
-  return new Response(JSON.stringify({ success: true }), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-      "Set-Cookie": expiredCookie,
-    },
-  });
+  return Response.json({ success: true });
 }
