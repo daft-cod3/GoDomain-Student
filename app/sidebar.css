@@ -552,3 +552,167 @@ html[data-theme="dark"] .sb-streak-note {
     grid-template-columns: 200px minmax(0, 1fr) !important;
   }
 }
+
+/* Final responsive pass: stable, shorter sidebar that scales with screens. */
+.app-shell:has(.sb-shell--refined),
+.app-shell:has(.sb-shell--refined[data-expanded="true"]) {
+  --gd-sidebar-rail: clamp(8.6rem, 13vw, 11.5rem);
+  grid-template-columns: var(--gd-sidebar-rail) minmax(0, 1fr) !important;
+  gap: clamp(0.45rem, 1vw, 0.85rem) !important;
+}
+
+.sb-shell.sb-shell--refined,
+.sb-shell.sb-shell--refined[data-expanded="true"] {
+  top: calc(var(--shell-nav-height, 3.5rem) + clamp(0.45rem, 1.1vw, 0.8rem)) !important;
+  width: var(--gd-sidebar-rail, 11rem) !important;
+  height: min(34rem, calc(100svh - var(--shell-nav-height, 3.5rem) - 1.6rem)) !important;
+  max-height: 78svh !important;
+  padding: 0 0.42rem 0 0.5rem !important;
+}
+
+.sb-panel.sb-panel--refined,
+.sb-panel.sb-panel--refined.expanded {
+  height: 100% !important;
+  padding: clamp(0.45rem, 1vw, 0.62rem) !important;
+  gap: clamp(0.36rem, 0.8vw, 0.55rem) !important;
+  border-radius: 16px !important;
+}
+
+.sb-panel--refined .sb-brand {
+  min-height: 2.25rem !important;
+  margin: 0 !important;
+  padding: 0.32rem 0.38rem !important;
+}
+
+.sb-panel--refined .sb-brand-mark {
+  width: clamp(1.45rem, 2.6vw, 1.75rem) !important;
+  height: clamp(1.45rem, 2.6vw, 1.75rem) !important;
+  border-radius: 8px !important;
+}
+
+.sb-panel--refined .sb-brand-title {
+  font-size: clamp(0.68rem, 1vw, 0.78rem) !important;
+}
+
+.sb-panel--refined .sb-brand-sub,
+.sb-panel--refined .sb-nav-caption,
+.sb-panel--refined .sb-nav-kicker {
+  font-size: clamp(0.48rem, 0.82vw, 0.6rem) !important;
+}
+
+.sb-panel--refined .sb-nav {
+  gap: clamp(0.32rem, 0.75vw, 0.48rem) !important;
+  padding: 0.16rem 0 !important;
+}
+
+.sb-panel--refined .sb-nav-link,
+.sb-panel--refined.expanded .sb-nav-link {
+  min-height: clamp(2.6rem, 5.4vw, 3.28rem) !important;
+  padding: clamp(0.34rem, 0.9vw, 0.52rem) !important;
+  gap: clamp(0.34rem, 0.8vw, 0.52rem) !important;
+  border-radius: 12px !important;
+}
+
+.sb-panel--refined .sb-icon {
+  width: clamp(1.45rem, 2.7vw, 1.85rem) !important;
+  height: clamp(1.45rem, 2.7vw, 1.85rem) !important;
+  min-width: clamp(1.45rem, 2.7vw, 1.85rem) !important;
+  padding: clamp(0.24rem, 0.55vw, 0.38rem) !important;
+  border-radius: 9px !important;
+}
+
+.sb-panel--refined .sb-icon svg {
+  width: clamp(0.78rem, 1.6vw, 1rem) !important;
+  height: clamp(0.78rem, 1.6vw, 1rem) !important;
+}
+
+.sb-panel--refined .sb-nav-label-always {
+  font-size: clamp(0.58rem, 0.9vw, 0.72rem) !important;
+  line-height: 1.05 !important;
+}
+
+.sb-panel--refined .sb-footer {
+  padding-top: 0.42rem !important;
+  gap: 0.42rem !important;
+}
+
+.sb-panel--refined .sb-streak {
+  padding: 0.46rem 0.5rem !important;
+  gap: 0.32rem !important;
+}
+
+.sb-panel--refined .sb-streak-note {
+  display: none !important;
+}
+
+.sb-panel--refined .sb-cta {
+  padding: 0.48rem 0.58rem !important;
+  font-size: 0.64rem !important;
+}
+
+@media (max-width: 900px) {
+  .app-shell:has(.sb-shell--refined),
+  .app-shell:has(.sb-shell--refined[data-expanded="true"]) {
+    --gd-sidebar-rail: clamp(3.7rem, 8vw, 4.7rem);
+  }
+
+  .sb-shell.sb-shell--refined,
+  .sb-shell.sb-shell--refined[data-expanded="true"] {
+    height: min(28rem, calc(100svh - var(--shell-nav-height, 3rem) - 1.4rem)) !important;
+    max-height: 70svh !important;
+  }
+
+  .sb-shell.sb-shell--refined .sb-text,
+  .sb-shell.sb-shell--refined .sb-nav-caption-wrap,
+  .sb-shell.sb-shell--refined .sb-footer,
+  .sb-shell.sb-shell--refined .sb-brand-copy {
+    display: none !important;
+  }
+
+  .sb-panel--refined .sb-nav-link,
+  .sb-panel--refined.expanded .sb-nav-link {
+    flex-direction: column !important;
+    min-height: clamp(2.35rem, 8vw, 3rem) !important;
+    padding: 0.32rem !important;
+  }
+
+  .sb-panel--refined .sb-nav-label-always {
+    font-size: clamp(0.48rem, 1.6vw, 0.6rem) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-shell:has(.sb-shell--refined),
+  .app-shell:has(.sb-shell--refined[data-expanded="true"]) {
+    --gd-sidebar-rail: 3.25rem;
+    gap: 0.35rem !important;
+  }
+
+  .sb-shell.sb-shell--refined,
+  .sb-shell.sb-shell--refined[data-expanded="true"] {
+    height: min(22rem, calc(100svh - var(--shell-nav-height, 2.75rem) - 1.2rem)) !important;
+    max-height: 62svh !important;
+    padding-left: 0.35rem !important;
+    padding-right: 0.25rem !important;
+  }
+
+  .sb-panel--refined .sb-nav-label-always,
+  .sb-panel--refined .sb-brand {
+    display: none !important;
+  }
+
+  .sb-panel--refined .sb-nav {
+    justify-content: center !important;
+  }
+
+  .sb-panel--refined .sb-icon {
+    width: 1.28rem !important;
+    height: 1.28rem !important;
+    min-width: 1.28rem !important;
+  }
+
+  .sb-panel--refined .sb-icon svg {
+    width: 0.72rem !important;
+    height: 0.72rem !important;
+  }
+}

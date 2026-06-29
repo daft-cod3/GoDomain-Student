@@ -127,7 +127,7 @@ export const profilePerformanceCards = [
   },
   {
     label: "Badges",
-    value: "12",
+    value: "16",
     meta: "Milestones unlocked",
   },
 ];

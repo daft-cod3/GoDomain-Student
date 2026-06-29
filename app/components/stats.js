@@ -211,10 +211,20 @@ function StreakButtons() {
 const ACHIEVEMENTS = [
   { title: "First Steps", icon: "🚗", unlocked: true },
   { title: "Streak Master", icon: "🔥", unlocked: true },
-  { title: "Unit Champion", icon: "🏆", unlocked: false },
-  { title: "Road Warrior", icon: "🛣️", unlocked: false },
+  { title: "Unit Champion", icon: "🏆", unlocked: true },
+  { title: "Road Warrior", icon: "🛣️", unlocked: true },
   { title: "Perfect Score", icon: "💯", unlocked: true },
   { title: "Mentor Meeting", icon: "👨🏫", unlocked: true },
+  { title: "Mirror Master", icon: "MM", unlocked: true },
+  { title: "Signal Pro", icon: "SP", unlocked: true },
+  { title: "Parking Ace", icon: "PA", unlocked: true },
+  { title: "Junction Expert", icon: "JE", unlocked: true },
+  { title: "Hill Start Hero", icon: "HS", unlocked: true },
+  { title: "Night Ready", icon: "NR", unlocked: true },
+  { title: "Hazard Scout", icon: "HZ", unlocked: true },
+  { title: "Lane Keeper", icon: "LK", unlocked: true },
+  { title: "Quiz Sprinter", icon: "QS", unlocked: true },
+  { title: "Road Sign Guru", icon: "RS", unlocked: true },
 ];
 
 const STAT_PILLS = [
@@ -243,6 +253,45 @@ const STAT_PILLS = [
     icon: "$",
   },
 ];
+
+const LEADERBOARD = [
+  {
+    id: studentProfile.indexNumber,
+    name: studentProfile.name,
+    school: studentProfile.drivingSchool,
+    hp: studentProfile.hp,
+    level: studentProfile.level,
+    current: true,
+  },
+  {
+    id: "GDS-2031",
+    name: "Brian Otieno",
+    school: "GoDomain Driving School",
+    hp: 96,
+    level: "Advanced",
+  },
+  {
+    id: "GDS-1988",
+    name: "Amina Wanjiku",
+    school: "GoDomain Driving School",
+    hp: 91,
+    level: "Advanced",
+  },
+  {
+    id: "GDS-2104",
+    name: "Kevin Mwangi",
+    school: "GoDomain Driving School",
+    hp: 88,
+    level: "Intermediate",
+  },
+  {
+    id: "GDS-2072",
+    name: "Faith Njeri",
+    school: "GoDomain Driving School",
+    hp: 76,
+    level: "Intermediate",
+  },
+].sort((a, b) => b.hp - a.hp);
 
 export default function Stats() {
   const [units, setUnits] = useState(() => getUnitRows(learningUnits));
@@ -384,6 +433,7 @@ export default function Stats() {
           { id: "units", label: "Units" },
           { id: "details", label: "Details" },
           { id: "badges", label: "Badges" },
+          { id: "leaderboard", label: "Leaderboard" },
         ].map((t) => (
           <Tab
             key={t.id}
@@ -447,6 +497,30 @@ export default function Stats() {
           <div className="prof-ach-grid">
             {ACHIEVEMENTS.map((a, i) => (
               <AchBadge key={a.title} a={a} index={i} />
+            ))}
+          </div>
+        )}
+
+        {tab === "leaderboard" && (
+          <div className="prof-leaderboard-list">
+            {LEADERBOARD.map((student, index) => (
+              <article
+                key={student.id}
+                className={`prof-leader-row${student.current ? " current" : ""}`}
+              >
+                <div className="prof-leader-rank">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+                <div className="prof-leader-copy">
+                  <strong>{student.name}</strong>
+                  <span>{student.school}</span>
+                </div>
+                <span className="prof-leader-level">{student.level}</span>
+                <div className="prof-leader-hp">
+                  <strong>{student.hp}</strong>
+                  <span>HP</span>
+                </div>
+              </article>
             ))}
           </div>
         )}

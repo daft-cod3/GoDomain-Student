@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getLearningDayHref } from "../learn";
 import ContentReview from "../learn/components/contReview";
-import ModelTownBoard from "./modelTownBoard";
 import RoadSign from "./roadSign";
 import TeacherUploadsSection from "./teacher-uploads-section";
 
@@ -219,7 +218,6 @@ export default function Dashboard() {
         </div>
 
         <RoadSign />
-        <ModelTownBoard />
       </div>
     </div>
   );
