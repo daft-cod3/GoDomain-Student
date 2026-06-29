@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -28,9 +28,9 @@ function loadEnvFile() {
     ) {
       value = value.slice(1, -1);
     }
-    if (!(key in process.env)) {
-      process.env[key] = value;
-    }
+    // Always override so we can reliably use the intended local DATABASE_URL.
+    process.env[key] = value;
+
   }
 }
 
@@ -111,7 +111,11 @@ async function main() {
           ],
         );
 
-        for (let stepIndex = 0; stepIndex < lesson.lessons.length; stepIndex++) {
+        for (
+          let stepIndex = 0;
+          stepIndex < lesson.lessons.length;
+          stepIndex++
+        ) {
           const step = lesson.lessons[stepIndex];
 
           await clients.query(

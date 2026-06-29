@@ -1,38 +1,32 @@
-﻿#!/usr/bin/env node
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { Pool } from "pg";
+#!/usr/bin/env node
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs = require("node:fs");
+const path = require("node:path");
+const { Pool } = require("pg");
 
 function loadEnvFile() {
   const envPath = path.join(__dirname, "..", ".env.local");
-  if (!fs.existsSync(envPath)) {
-    return;
-  }
+  if (!fs.existsSync(envPath)) return;
+
   const text = fs.readFileSync(envPath, "utf8");
   for (const line of text.split(/\r?\n/)) {
     const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) {
-      continue;
-    }
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
     const eq = trimmed.indexOf("=");
-    if (eq === -1) {
-      continue;
-    }
+    if (eq === -1) continue;
+
     const key = trimmed.slice(0, eq).trim();
     let value = trimmed.slice(eq + 1).trim();
+
     if (
       (value.startsWith('"') && value.endsWith('"')) ||
       (value.startsWith("'") && value.endsWith("'"))
     ) {
       value = value.slice(1, -1);
     }
-    if (!(key in process.env)) {
-      process.env[key] = value;
-    }
+
+    if (!(key in process.env)) process.env[key] = value;
   }
 }
 
@@ -40,37 +34,8 @@ loadEnvFile();
 
 function getEnv(name) {
   const v = process.env[name];
-  if (!v) {
-    throw new Error(`Missing required env var ${name}`);
-  }
+  if (!v) throw new Error(`Missing required env var ${name}`);
   return v;
-}
-
-function parseDatabaseUrl(url) {
-  try {
-    const parsed = new URL(url);
-    return {
-      protocol: parsed.protocol,
-      hostname: parsed.hostname,
-      port: parsed.port,
-      pathname: parsed.pathname,
-      username: parsed.username,
-    };
-  } catch (err) {
-    return { raw: "<unparseable DATABASE_URL>", error: err.message };
-  }
-}
-
-function maskDatabaseUrl(url) {
-  try {
-    const parsed = new URL(url);
-    if (parsed.password) {
-      parsed.password = "***";
-    }
-    return parsed.toString();
-  } catch {
-    return "<unparseable DATABASE_URL>";
-  }
 }
 
 function requiresSsl(connectionString = "") {
@@ -84,20 +49,13 @@ function requiresSsl(connectionString = "") {
 async function main() {
   const databaseUrl = getEnv("DATABASE_URL");
 
-  console.log("Loaded DATABASE_URL:", maskDatabaseUrl(databaseUrl));
-  const parsed = parseDatabaseUrl(databaseUrl);
-  console.log("Parsed database URL:", JSON.stringify(parsed, null, 2));
-
   const schemaPath = path.join(__dirname, "schema.sql");
-
   if (!fs.existsSync(schemaPath)) {
     throw new Error(`Schema file not found: ${schemaPath}`);
   }
 
   const schema = fs.readFileSync(schemaPath, "utf8").trim();
-  if (!schema) {
-    throw new Error(`Schema file is empty: ${schemaPath}`);
-  }
+  if (!schema) throw new Error(`Schema file is empty: ${schemaPath}`);
 
   const pool = new Pool({
     connectionString: databaseUrl,
@@ -114,7 +72,7 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error("Failed to apply schema:", err.message || err);
+  console.error("Failed to apply schema:", err && (err.message || err));
   process.exitCode = 1;
 });
 
