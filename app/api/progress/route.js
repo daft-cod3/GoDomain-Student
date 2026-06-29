@@ -1,71 +1,72 @@
-import { getUserFromRequest } from "../../../lib/auth.js";
-import { query } from "../../../lib/db.js";
+﻿import { getUserFromRequest } from "../../../lib/auth.js";
+import { createClient } from "../../../lib/server.js";
 import { getLearningDay } from "../../learn/index.js";
 
-async function insertOrUpdateProgress(userId, lessonId, completedStepIds, progressPercent) {
-  const existing = await query(
-    `SELECT progress_percent FROM learning_progress
-     WHERE user_id = $1 AND lesson_id = $2`,
-    [userId, lessonId],
-  );
+async function upsertProgress(supabase, userId, lessonId, completedStepIds, progressPercent) {
+  const { data: existing, error: existingError } = await supabase
+    .from("learning_progress")
+    .select("progress_percent")
+    .eq("user_id", userId)
+    .eq("lesson_id", lessonId)
+    .maybeSingle();
 
-  const rows = existing.rows;
-  if (rows.length > 0) {
-    const previous = rows[0].progress_percent ?? 0;
-    await query(
-      `UPDATE learning_progress
-       SET completed_step_ids = $1,
-           progress_percent = $2,
-           updated_at = NOW()
-       WHERE user_id = $3 AND lesson_id = $4`,
-      [JSON.stringify(completedStepIds), progressPercent, userId, lessonId],
-    );
-    return previous;
+  if (existingError) {
+    throw existingError;
   }
 
-  await query(
-    `INSERT INTO learning_progress (user_id, lesson_id, completed_step_ids, progress_percent)
-     VALUES ($1, $2, $3, $4)`,
-    [userId, lessonId, JSON.stringify(completedStepIds), progressPercent],
+  const { error } = await supabase.from("learning_progress").upsert(
+    {
+      user_id: userId,
+      lesson_id: lessonId,
+      completed_step_ids: completedStepIds,
+      progress_percent: progressPercent,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "user_id,lesson_id" },
   );
-  return 0;
+
+  if (error) {
+    throw error;
+  }
+
+  return existing?.progress_percent ?? 0;
 }
 
-export async function GET(request) {
-  const user = await getUserFromRequest(request);
+export async function GET() {
+  const user = await getUserFromRequest();
   if (!user) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const result = await query(
-    `SELECT lesson_id, completed_step_ids, progress_percent, updated_at
-     FROM learning_progress
-     WHERE user_id = $1
-     ORDER BY updated_at DESC`,
-    [user.id],
-  );
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("learning_progress")
+    .select("lesson_id, completed_step_ids, progress_percent, updated_at")
+    .eq("user_id", user.id)
+    .order("updated_at", { ascending: false });
 
-  return new Response(JSON.stringify(result.rows), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  if (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+
+  return Response.json(data ?? []);
 }
 
 export async function POST(request) {
-  const user = await getUserFromRequest(request);
+  const user = await getUserFromRequest();
   if (!user) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const body = await request.json();
   const lessonId = (body.lessonId || "").trim();
-  const completedStepIds = Array.isArray(body.completedStepIds) ? body.completedStepIds : [];
+  const completedStepIds = Array.isArray(body.completedStepIds)
+    ? body.completedStepIds
+    : [];
+
+  if (!lessonId) {
+    return Response.json({ error: "lessonId is required." }, { status: 400 });
+  }
 
   let progressPercent;
   if (Number.isFinite(body.progressPercent)) {
@@ -76,35 +77,31 @@ export async function POST(request) {
     progressPercent = totalSteps > 0 ? Math.round((completedStepIds.length / totalSteps) * 100) : 0;
   }
 
-  if (!lessonId) {
-    return new Response(JSON.stringify({ error: "lessonId is required." }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-
-  const previousPercent = await insertOrUpdateProgress(
-    user.id,
-    lessonId,
-    completedStepIds,
-    progressPercent,
-  );
-
-  if (progressPercent === 100 && previousPercent < 100) {
-    await query(
-      `INSERT INTO activities (user_id, type, title, detail)
-       VALUES ($1, $2, $3, $4)`,
-      [
-        user.id,
-        "Achievement",
-        `Completed lesson ${lessonId}`,
-        `Finished all steps in ${lessonId}`,
-      ],
+  try {
+    const supabase = await createClient();
+    const previousPercent = await upsertProgress(
+      supabase,
+      user.id,
+      lessonId,
+      completedStepIds,
+      progressPercent,
     );
+
+    if (progressPercent === 100 && previousPercent < 100) {
+      const { error } = await supabase.from("activities").insert({
+        user_id: user.id,
+        type: "Achievement",
+        title: `Completed lesson ${lessonId}`,
+        detail: `Finished all steps in ${lessonId}`,
+      });
+
+      if (error) {
+        throw error;
+      }
+    }
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
   }
 
-  return new Response(JSON.stringify({ success: true }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  return Response.json({ success: true });
 }

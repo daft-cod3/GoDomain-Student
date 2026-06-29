@@ -1,53 +1,51 @@
-import { getUserFromRequest } from "../../../lib/auth.js";
-import { query } from "../../../lib/db.js";
+﻿import { getUserFromRequest } from "../../../lib/auth.js";
+import { createClient } from "../../../lib/server.js";
 
-export async function GET(request) {
-  const user = await getUserFromRequest(request);
+export async function GET() {
+  const user = await getUserFromRequest();
   if (!user) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const result = await query(
-    `SELECT id, type, title, detail, metadata, created_at
-     FROM activities
-     WHERE user_id = $1
-     ORDER BY created_at DESC
-     LIMIT 20`,
-    [user.id],
-  );
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("activities")
+    .select("id, type, title, detail, metadata, created_at")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false })
+    .limit(20);
 
-  return new Response(JSON.stringify(result.rows), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  if (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+
+  return Response.json(data ?? []);
 }
 
 export async function POST(request) {
-  const user = await getUserFromRequest(request);
+  const user = await getUserFromRequest();
   if (!user) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const supabase = await createClient();
   const body = await request.json();
   const type = (body.type || "Update").trim();
   const title = (body.title || "Activity update").trim();
   const detail = body.detail || "";
   const metadata = body.metadata || {};
 
-  await query(
-    `INSERT INTO activities (user_id, type, title, detail, metadata)
-     VALUES ($1, $2, $3, $4, $5)`,
-    [user.id, type, title, detail, metadata],
-  );
-
-  return new Response(JSON.stringify({ success: true }), {
-    status: 201,
-    headers: { "Content-Type": "application/json" },
+  const { error } = await supabase.from("activities").insert({
+    user_id: user.id,
+    type,
+    title,
+    detail,
+    metadata,
   });
+
+  if (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+
+  return Response.json({ success: true }, { status: 201 });
 }

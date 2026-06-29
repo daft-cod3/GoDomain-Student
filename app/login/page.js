@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -90,6 +90,11 @@ function LoginPageInner() {
         return;
       }
 
+      if (data.url) {
+        window.location.href = data.url;
+        return;
+      }
+
       router.push(redirectTo);
     } catch (error) {
       setMessage(error.message);
@@ -128,12 +133,17 @@ function LoginPageInner() {
       const response = await fetch("/api/auth/provider", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ provider }),
+        body: JSON.stringify({ provider, redirectTo }),
       });
 
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || "Provider login failed.");
+      }
+
+      if (data.url) {
+        window.location.href = data.url;
+        return;
       }
 
       router.push(redirectTo);
