@@ -18,7 +18,7 @@ function StatBar({ label, value, capacity, color, track, icon, href }) {
     <Link
       className="nb2-stat"
       href={href}
-      aria-label={`${label}: ${value}/${capacity}`}
+      aria-label={`${label}: ${value}`}
       style={{ "--nb2-color": color }}
     >
       <span className="nb2-stat-icon" aria-hidden="true" style={{ color }}>
@@ -27,10 +27,7 @@ function StatBar({ label, value, capacity, color, track, icon, href }) {
       <div className="nb2-stat-body">
         <div className="nb2-stat-row">
           <span className="nb2-stat-label">{label}</span>
-          <strong className="nb2-stat-val">
-            {value}
-            <em>/{capacity}</em>
-          </strong>
+          <strong className="nb2-stat-val">{value}</strong>
         </div>
         <div className="nb2-stat-track" aria-hidden="true">
           <span

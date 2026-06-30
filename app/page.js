@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ModelTownBoard from "./components/modelTownBoard";
 import RoadSign from "./components/roadSign";
 import DashboardSidebar from "./components/sidebar";
 import TeacherUploadsSection from "./components/teacher-uploads-section";
@@ -269,7 +268,6 @@ export default function HomePage() {
             </div>
 
             <RoadSign />
-            <ModelTownBoard />
           </div>
         </div>
       </main>

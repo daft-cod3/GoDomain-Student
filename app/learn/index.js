@@ -708,12 +708,6 @@ export function getLearningDayHref(dayId) {
   return `/content/${dayId}`;
 }
 
-export function getSubLessonHref(lessonId, stepId) {
-  // Kept for backwards compatibility with subLearn route components.
-  return `/subLearn/${lessonId}/${stepId}`;
-}
-
-
 export function getLearningStep(dayId, stepId) {
   const lesson = getLearningDay(dayId);
 
