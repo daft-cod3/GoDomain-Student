@@ -7,10 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write",
-    "db:schema": "node db/migrate.js",
-    "db:seed": "node db/seed-content.js",
-    "test:db": "node --test db/migrate.test.js"
+    "format": "biome format --write"
   },
   "dependencies": {
     "i18next": "^26.0.10",

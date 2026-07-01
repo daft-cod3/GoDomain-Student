@@ -609,7 +609,491 @@ const lessonBlueprints = [
 
 const completionBlueprint = {};
 
+const progressiveLessonContent = {
+  "Speed Management": {
+    summary:
+      "This lesson moves from simple speed limits into choosing a speed that matches traffic, visibility, road surface, and stopping distance.",
+    topics: [
+      {
+        title: "Reading the safe speed",
+        points: [
+          "Start with the posted limit, then reduce speed when traffic, weather, pedestrians, or road shape demand it.",
+          "A safe speed leaves enough time to stop smoothly if the situation changes.",
+          "Speed choice should be settled before the hazard, not during the hazard.",
+        ],
+      },
+      {
+        title: "Following distance",
+        points: [
+          "Leave more space when speed rises because stopping distance grows quickly.",
+          "Increase the gap in rain, dust, traffic queues, and when following heavy vehicles.",
+          "A steady gap protects the driver from harsh braking and late swerves.",
+        ],
+      },
+      {
+        title: "Speed changes before turns",
+        points: [
+          "Brake before the bend or turn, then steer with the vehicle already settled.",
+          "Avoid entering junctions while still reducing speed aggressively.",
+          "Smooth speed changes make signals and lane position easier for other road users to read.",
+        ],
+      },
+    ],
+  },
+  "Lane Discipline": {
+    summary:
+      "This lesson develops stable lane holding after speed control, adding mirror checks, lane choice, and controlled merging.",
+    topics: [
+      {
+        title: "Choosing the correct lane early",
+        points: [
+          "Use signs, arrows, and the planned direction to choose the lane before the road becomes busy.",
+          "Late lane choices create pressure and can force unsafe crossing of lane markings.",
+          "The correct lane is the one that matches the next legal movement, not the shortest path.",
+        ],
+      },
+      {
+        title: "Holding lane position",
+        points: [
+          "Keep the vehicle centered with small steering corrections instead of drifting and correcting sharply.",
+          "Use road edges, center lines, and vehicles ahead as reference points.",
+          "Stable lane holding gives motorcycles and pedestrians clearer space around the vehicle.",
+        ],
+      },
+      {
+        title: "Merging and lane changes",
+        points: [
+          "Check mirrors, signal, confirm the gap, then move gradually into the lane.",
+          "Never start a lane change just because the signal is on; the gap must be safe first.",
+          "Cancel the signal and settle speed once the vehicle is fully in the new lane.",
+        ],
+      },
+    ],
+  },
+  "Overtaking Basics": {
+    summary:
+      "This lesson builds on lane discipline by teaching when overtaking is legal, visible, and worth doing.",
+    topics: [
+      {
+        title: "When not to overtake",
+        points: [
+          "Do not overtake near bends, junctions, crossings, hills, solid lines, or unclear views.",
+          "Avoid overtaking when the gain is small but the risk is high.",
+          "If the vehicle ahead is turning or slowing for a hazard, wait and reassess.",
+        ],
+      },
+      {
+        title: "Planning the pass",
+        points: [
+          "Check mirrors and oncoming traffic before moving out.",
+          "Confirm there is enough space to pass and return without forcing another road user to brake.",
+          "Use a clear signal only after the decision is safe.",
+        ],
+      },
+      {
+        title: "Returning safely",
+        points: [
+          "Return to the lane only after the passed vehicle is visible in the mirror.",
+          "Do not cut back sharply or slow immediately after overtaking.",
+          "Cancel the signal and rebuild a safe following distance.",
+        ],
+      },
+    ],
+  },
+  "Pedestrian Zones": {
+    summary:
+      "This lesson turns hazard scanning toward people on foot, especially around schools, crossings, markets, and shared streets.",
+    topics: [
+      {
+        title: "Predicting pedestrian movement",
+        points: [
+          "Look for children, parked vehicles, bus stops, shops, and road edges where people may step out.",
+          "A pedestrian looking away may still enter the road, so reduce speed before the risk is close.",
+          "Eye contact helps, but it does not replace slowing and covering the brake.",
+        ],
+      },
+      {
+        title: "Crossings and waiting points",
+        points: [
+          "Approach crossings at a speed that allows a calm stop before the line.",
+          "Never block a crossing while waiting in traffic.",
+          "Check both sides of the crossing before moving again after pedestrians clear.",
+        ],
+      },
+      {
+        title: "Shared road spaces",
+        points: [
+          "In busy pedestrian areas, keep speed low and leave extra side clearance.",
+          "Use the horn only as a warning when necessary, not to pressure people.",
+          "Be ready for sudden stops from vehicles ahead reacting to pedestrians.",
+        ],
+      },
+    ],
+  },
+  "Night Driving": {
+    summary:
+      "This lesson adds low-light decisions: headlight use, glare control, speed reduction, and spotting hidden road users.",
+    topics: [
+      {
+        title: "Lighting and visibility",
+        points: [
+          "Use headlights early enough to see and be seen, not only when the road is fully dark.",
+          "Dip headlights for oncoming traffic and when following another vehicle closely.",
+          "Dirty windscreens and weak lights reduce reaction time at night.",
+        ],
+      },
+      {
+        title: "Managing glare",
+        points: [
+          "Look slightly left of bright oncoming lights while keeping the lane visible.",
+          "Slow down if glare hides pedestrians, cyclists, road edges, or markings.",
+          "Avoid staring at high beams because recovery takes time.",
+        ],
+      },
+      {
+        title: "Night speed choice",
+        points: [
+          "Drive at a speed that allows stopping within the distance lit by the headlights.",
+          "Leave more following distance because judging speed and distance is harder at night.",
+          "Expect unlit road users near settlements and shoulders.",
+        ],
+      },
+    ],
+  },
+  "Parking Routine": {
+    summary:
+      "This lesson begins the maneuver unit by breaking parking into setup, reference points, steering timing, and final correction.",
+    topics: [
+      {
+        title: "Parking setup",
+        points: [
+          "Choose a legal, visible, and safe parking space before slowing sharply.",
+          "Signal early and position the vehicle so traffic can understand the plan.",
+          "Check mirrors and blind spots before leaving the normal lane position.",
+        ],
+      },
+      {
+        title: "Reference points",
+        points: [
+          "Use mirrors, curb lines, bay markings, and vehicle corners as fixed guides.",
+          "Move slowly enough that small steering corrections can be made calmly.",
+          "Stop and reset if the angle becomes unsafe instead of forcing the vehicle in.",
+        ],
+      },
+      {
+        title: "Finishing safely",
+        points: [
+          "Straighten the wheels and secure the vehicle before opening doors.",
+          "Leave enough space for other road users and nearby parked vehicles.",
+          "Before moving off, check all sides and signal only when ready to rejoin.",
+        ],
+      },
+    ],
+  },
+  "Hill Starts": {
+    summary:
+      "This lesson builds from parking control into clutch, brake, and observation timing on slopes.",
+    topics: [
+      {
+        title: "Holding the vehicle",
+        points: [
+          "Use the parking brake or foot brake to prevent rollback before moving off.",
+          "Find the biting point gently before releasing the brake.",
+          "Avoid rushing the pedals because sudden release can stall or roll the vehicle.",
+        ],
+      },
+      {
+        title: "Moving off uphill",
+        points: [
+          "Check mirrors, signal if needed, and confirm the path is clear before releasing the brake.",
+          "Add enough power for the slope while easing the clutch smoothly.",
+          "Keep steering steady and build speed only after the vehicle is moving cleanly.",
+        ],
+      },
+      {
+        title: "Downhill control",
+        points: [
+          "Select a gear that helps control speed before the slope becomes steep.",
+          "Use brakes smoothly instead of coasting with the clutch down.",
+          "Increase following distance because gravity lengthens stopping distance.",
+        ],
+      },
+    ],
+  },
+  Roundabouts: {
+    summary:
+      "This lesson combines signs, lanes, priority, and exit timing for controlled roundabout decisions.",
+    topics: [
+      {
+        title: "Approach and lane choice",
+        points: [
+          "Read signs and arrows early so the correct lane is chosen before the entry line.",
+          "Reduce speed while checking traffic already circulating.",
+          "Give way to traffic with priority and wait without edging forward into danger.",
+        ],
+      },
+      {
+        title: "Circulating safely",
+        points: [
+          "Hold the selected lane and avoid cutting across the roundabout.",
+          "Watch for motorcycles, cyclists, and vehicles changing lanes late.",
+          "Keep speed low enough to respond if another driver makes a poor choice.",
+        ],
+      },
+      {
+        title: "Exit timing",
+        points: [
+          "Signal at the correct time so other road users know the exit plan.",
+          "Check mirrors before leaving the roundabout.",
+          "Straighten into the correct lane after the exit and cancel the signal.",
+        ],
+      },
+    ],
+  },
+  "Emergency Response": {
+    summary:
+      "This lesson teaches controlled reactions after the learner has practised normal maneuvers and roundabouts.",
+    topics: [
+      {
+        title: "Emergency braking",
+        points: [
+          "Brake firmly while keeping the steering straight when a sudden stop is needed.",
+          "Avoid swerving unless braking alone cannot avoid the danger.",
+          "After stopping, check mirrors and secure the vehicle if needed.",
+        ],
+      },
+      {
+        title: "Tyre or control problem",
+        points: [
+          "Hold the steering wheel firmly and reduce speed gradually.",
+          "Avoid harsh braking if the vehicle feels unstable.",
+          "Move to a safe place only when the path is clear.",
+        ],
+      },
+      {
+        title: "After an incident",
+        points: [
+          "Warn other road users with hazard lights or a safe warning triangle where required.",
+          "Protect passengers and move away from traffic if it is safe.",
+          "Report the incident and do not create a second hazard.",
+        ],
+      },
+    ],
+  },
+  "Highway Etiquette": {
+    summary:
+      "This lesson extends lane and speed skills to higher-speed roads where spacing, signaling, and patience matter more.",
+    topics: [
+      {
+        title: "Joining a highway",
+        points: [
+          "Use the acceleration lane to match traffic speed when safe.",
+          "Check mirrors and blind spots before merging.",
+          "Do not force entry; adjust speed to take a clear gap.",
+        ],
+      },
+      {
+        title: "Keeping highway space",
+        points: [
+          "Maintain a larger following distance than on town roads.",
+          "Keep left or in the normal lane unless overtaking or following road instructions.",
+          "Avoid sudden braking because traffic behind is moving faster.",
+        ],
+      },
+      {
+        title: "Exiting smoothly",
+        points: [
+          "Move into the exit lane early after mirror checks and signaling.",
+          "Reduce speed on the exit lane, not in the fast traffic lane.",
+          "Watch for vehicles cutting across late near exits.",
+        ],
+      },
+    ],
+  },
+  "Mock Theory": {
+    summary:
+      "This lesson starts exam readiness with timed theory recall across signs, markings, priority, and safety routines.",
+    topics: [
+      {
+        title: "Timed question rhythm",
+        points: [
+          "Read the full question before choosing an answer.",
+          "Eliminate clearly unsafe options first.",
+          "Mark uncertain questions for review instead of losing time early.",
+        ],
+      },
+      {
+        title: "Rule recall",
+        points: [
+          "Connect signs and markings to the action they require.",
+          "Use priority rules to decide who moves first in scenario questions.",
+          "Check whether the safest answer is legal, visible, and predictable.",
+        ],
+      },
+      {
+        title: "Reviewing mistakes",
+        points: [
+          "Group missed questions by topic so revision is targeted.",
+          "Rewrite the correct rule in one short sentence.",
+          "Repeat the missed card before taking another mock attempt.",
+        ],
+      },
+    ],
+  },
+  "Case Drills": {
+    summary:
+      "This lesson turns theory knowledge into scenario decisions with changing traffic, pedestrians, and road signs.",
+    topics: [
+      {
+        title: "Reading the full scene",
+        points: [
+          "Identify the road layout, signs, markings, traffic, and vulnerable road users first.",
+          "Avoid answering from one clue while ignoring a bigger hazard.",
+          "State the safest first action before choosing the final answer.",
+        ],
+      },
+      {
+        title: "Decision order",
+        points: [
+          "Control speed before steering or signaling when risk is rising.",
+          "Give priority when the legal or safer claim belongs to another road user.",
+          "Choose the option that leaves the most time and space.",
+        ],
+      },
+      {
+        title: "Explaining the answer",
+        points: [
+          "A good case answer can be explained with rule, risk, and response.",
+          "If two answers seem legal, choose the one that reduces danger earlier.",
+          "Use each explanation as a flashcard for faster recall.",
+        ],
+      },
+    ],
+  },
+  "Sign Memory": {
+    summary:
+      "This lesson sharpens recognition speed so signs are understood before the vehicle reaches the decision point.",
+    topics: [
+      {
+        title: "Shape and color clues",
+        points: [
+          "Use sign shape and color to identify the family before reading details.",
+          "Warning signs prepare the driver to slow and search for the hazard.",
+          "Regulatory signs tell the driver what must or must not be done.",
+        ],
+      },
+      {
+        title: "Meaning to action",
+        points: [
+          "Every sign should trigger a specific driving response.",
+          "If the sign is missed, use road markings and traffic behavior as backup clues.",
+          "Repeat signs in short groups to avoid mixing similar symbols.",
+        ],
+      },
+      {
+        title: "Fast recall check",
+        points: [
+          "Name the sign, its location, and the correct response within a few seconds.",
+          "Separate confusing signs and compare them side by side.",
+          "Review missed signs again the next day.",
+        ],
+      },
+    ],
+  },
+  "Final Revision": {
+    summary:
+      "This lesson pulls weak areas into a final revision loop before the assessment warmup.",
+    topics: [
+      {
+        title: "Finding weak points",
+        points: [
+          "Review missed cards, slow answers, and topics that still need prompts.",
+          "Prioritize safety-critical mistakes over easy score gains.",
+          "Build a short list of topics to repeat before the final check.",
+        ],
+      },
+      {
+        title: "Mixed practice",
+        points: [
+          "Mix signs, markings, priority, hazards, and maneuvers so recall is flexible.",
+          "Avoid practising only the most comfortable topic.",
+          "Explain each answer aloud to confirm the rule is understood.",
+        ],
+      },
+      {
+        title: "Confidence pass",
+        points: [
+          "Repeat only the cards that were missed or guessed.",
+          "Stop when answers are accurate and calm, not when the session feels long.",
+          "Keep the final routine short enough to stay fresh.",
+        ],
+      },
+    ],
+  },
+  "Assessment Warmup": {
+    summary:
+      "This lesson prepares the learner for the final assessment with calm checks, route awareness, and mistake recovery.",
+    topics: [
+      {
+        title: "Pre-test routine",
+        points: [
+          "Check documents, vehicle controls, mirrors, seat position, and safety basics before starting.",
+          "Listen fully to instructions before moving.",
+          "Ask for clarification if an instruction is not heard clearly.",
+        ],
+      },
+      {
+        title: "During the assessment",
+        points: [
+          "Drive normally and safely instead of trying to impress with speed.",
+          "Use mirrors, signals, position, speed, and look as a repeatable routine.",
+          "If a small mistake happens, recover safely and continue calmly.",
+        ],
+      },
+      {
+        title: "Final readiness check",
+        points: [
+          "Confirm the weakest topic has been reviewed once more.",
+          "Prioritize smooth observation and legal decisions.",
+          "End with a short confidence pass instead of heavy last-minute cramming.",
+        ],
+      },
+    ],
+  },
+};
+
+function getProgressiveLessonContent(lessonBlueprint) {
+  return progressiveLessonContent[lessonBlueprint.title] ?? null;
+}
+
 function createDefaultLessonContent(unit, lessonBlueprint, lessonNumber) {
+  const progressiveContent = getProgressiveLessonContent(lessonBlueprint);
+  if (progressiveContent) {
+    const steps = [
+      ...progressiveContent.topics.map((topic, index) => ({
+        kind: index === 0 ? "theory" : "board",
+        title: topic.title,
+        duration: `${8 + index} min`,
+        detail: topic.points[0],
+      })),
+      {
+        kind: "quiz",
+        title: `${lessonBlueprint.focus} checkpoint`,
+        duration: "5 min",
+        detail:
+          progressiveContent.topics.at(-1)?.points.at(-1) ??
+          "Confirm the safest first action before moving on.",
+      },
+    ];
+
+    return {
+      overviewTitle: `Lesson ${lessonNumber} content`,
+      overviewSummary: progressiveContent.summary,
+      overviewTopics: progressiveContent.topics,
+      steps,
+    };
+  }
+
   const focus = lessonBlueprint.focus ?? lessonBlueprint.title;
   const lowerFocus = focus.toLowerCase();
   const topics = [

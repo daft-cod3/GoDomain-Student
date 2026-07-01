@@ -34,8 +34,8 @@ export default async function RoadSignDetailPage({ params }) {
     <div className="app-shell">
       <Sidebar active="dashboard" />
       <main className="main-content">
-        <section className="road-sign-page">
-          <header className="road-sign-detail-hero">
+        <section className={`road-sign-page road-sign-page-${sign.family}`}>
+          <header className={`road-sign-detail-hero ${sign.family}`}>
             <div className="road-sign-detail-copy">
               <Link className="road-sign-back" href="/dashboard">
                 Back to dashboard
