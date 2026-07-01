@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "db:schema": "node db/apply-schema2.js",
-    "db:seed": "node db/seed-content.js"
+    "db:schema": "node db/migrate.js",
+    "db:seed": "node db/seed-content.js",
+    "test:db": "node --test db/migrate.test.js"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",
