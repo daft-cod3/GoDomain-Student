@@ -1,45 +1,46 @@
 import Link from "next/link";
-import { getLearningDayHref } from "../learn";
+import { getLearningDayHref, learningDays } from "../learn";
 import ContentReview from "../learn/components/contReview";
 import RoadSign from "./roadSign";
 import TeacherUploadsSection from "./teacher-uploads-section";
 
-const popularLessons = [
-  {
-    id: "controls",
-    title: "Vehicle controls",
-    meta: "4 sub-lessons / Foundation setup",
-    tag: "Hot",
-    href: getLearningDayHref("unit-1-lesson-1"),
-    art: "art-lilac",
-  },
-  {
-    id: "signs",
-    title: "Traffic signs",
-    meta: "4 sub-lessons / Fast recall drill",
-    tag: "Trending",
-    href: getLearningDayHref("unit-1-lesson-2"),
-    art: "art-peach",
-  },
-  {
-    id: "junctions",
-    title: "Junction rules",
-    meta: "4 sub-lessons / Risk-heavy topic",
-    tag: "Popular",
-    href: getLearningDayHref("unit-1-lesson-4"),
-    art: "art-mint",
-  },
-  {
-    id: "hazard",
-    title: "Hazard awareness",
-    meta: "4 sub-lessons / Scan discipline",
-    tag: "Top pick",
-    href: getLearningDayHref("unit-1-lesson-5"),
-    art: "art-sky",
-  },
-];
+const lessonPerformance = {
+  "unit-1-lesson-1": 78,
+  "unit-1-lesson-2": 62,
+  "unit-1-lesson-3": 57,
+  "unit-1-lesson-4": 43,
+  "unit-1-lesson-5": 68,
+};
+
+const worstPerformedLesson = [...learningDays]
+  .filter((lesson) => !lesson.isLocked)
+  .sort(
+    (a, b) =>
+      (lessonPerformance[a.id] ?? a.progress ?? 0) -
+      (lessonPerformance[b.id] ?? b.progress ?? 0),
+  )[0];
+
+function HeroIcon({ path }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden="true"
+    >
+      {path}
+    </svg>
+  );
+}
 
 export default function Dashboard() {
+  const recommendationScore = worstPerformedLesson
+    ? (lessonPerformance[worstPerformedLesson.id] ??
+      worstPerformedLesson.progress ??
+      0)
+    : 0;
+
   return (
     <div className="dashboard-shell">
       <div className="dashboard-panel">
@@ -57,31 +58,51 @@ export default function Dashboard() {
             </p>
             <div className="dash-hero-actions">
               <Link className="dash-hero-button primary" href="/content">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
+                <HeroIcon path={<path d="M5 12h14M12 5l7 7-7 7" />} />
                 Open learning path
               </Link>
               <Link className="dash-hero-button secondary" href="/stats">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
+                <HeroIcon
+                  path={
+                    <>
+                      <path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2Z" />
+                      <path d="M9 19V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10" />
+                      <path d="M15 19V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2Z" />
+                    </>
+                  }
+                />
                 View progress
               </Link>
             </div>
+
+            {worstPerformedLesson
+              ? <Link
+                  className="dash-hero-recommendation"
+                  href={getLearningDayHref(worstPerformedLesson.id)}
+                >
+                  <span className="dash-recommend-icon" aria-hidden="true">
+                    <HeroIcon
+                      path={
+                        <>
+                          <path d="M4 19V5" />
+                          <path d="M4 19h16" />
+                          <path d="m8 15 3-4 3 2 4-6" />
+                          <path d="M18 7h-4" />
+                          <path d="M18 7v4" />
+                        </>
+                      }
+                    />
+                  </span>
+                  <span>
+                    <strong>{worstPerformedLesson.title}</strong>
+                    <small>
+                      Worst performed lesson / {recommendationScore}% score
+                    </small>
+                  </span>
+                </Link>
+              : null}
           </div>
+
           <div className="dash-hero-art">
             <div className="book-stack">
               <span className="book book-one" />
@@ -94,10 +115,42 @@ export default function Dashboard() {
               <span />
               <span />
             </div>
-            <div className="floating-elements">
-              <div className="floating-badge">🚗</div>
-              <div className="floating-badge">📚</div>
-              <div className="floating-badge">🎯</div>
+            <div className="floating-elements" aria-hidden="true">
+              <div className="floating-badge">
+                <HeroIcon
+                  path={
+                    <>
+                      <path d="M7 17h10" />
+                      <path d="M6 17v-4l2-5h8l2 5v4" />
+                      <path d="M8 17v2" />
+                      <path d="M16 17v2" />
+                    </>
+                  }
+                />
+              </div>
+              <div className="floating-badge">
+                <HeroIcon
+                  path={
+                    <>
+                      <path d="M4 19.5V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2" />
+                      <path d="M8 7h6" />
+                      <path d="M8 11h5" />
+                    </>
+                  }
+                />
+              </div>
+              <div className="floating-badge">
+                <HeroIcon
+                  path={
+                    <>
+                      <circle cx="12" cy="12" r="8" />
+                      <circle cx="12" cy="12" r="3" />
+                      <path d="M12 4v4" />
+                      <path d="M20 12h-4" />
+                    </>
+                  }
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -105,115 +158,7 @@ export default function Dashboard() {
         <div className="dash-body">
           <div className="dash-main">
             <TeacherUploadsSection />
-
             <ContentReview />
-
-            <section className="dash-section">
-              <div className="dash-section-head">
-                <div>
-                  <div className="dash-section-title">Popular</div>
-                  <div className="dash-section-subtitle">
-                    Most-revisited lessons and revision packs this week.
-                  </div>
-                </div>
-                <Link className="dash-link" href="/content">
-                  View all
-                </Link>
-              </div>
-              <div className="dash-card-grid">
-                {popularLessons.map((lesson) => (
-                  <Link
-                    key={lesson.id}
-                    className="dash-course-card"
-                    href={lesson.href}
-                  >
-                    <div className={`dash-card-art ${lesson.art}`} />
-                    <div className="dash-card-row">
-                      <div className="dash-card-title">{lesson.title}</div>
-                      <span className="dash-card-tag">{lesson.tag}</span>
-                    </div>
-                    <div className="dash-card-meta">{lesson.meta}</div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-
-            <section className="dash-section">
-              <div className="dash-section-head">
-                <div>
-                  <div className="dash-section-title">Recent Activity</div>
-                  <div className="dash-section-subtitle">
-                    Latest updates and milestones from your learning journey.
-                  </div>
-                </div>
-                <Link className="dash-link" href="/stats">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M9 5l7 7-7 7" />
-                  </svg>
-                  View all
-                </Link>
-              </div>
-              <div className="dash-activity-list">
-                <div className="dash-activity-item">
-                  <div className="dash-activity-icon-wrapper">
-                    <span className="dash-activity-icon">📚</span>
-                  </div>
-                  <div className="dash-activity-content">
-                    <div className="dash-activity-copy">
-                      <strong>Completed Unit 1</strong>
-                      <p>Finished all lessons in Unit 1 with 95% score</p>
-                    </div>
-                    <span className="dash-activity-time">2 hours ago</span>
-                  </div>
-                  <div className="dash-activity-badge">Achievement</div>
-                </div>
-                <div className="dash-activity-item">
-                  <div className="dash-activity-icon-wrapper">
-                    <span className="dash-activity-icon">👨‍🏫</span>
-                  </div>
-                  <div className="dash-activity-content">
-                    <div className="dash-activity-copy">
-                      <strong>Mentor Session</strong>
-                      <p>Reviewed progress with instructor John</p>
-                    </div>
-                    <span className="dash-activity-time">1 day ago</span>
-                  </div>
-                  <div className="dash-activity-badge">Session</div>
-                </div>
-                <div className="dash-activity-item">
-                  <div className="dash-activity-icon-wrapper">
-                    <span className="dash-activity-icon">🏆</span>
-                  </div>
-                  <div className="dash-activity-content">
-                    <div className="dash-activity-copy">
-                      <strong>Achievement Unlocked</strong>
-                      <p>Earned 'Streak Master' badge</p>
-                    </div>
-                    <span className="dash-activity-time">3 days ago</span>
-                  </div>
-                  <div className="dash-activity-badge">Badge</div>
-                </div>
-                <div className="dash-activity-item">
-                  <div className="dash-activity-icon-wrapper">
-                    <span className="dash-activity-icon">🎯</span>
-                  </div>
-                  <div className="dash-activity-content">
-                    <div className="dash-activity-copy">
-                      <strong>Quiz Completed</strong>
-                      <p>Scored 88% on Traffic Signs quiz</p>
-                    </div>
-                    <span className="dash-activity-time">5 days ago</span>
-                  </div>
-                  <div className="dash-activity-badge">Quiz</div>
-                </div>
-              </div>
-            </section>
           </div>
         </div>
 

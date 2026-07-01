@@ -219,12 +219,8 @@ function UnitBanner({ unit }) {
   return (
     <section className="lp-banner">
       <div className="lp-banner-copy lp-text-panel">
-        <span className="lp-banner-eyebrow lp-text-box">
-          {unit.label} / {unit.completedLessons} of {unit.lessons.length}{" "}
-          lessons
-        </span>
-        <h2 className="lp-banner-title lp-text-box">{unit.title}</h2>
-        <p className="lp-banner-guide lp-text-box">{unit.summary}</p>
+        <h2 className="lp-banner-title lp-text-box">Fundamentlas</h2>
+        <p className="lp-banner-guide lp-text-box">{unit.title}</p>
       </div>
       <div className="lp-banner-progress lp-text-panel">
         <span>{unit.progress}%</span>
@@ -318,15 +314,11 @@ function LessonNode({ lesson, lessonIndex, isCurrent, navigateLesson }) {
         <span className="lp-node-icon">
           <NodeIcon type={iconType} color={iconColor} />
         </span>
-        {showStart && <span className="lp-node-start-label">START</span>}
       </button>
 
-      {/* Stars below the lesson circle */}
       <div className="lp-node-stars">
         <Stars earned={starRating} />
       </div>
-
-      <span className="lp-node-day lp-text-box">{day}</span>
     </div>
   );
 }
@@ -385,7 +377,6 @@ function UnitSection({ unit, currentLessonId, onNavigateLesson }) {
                   <NodeIcon type="trophy" color="#b0b8c4" />
                 </span>
               </div>
-              <span className="lp-node-day lp-text-box">Unit end</span>
             </div>
           </div>
         </div>

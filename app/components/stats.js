@@ -143,16 +143,173 @@ function UnitBar({ unit, index }) {
   );
 }
 
-function AchBadge({ a, index }) {
+function BadgeIcon({ name }) {
+  const common = {
+    fill: "none",
+    stroke: "currentColor",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    strokeWidth: "2",
+  };
+  const icons = {
+    route: (
+      <>
+        <path {...common} d="M6 18c3-6 9 0 12-6" />
+        <circle {...common} cx="5" cy="19" r="2" />
+        <circle {...common} cx="19" cy="11" r="2" />
+      </>
+    ),
+    flame: (
+      <path
+        {...common}
+        d="M12 21c3.5-1.2 6-3.9 6-7.2 0-2.6-1.4-4.7-4.2-6.8.1 2.2-.8 3.4-2 4.2.2-2.6-.8-4.9-3.3-6.2.1 4.1-2.5 5.7-2.5 8.7C6 17.3 8.5 19.9 12 21Z"
+      />
+    ),
+    trophy: (
+      <>
+        <path {...common} d="M8 4h8v5a4 4 0 0 1-8 0V4Z" />
+        <path {...common} d="M8 6H5a3 3 0 0 0 3 4" />
+        <path {...common} d="M16 6h3a3 3 0 0 1-3 4" />
+        <path {...common} d="M12 13v4" />
+        <path {...common} d="M9 21h6" />
+      </>
+    ),
+    road: (
+      <>
+        <path {...common} d="M8 21 11 3" />
+        <path {...common} d="m16 21-3-18" />
+        <path {...common} d="M12 8v2" />
+        <path {...common} d="M12 14v2" />
+      </>
+    ),
+    target: (
+      <>
+        <circle {...common} cx="12" cy="12" r="8" />
+        <circle {...common} cx="12" cy="12" r="4" />
+        <circle fill="currentColor" cx="12" cy="12" r="1.5" />
+      </>
+    ),
+    mentor: (
+      <>
+        <circle {...common} cx="9" cy="8" r="3" />
+        <path {...common} d="M3.5 20a5.5 5.5 0 0 1 11 0" />
+        <path {...common} d="M16 9h4" />
+        <path {...common} d="M18 7v4" />
+      </>
+    ),
+    mirror: (
+      <>
+        <path {...common} d="M5 12a7 7 0 0 1 14 0v5H5v-5Z" />
+        <path {...common} d="M9 17v3" />
+        <path {...common} d="M15 17v3" />
+      </>
+    ),
+    signal: (
+      <>
+        <path {...common} d="M4 12h13" />
+        <path {...common} d="m12 7 5 5-5 5" />
+        <path {...common} d="M4 6h5" />
+        <path {...common} d="M4 18h5" />
+      </>
+    ),
+    parking: (
+      <>
+        <path {...common} d="M7 21V3h6a5 5 0 0 1 0 10H7" />
+        <path {...common} d="M7 13h6" />
+      </>
+    ),
+    junction: (
+      <>
+        <path {...common} d="M12 21V3" />
+        <path {...common} d="M12 11h6l3-3" />
+        <path {...common} d="M12 13H6l-3 3" />
+      </>
+    ),
+    hill: (
+      <>
+        <path {...common} d="M3 18h18" />
+        <path {...common} d="m5 18 7-10 7 10" />
+        <path {...common} d="M9 18v-3h6v3" />
+      </>
+    ),
+    night: (
+      <path
+        {...common}
+        d="M19 15.5A7.5 7.5 0 0 1 8.5 5a7.5 7.5 0 1 0 10.5 10.5Z"
+      />
+    ),
+    hazard: (
+      <>
+        <path {...common} d="m12 3 9 16H3L12 3Z" />
+        <path {...common} d="M12 9v4" />
+        <path {...common} d="M12 17h.01" />
+      </>
+    ),
+    lane: (
+      <>
+        <path {...common} d="M5 21 9 3" />
+        <path {...common} d="m19 21-4-18" />
+        <path {...common} d="M12 6v3" />
+        <path {...common} d="M12 13v3" />
+      </>
+    ),
+    timer: (
+      <>
+        <circle {...common} cx="12" cy="13" r="7" />
+        <path {...common} d="M9 2h6" />
+        <path {...common} d="M12 13l3-3" />
+      </>
+    ),
+    signs: (
+      <>
+        <path {...common} d="M12 2 4 6v8l8 8 8-8V6l-8-4Z" />
+        <path {...common} d="M9 12h6" />
+      </>
+    ),
+  };
+  const aliases = {
+    "First Steps": "route",
+    "Streak Master": "flame",
+    "Unit Champion": "trophy",
+    "Road Warrior": "road",
+    "Perfect Score": "target",
+    "Mentor Meeting": "mentor",
+    "Mirror Master": "mirror",
+    "Signal Pro": "signal",
+    "Parking Ace": "parking",
+    "Junction Expert": "junction",
+    "Hill Start Hero": "hill",
+    "Night Ready": "night",
+    "Hazard Scout": "hazard",
+    "Lane Keeper": "lane",
+    "Quiz Sprinter": "timer",
+    "Road Sign Guru": "signs",
+  };
+
   return (
-    <div
-      className={`prof-ach${a.unlocked ? " unlocked" : ""}`}
+    <svg viewBox="0 0 24 24" className="prof-ach-svg" aria-hidden="true">
+      {icons[name] ?? icons[aliases[name]] ?? icons.route}
+    </svg>
+  );
+}
+
+function AchBadge({ a, index, active, onSelect }) {
+  return (
+    <button
+      type="button"
+      className={`prof-ach${a.unlocked ? " unlocked" : ""}${active ? " active" : ""}`}
       style={{ animationDelay: `${index * 50}ms` }}
+      onClick={onSelect}
+      aria-pressed={active}
     >
-      <span className="prof-ach-icon">{a.icon}</span>
+      <span className="prof-ach-icon">
+        <BadgeIcon name={a.title} />
+      </span>
       <span className="prof-ach-title">{a.title}</span>
-      <span className="prof-ach-state">{a.unlocked ? "✓" : "🔒"}</span>
-    </div>
+      <span className="prof-ach-state">
+        {a.unlocked ? "Unlocked" : "Locked"}
+      </span>
+    </button>
   );
 }
 
@@ -297,6 +454,7 @@ export default function Stats() {
   const [units, setUnits] = useState(() => getUnitRows(learningUnits));
   const [img, setImg] = useState(DEFAULT_PROFILE_IMAGE);
   const [tab, setTab] = useState("overview");
+  const [selectedBadge, setSelectedBadge] = useState(ACHIEVEMENTS[0].title);
   const [visible, setVisible] = useState(false);
   const fileRef = useRef(null);
 
@@ -494,10 +652,25 @@ export default function Stats() {
         )}
 
         {tab === "badges" && (
-          <div className="prof-ach-grid">
-            {ACHIEVEMENTS.map((a, i) => (
-              <AchBadge key={a.title} a={a} index={i} />
-            ))}
+          <div className="prof-badges-panel">
+            <div className="prof-ach-grid">
+              {ACHIEVEMENTS.map((a, i) => (
+                <AchBadge
+                  key={a.title}
+                  a={a}
+                  index={i}
+                  active={selectedBadge === a.title}
+                  onSelect={() => setSelectedBadge(a.title)}
+                />
+              ))}
+            </div>
+            <div className="prof-badge-detail" aria-live="polite">
+              <BadgeIcon name={selectedBadge} />
+              <div>
+                <span>Selected badge</span>
+                <strong>{selectedBadge}</strong>
+              </div>
+            </div>
           </div>
         )}
 

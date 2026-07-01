@@ -21,53 +21,53 @@ function persistUnseenMap(nextMap) {
   window.localStorage.setItem(UNSEEN_UPLOADS_KEY, JSON.stringify(nextMap));
 }
 
-function UploadCard({ upload, unseen, onMarkSeen }) {
+const DASHBOARD_UPLOAD_CATEGORIES = [
+  { id: "video", accent: "violet" },
+  { id: "image", accent: "mint" },
+  { id: "link", accent: "rose" },
+];
+
+function getRecentUploadsByCategory(categoryId) {
+  return teacherUploads
+    .filter((upload) => upload.category === categoryId)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 2);
+}
+
+function UploadCard({ category, uploads, unseen, onMarkSeen }) {
   return (
     <article
-      className={`teacher-card teacher-card-link ${upload.accent}${
+      className={`teacher-card teacher-card-link ${category.accent}${
         unseen ? " is-unseen" : " is-seen"
       }`}
     >
-      <div className="teacher-card-top">
-        <span className={`teacher-icon ${upload.icon}`} />
-        <span className="teacher-type">{upload.type}</span>
-        <button
-          type="button"
-          className={`teacher-new-button${unseen ? " unseen" : " seen"}`}
-          aria-pressed={!unseen}
-          onClick={() => onMarkSeen(upload.id)}
-        >
-          <span>{unseen ? "New" : "Seen"}</span>
-          {unseen ? <span className="teacher-new-popup">+1</span> : null}
-        </button>
-      </div>
-
-      <div className="teacher-card-copy">
-        <div className="teacher-title">{upload.title}</div>
-        <div className="teacher-meta">{upload.meta}</div>
-        <p className="teacher-summary">{upload.summary}</p>
-      </div>
-
-      <div className="teacher-chip-row">
-        <span className="teacher-chip">{upload.teacher}</span>
-        <span className="teacher-chip">
-          {upload.deliverables[0]?.value ?? "1"} items
-        </span>
-        <span className="teacher-chip">
-          {upload.deliverables[1]?.value ?? "Revision"}
-        </span>
-      </div>
-
-      <div className="teacher-card-footer">
-        <span className="teacher-card-status">
-          {unseen ? "Waiting for review" : "Marked as seen"}
-        </span>
-        <div className="teacher-card-actions">
-          <Link className="teacher-primary-action" href={upload.href}>
-            {upload.action}
+      <div className="teacher-recent-list">
+        {uploads.map((upload) => (
+          <Link
+            key={upload.id}
+            className="teacher-recent-upload"
+            href={upload.href}
+          >
+            <span
+              className={`teacher-icon ${upload.icon}`}
+              aria-hidden="true"
+            />
+            <span>{upload.title}</span>
           </Link>
-        </div>
+        ))}
       </div>
+
+      <button
+        type="button"
+        className={`teacher-new-button${unseen ? " unseen" : " seen"}`}
+        aria-pressed={!unseen}
+        onClick={() => onMarkSeen(uploads.map((upload) => upload.id))}
+      >
+        <span>{unseen ? "New" : "Seen"}</span>
+        {unseen
+          ? <span className="teacher-new-popup">+{uploads.length}</span>
+          : null}
+      </button>
     </article>
   );
 }
@@ -102,28 +102,30 @@ export default function TeacherUploadsSection() {
     }
   }, []);
 
-  function handleMarkSeen(uploadId) {
+  function handleMarkSeen(uploadIds) {
+    const seenUpdates = uploadIds.reduce((acc, uploadId) => {
+      acc[uploadId] = false;
+      return acc;
+    }, {});
+
     startTransition(() => {
-      setOptimisticUnseenMap({ [uploadId]: false });
+      setOptimisticUnseenMap(seenUpdates);
     });
 
     setUnseenMap((currentState) => {
       const nextState = {
         ...currentState,
-        [uploadId]: false,
+        ...seenUpdates,
       };
       persistUnseenMap(nextState);
       return nextState;
     });
   }
 
-  const dashboardUploads = [
-    "video-upload",
-    "image-upload",
-    "resource-upload",
-  ]
-    .map((id) => teacherUploads.find((upload) => upload.id === id))
-    .filter(Boolean);
+  const dashboardUploadGroups = DASHBOARD_UPLOAD_CATEGORIES.map((category) => ({
+    ...category,
+    uploads: getRecentUploadsByCategory(category.id),
+  })).filter((category) => category.uploads.length);
 
   return (
     <section className="dash-section teacher-uploads-section">
@@ -143,17 +145,14 @@ export default function TeacherUploadsSection() {
       </div>
 
       <div className="teacher-grid teacher-grid-three">
-        {dashboardUploads.map((upload) => (
+        {dashboardUploadGroups.map((category) => (
           <UploadCard
-            key={upload.id}
-            upload={{
-              ...upload,
-              type:
-                upload.id === "resource-upload"
-                  ? "Notes / links"
-                  : upload.type,
-            }}
-            unseen={Boolean(optimisticUnseenMap[upload.id])}
+            key={category.id}
+            category={category}
+            uploads={category.uploads}
+            unseen={category.uploads.some(
+              (upload) => optimisticUnseenMap[upload.id],
+            )}
             onMarkSeen={handleMarkSeen}
           />
         ))}

@@ -609,10 +609,68 @@ const lessonBlueprints = [
 
 const completionBlueprint = {};
 
+function createDefaultLessonContent(unit, lessonBlueprint, lessonNumber) {
+  const focus = lessonBlueprint.focus ?? lessonBlueprint.title;
+  const lowerFocus = focus.toLowerCase();
+  const topics = [
+    {
+      title: `${focus} setup`,
+      points: [
+        `Identify the main ${lowerFocus} cues before the vehicle reaches the decision point.`,
+        `Connect ${lowerFocus} to mirrors, speed, position, and the next safe action.`,
+        `Use ${unit.title} routines so the lesson stays connected to the wider driving path.`,
+      ],
+    },
+    {
+      title: `${focus} road reading`,
+      points: [
+        `Scan ahead, near, and behind before committing to the ${lowerFocus} response.`,
+        "Choose the calmest safe action early instead of correcting late.",
+        `Explain the reason for each ${lowerFocus} decision in one short sentence.`,
+      ],
+    },
+    {
+      title: `${focus} practice loop`,
+      points: [
+        `Repeat the ${lowerFocus} routine slowly until the order feels automatic.`,
+        "Reset after each attempt and name the one detail that should improve.",
+        "Keep the routine short, visible, and tied to the road situation in front of you.",
+      ],
+    },
+    {
+      title: `${focus} checkpoint`,
+      points: [
+        `Match each ${lowerFocus} scenario to the safest first response.`,
+        "Confirm the signal, lane, speed, and observation steps before finishing.",
+        "Use missed answers as the next flash-card review target.",
+      ],
+    },
+  ];
+
+  const steps = topics.map((topic, index) => ({
+    kind: index === 3 ? "quiz" : index === 0 ? "theory" : "board",
+    title: topic.title,
+    duration: index === 3 ? "5 min" : `${7 + index} min`,
+    detail: topic.points[0],
+  }));
+
+  return {
+    overviewTitle: `Lesson ${lessonNumber} content`,
+    overviewSummary:
+      lessonBlueprint.overviewSummary ??
+      `${lessonBlueprint.title} builds ${lowerFocus} through short flash cards, visual checks, and a final checkpoint tied to ${unit.label}.`,
+    overviewTopics: topics,
+    steps,
+  };
+}
+
 function createSubLessons(unit, lessonNumber, focus, lessonBlueprint) {
   const completedCount = completionBlueprint[unit.id]?.[lessonNumber - 1] ?? 0;
+  const content = lessonBlueprint.steps?.length
+    ? { steps: lessonBlueprint.steps }
+    : createDefaultLessonContent(unit, lessonBlueprint, lessonNumber);
 
-  return (lessonBlueprint.steps ?? []).map((template, index) => ({
+  return content.steps.map((template, index) => ({
     id: `${unit.id}-lesson-${lessonNumber}-step-${index + 1}`,
     title: template.title ?? `${focus} step ${index + 1}`,
     kind: template.kind,
@@ -623,6 +681,10 @@ function createSubLessons(unit, lessonNumber, focus, lessonBlueprint) {
 }
 
 function createLesson(unit, lessonBlueprint, lessonNumber, globalIndex) {
+  const defaultContent =
+    lessonBlueprint.overviewTopics?.length && lessonBlueprint.steps?.length
+      ? null
+      : createDefaultLessonContent(unit, lessonBlueprint, lessonNumber);
   const lessons = createSubLessons(
     unit,
     lessonNumber,
@@ -642,9 +704,12 @@ function createLesson(unit, lessonBlueprint, lessonNumber, globalIndex) {
     unitLabel: unit.label,
     lessonNumber,
     isLocked: !unit.unlocked,
-    overviewTitle: lessonBlueprint.overviewTitle,
-    overviewSummary: lessonBlueprint.overviewSummary,
-    overviewTopics: lessonBlueprint.overviewTopics,
+    overviewTitle:
+      lessonBlueprint.overviewTitle ?? defaultContent?.overviewTitle,
+    overviewSummary:
+      lessonBlueprint.overviewSummary ?? defaultContent?.overviewSummary,
+    overviewTopics:
+      lessonBlueprint.overviewTopics ?? defaultContent?.overviewTopics,
     roadOptionIllustrations: lessonBlueprint.roadOptionIllustrations,
     lessons,
   };

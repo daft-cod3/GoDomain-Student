@@ -3,6 +3,8 @@ import { getLearningDayHref } from "../learn";
 const uploadBlueprints = [
   {
     id: "image-upload",
+    category: "image",
+    createdAt: "2026-06-29T08:20:00+03:00",
     type: "Image set",
     title: "Road markings photo wall",
     meta: "Ms. Diaz / 16 images / Updated today",
@@ -48,7 +50,56 @@ const uploadBlueprints = [
     ],
   },
   {
+    id: "image-upload-lane-boxes",
+    category: "image",
+    createdAt: "2026-06-28T15:40:00+03:00",
+    type: "Image set",
+    title: "Lane boxes and stop points",
+    meta: "Ms. Diaz / 12 images / Updated yesterday",
+    summary: "Marked examples for where to wait, turn, and hold the lane line.",
+    action: "Open image set",
+    icon: "image",
+    accent: "mint",
+    teacher: "Ms. Diaz",
+    relatedLessonId: "unit-1-lesson-3",
+    intro:
+      "This image set focuses on stop boxes, turn bays, and lane-holding marks so learners can connect the paint on the road to the correct vehicle position.",
+    teacherNote:
+      "Check the waiting position before reading the caption. The goal is to make the stopping point feel obvious before the vehicle reaches it.",
+    highlights: [
+      "12 annotated road-marking scenes with clear waiting positions.",
+      "Comparisons between early lane setup and late correction.",
+      "Short prompts for fast visual review before a board lesson.",
+    ],
+    deliverables: [
+      { label: "Scenes", value: "12" },
+      { label: "Focus area", value: "Lane position" },
+      { label: "Best use", value: "Position review" },
+    ],
+    sections: [
+      {
+        title: "What is inside",
+        body: "The pack groups lane boxes, turn bays, and stop points so the learner can compare similar markings without losing the driving context.",
+      },
+      {
+        title: "How to use it",
+        body: "Name the marking, point to the correct waiting area, then read the caption to confirm the road response.",
+      },
+      {
+        title: "Why it matters",
+        body: "Late positioning around markings creates rushed steering. This set trains earlier recognition and calmer lane control.",
+      },
+    ],
+    nextSteps: [
+      "Review the stop-box examples before the next road-markings lesson.",
+      "Compare each image with the related lesson notes.",
+      "Repeat the turn-bay prompts until the lane choice is automatic.",
+    ],
+  },
+  {
     id: "video-upload",
+    category: "video",
+    createdAt: "2026-06-29T06:15:00+03:00",
     type: "Video",
     title: "Junction decisions breakdown",
     meta: "Mr. Chen / 12 min / Uploaded 2 hours ago",
@@ -94,7 +145,57 @@ const uploadBlueprints = [
     ],
   },
   {
+    id: "video-upload-roundabout",
+    category: "video",
+    createdAt: "2026-06-28T18:05:00+03:00",
+    type: "Video",
+    title: "Roundabout lane timing",
+    meta: "Mr. Chen / 9 min / Uploaded yesterday",
+    summary:
+      "Slow replay of approach position, signal timing, and clean exits.",
+    action: "Watch replay",
+    icon: "video",
+    accent: "violet",
+    teacher: "Mr. Chen",
+    relatedLessonId: "unit-3-lesson-3",
+    intro:
+      "This video slows down roundabout approach, lane holding, signal timing, and exit choice so learners can see the full routine without rushing.",
+    teacherNote:
+      "Pause before each exit and say whether the vehicle should stay circulating or leave. That prediction is the useful practice.",
+    highlights: [
+      "9-minute replay with approach and exit markers.",
+      "Lane discipline examples for common roundabout mistakes.",
+      "Signal timing checks before the final exit decision.",
+    ],
+    deliverables: [
+      { label: "Runtime", value: "9 min" },
+      { label: "Focus area", value: "Roundabouts" },
+      { label: "Best use", value: "Timing review" },
+    ],
+    sections: [
+      {
+        title: "Chapter flow",
+        body: "The video starts with approach setup, moves into lane holding, then finishes with exit timing and signal discipline.",
+      },
+      {
+        title: "Recommended routine",
+        body: "Watch the full replay once, then repeat the exit sections while calling the lane and signal before the teacher explains it.",
+      },
+      {
+        title: "Expected outcome",
+        body: "Learners should leave with better roundabout timing and fewer late exit corrections.",
+      },
+    ],
+    nextSteps: [
+      "Replay the exit chapter before the roundabout lesson.",
+      "Use the model board to trace the lane after watching.",
+      "Message the teacher if the second exit still feels unclear.",
+    ],
+  },
+  {
     id: "quiz-upload",
+    category: "link",
+    createdAt: "2026-06-27T10:00:00+03:00",
     type: "Quiz link",
     title: "Hazard scan checkpoint",
     meta: "Ms. Omar / 10 questions / Due in 2 days",
@@ -141,6 +242,8 @@ const uploadBlueprints = [
   },
   {
     id: "resource-upload",
+    category: "link",
+    createdAt: "2026-06-29T09:05:00+03:00",
     type: "Resource link",
     title: "Traffic sign revision pack",
     meta: "Ms. Bello / Notes + visuals / Updated today",
@@ -183,6 +286,54 @@ const uploadBlueprints = [
       "Pair this pack with the traffic-sign lesson before the next revision session.",
       "Repeat the warning-sign group until the action response feels immediate.",
       "Use the dashboard review cards to revisit the notes after a full lesson clear.",
+    ],
+  },
+  {
+    id: "resource-upload-parking",
+    category: "link",
+    createdAt: "2026-06-28T20:10:00+03:00",
+    type: "Resource link",
+    title: "Parking routine checklist",
+    meta: "Ms. Bello / Notes + checklist / Updated yesterday",
+    summary:
+      "A short checklist for mirror checks, reference points, and corrections.",
+    action: "Open checklist",
+    icon: "link",
+    accent: "rose",
+    teacher: "Ms. Bello",
+    relatedLessonId: "unit-3-lesson-1",
+    intro:
+      "This checklist condenses parking into setup, reference point, steering input, correction, and final safety checks.",
+    teacherNote:
+      "Use the checklist aloud before practising. The routine should sound simple before it is attempted in the vehicle.",
+    highlights: [
+      "Step-by-step parking sequence for repeated practice.",
+      "Reference-point prompts for bay and reverse parking.",
+      "Correction checks for common steering and mirror mistakes.",
+    ],
+    deliverables: [
+      { label: "Format", value: "Checklist" },
+      { label: "Focus area", value: "Parking" },
+      { label: "Best use", value: "Routine prep" },
+    ],
+    sections: [
+      {
+        title: "Checklist structure",
+        body: "The checklist follows the parking routine from observation to final position so learners can practise without skipping safety checks.",
+      },
+      {
+        title: "Best revision loop",
+        body: "Read one step, perform it slowly, then reset and repeat until the order stays consistent.",
+      },
+      {
+        title: "Assessment support",
+        body: "The checklist helps reduce rushed corrections by making each reference point and mirror check explicit.",
+      },
+    ],
+    nextSteps: [
+      "Open the parking lesson after reading the checklist.",
+      "Repeat the mirror-check order before the next practical session.",
+      "Review corrections after each attempt instead of waiting until the end.",
     ],
   },
 ];
