@@ -2,9 +2,49 @@ import Link from "next/link";
 import RoadSign from "./components/roadSign";
 import DashboardSidebar from "./components/sidebar";
 import TeacherUploadsSection from "./components/teacher-uploads-section";
-import { studentProfile } from "./data/student-profile";
 import { getLearningDayHref } from "./learn";
 import ContentReview from "./learn/components/contReview";
+
+export const dynamic = "force-dynamic";
+
+const dailyTaskPool = [
+  {
+    title: "Open today's flashcards",
+    detail: "Complete one lesson card set before moving to revision.",
+    href: getLearningDayHref("unit-1-lesson-1"),
+    action: "Start cards",
+  },
+  {
+    title: "Review three road signs",
+    detail: "Name the sign, placement, and safest driver response.",
+    href: "/dashboard",
+    action: "Open signs",
+  },
+  {
+    title: "Practise junction priority",
+    detail: "Check who moves first, when to wait, and where to stop.",
+    href: getLearningDayHref("unit-1-lesson-4"),
+    action: "Practise",
+  },
+  {
+    title: "Run a hazard scan drill",
+    detail: "Look far, near, mirrors, and back ahead in a steady loop.",
+    href: getLearningDayHref("unit-1-lesson-5"),
+    action: "Begin drill",
+  },
+  {
+    title: "Repeat one weak topic",
+    detail: "Choose the lowest-confidence card and complete it twice.",
+    href: "/content",
+    action: "Find topic",
+  },
+  {
+    title: "Check lane markings",
+    detail: "Match center lines, arrows, and stop boxes to the right action.",
+    href: getLearningDayHref("unit-1-lesson-3"),
+    action: "Review",
+  },
+];
 
 const popularLessons = [
   {
@@ -117,6 +157,48 @@ function DashboardIcon({ name }) {
   );
 }
 
+function getDailyTasks() {
+  const startOfYear = new Date(new Date().getFullYear(), 0, 0);
+  const today = new Date();
+  const dayOfYear = Math.floor((today - startOfYear) / 86400000);
+
+  return Array.from({ length: 3 }, (_, index) => {
+    const task = dailyTaskPool[(dayOfYear + index * 2) % dailyTaskPool.length];
+
+    return {
+      ...task,
+      number: String(index + 1).padStart(2, "0"),
+    };
+  });
+}
+
+function DailyTasks() {
+  const tasks = getDailyTasks();
+
+  return (
+    <aside className="daily-tasks-card" aria-labelledby="daily-tasks-title">
+      <div className="daily-tasks-head">
+        <span className="daily-tasks-kicker">Updated daily</span>
+        <h2 id="daily-tasks-title">Daily tasks</h2>
+      </div>
+      <ul className="daily-tasks-list">
+        {tasks.map((task) => (
+          <li key={task.title} className="daily-task-item">
+            <span className="daily-task-number">{task.number}</span>
+            <div className="daily-task-copy">
+              <strong>{task.title}</strong>
+              <p>{task.detail}</p>
+            </div>
+            <Link className="daily-task-link" href={task.href}>
+              {task.action}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  );
+}
+
 export default function HomePage() {
   return (
     <div className="app-shell">
@@ -146,46 +228,9 @@ export default function HomePage() {
                     View learner profile
                   </Link>
                 </div>
-                <div className="dash-hero-metrics">
-                  <article className="dash-hero-metric">
-                    <span className="dash-hero-metric-label">Progress</span>
-                    <strong className="dash-hero-metric-value">
-                      {studentProfile.progress}%
-                    </strong>
-                  </article>
-                  <article className="dash-hero-metric">
-                    <span className="dash-hero-metric-label">Road hours</span>
-                    <strong className="dash-hero-metric-value">
-                      {studentProfile.roadHours}
-                    </strong>
-                  </article>
-                  <article className="dash-hero-metric">
-                    <span className="dash-hero-metric-label">Next session</span>
-                    <strong className="dash-hero-metric-value">
-                      {studentProfile.nextSession}
-                    </strong>
-                  </article>
-                </div>
               </div>
 
-              <div className="dash-hero-art" aria-hidden="true">
-                <div className="book-stack">
-                  <span className="book book-one" />
-                  <span className="book book-two" />
-                  <span className="book book-three" />
-                  <span className="book book-four" />
-                  <span className="book book-five" />
-                </div>
-                <div className="book-stand">
-                  <span />
-                  <span />
-                </div>
-                <div className="floating-elements">
-                  <div className="floating-badge">Focus</div>
-                  <div className="floating-badge">Track</div>
-                  <div className="floating-badge">Review</div>
-                </div>
-              </div>
+              <DailyTasks />
             </section>
 
             <div className="dash-body">
