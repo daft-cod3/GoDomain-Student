@@ -55,6 +55,14 @@ function requiresSsl(connectionString = "") {
   );
 }
 
+function sanitizeForLogs(value) {
+  if (typeof value !== "string") {
+    return value;
+  }
+
+  return value.replace(/postgres(?:ql)?:\/\/[^\s"']+/gi, "postgresql://<redacted>");
+}
+
 function collectMigrations(migrationsDir) {
   if (!fs.existsSync(migrationsDir)) {
     return [];
@@ -139,7 +147,10 @@ async function applyMigrations() {
 
 if (require.main === module) {
   applyMigrations().catch((error) => {
-    console.error("Failed to apply database migrations:", error.message || error);
+    console.error(
+      "Failed to apply database migrations:",
+      sanitizeForLogs(error.message || String(error)),
+    );
     process.exitCode = 1;
   });
 }
@@ -147,4 +158,5 @@ if (require.main === module) {
 module.exports = {
   collectMigrations,
   ensureMigrationTable,
+  sanitizeForLogs,
 };

@@ -8,11 +8,16 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "db:schema": "node db/migrate.js",
+    "db:migrate": "npx supabase db push",
+    "db:reset": "npx supabase db reset",
+    "db:status": "npx supabase migration list",
+    "db:new": "npx supabase migration new",
+    "db:push": "node db/supabase-db-push.js",
     "db:seed": "node db/seed-content.js",
     "test:db": "node --test db/migrate.test.js"
   },
   "dependencies": {
+    "@supabase/server": "^1.2.0",
     "i18next": "^26.0.10",
     "next": "^16.2.5",
     "react": "19.2.3",
@@ -23,6 +28,7 @@
     "@biomejs/biome": "2.2.0",
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",
+    "supabase": "^2.109.0",
     "tailwindcss": "^4"
   },
   "overrides": {

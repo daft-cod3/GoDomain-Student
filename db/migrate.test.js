@@ -4,7 +4,12 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 
-const { collectMigrations } = require("./migrate");
+const { collectMigrations, sanitizeForLogs } = require("./migrate");
+
+test("sanitizeForLogs redacts connection strings", () => {
+  const message = 'connection failed for postgres://user:secret@example.com:5432/db?sslmode=require';
+  assert.equal(sanitizeForLogs(message), 'connection failed for postgresql://<redacted>');
+});
 
 test("collectMigrations discovers service-scoped migrations in deterministic order", () => {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "godomain-migrations-"));
