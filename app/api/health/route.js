@@ -1,14 +1,16 @@
-﻿import { createClient } from "../../../lib/server.js";
+﻿import { withSupabase } from '@supabase/server'
 
-export async function GET() {
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("learning_units")
-    .select("unit_id", { count: "exact", head: true });
+export const GET = withSupabase(
+  { auth: 'publishable' },
+  async (_request, ctx) => {
+    const { data, error } = await ctx.supabaseAdmin
+      .from('learning_units')
+      .select('unit_id', { count: 'exact', head: true })
 
-  if (error) {
-    return Response.json({ ok: false, error: error.message }, { status: 500 });
+    if (error) {
+      return Response.json({ ok: false, error: error.message }, { status: 500 })
+    }
+
+    return Response.json({ ok: true, backend: 'supabase', authMode: ctx.authMode })
   }
-
-  return Response.json({ ok: true, backend: "supabase" });
-}
+)
