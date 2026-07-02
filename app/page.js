@@ -185,12 +185,13 @@ function DailyTasks() {
         {tasks.map((task) => (
           <li key={task.title} className="daily-task-item">
             <span className="daily-task-number">{task.number}</span>
+            <span className="daily-task-status">Ready</span>
             <div className="daily-task-copy">
               <strong>{task.title}</strong>
               <p>{task.detail}</p>
             </div>
             <Link className="daily-task-link" href={task.href}>
-              {task.action}
+              <span className="daily-task-link-label">{task.action}</span>
             </Link>
           </li>
         ))}
