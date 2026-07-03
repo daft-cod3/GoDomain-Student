@@ -8,11 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "db:migrate": "npx supabase db push",
-    "db:reset": "npx supabase db reset",
-    "db:status": "npx supabase migration list",
-    "db:new": "npx supabase migration new",
-    "db:push": "node db/supabase-db-push.js",
+    "db:schema": "node db/migrate.js",
     "db:seed": "node db/seed-content.js",
     "test:db": "node --test db/migrate.test.js"
   },
