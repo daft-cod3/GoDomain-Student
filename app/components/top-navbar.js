@@ -111,14 +111,14 @@ export default function TopNavbar() {
         </span>
         <span className="nb2-brand-copy">
           <span className="nb2-brand-name">GoDomain</span>
-          <span className="nb2-brand-sub">Learning workspace</span>
+          <span className="nb2-brand-sub">Crimson Lion</span>
         </span>
       </Link>
 
       {/* ── Vitals: HP + Energy side-by-side (centre-left) ── */}
       <div className="nb2-vitals">
         <StatBar
-          label="HP"
+          label={`${studentProfile.hp} HP`}
           value={studentProfile.hp}
           capacity={studentProfile.hpCapacity}
           color="#e05c7a"
@@ -127,7 +127,7 @@ export default function TopNavbar() {
           href="/stats"
         />
         <StatBar
-          label="EN"
+          label={`${studentProfile.energy} EN`}
           value={studentProfile.energy}
           capacity={studentProfile.energyCapacity}
           color="#3ecf6e"
@@ -146,7 +146,7 @@ export default function TopNavbar() {
           </span>
           <div className="nb2-coins-body">
             <strong className="nb2-coins-val">{studentProfile.coins}</strong>
-            <span className="nb2-coins-label">coins</span>
+            <span className="nb2-coins-label">460 coins</span>
           </div>
         </Link>
       </div>
@@ -198,7 +198,6 @@ export default function TopNavbar() {
                   </svg>}
             </span>
           </span>
-          <span className="nb2-theme-label">{darkMode ? "Dark" : "Light"}</span>
         </button>
       </div>
     </header>

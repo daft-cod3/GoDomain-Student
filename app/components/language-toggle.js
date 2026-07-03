@@ -52,7 +52,7 @@ export default function LanguageToggle() {
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
-        <span className="top-navbar-language-code">
+        <span className="top-navbar-language-code" style={{ display: "none" }}>
           {currentLanguage.shortLabel}
         </span>
         <span className="top-navbar-language-name">

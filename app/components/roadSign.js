@@ -172,7 +172,7 @@ function SignRow({ title, description, signs }) {
                 <h3>{sign.label}</h3>
                 <p>{sign.caption}</p>
               </div>
-              <span className="road-sign-link">Open sign guide</span>
+              <span className="road-sign-link">↗ Learn More</span>
             </Link>
           </li>
         ))}
@@ -209,7 +209,7 @@ function RegulatoryRows({ groups }) {
                     <h3>{sign.label}</h3>
                     <p>{sign.caption}</p>
                   </div>
-                  <span className="road-sign-link">Open sign guide</span>
+                  <span className="road-sign-link">↗ Learn More</span>
                 </Link>
               </li>
             ))}
