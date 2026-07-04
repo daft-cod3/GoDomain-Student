@@ -1276,3 +1276,7 @@ export function getLearningStep(dayId, stepId) {
 export function getLearningStepHref(dayId, stepId) {
   return `/content/${dayId}/steps/${stepId}`;
 }
+
+export function getSubLessonHref(lessonId, stepId) {
+  return `/subLearn/${lessonId}/${stepId}`;
+}

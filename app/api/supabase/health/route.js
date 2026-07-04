@@ -1,19 +1,16 @@
-import { withSupabase } from '@supabase/server'
+import { createClient } from '../../../lib/server.js'
 
-export const GET = withSupabase(
-  { auth: 'publishable' },
-  async (_request, ctx) => {
-    const { data, error } = await ctx.supabaseAdmin
-      .from('activities')
-      .select('id')
-      .limit(1)
+export async function GET() {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('activities')
+    .select('id')
+    .limit(1)
 
-    return Response.json({
-      ok: true,
-      authMode: ctx.authMode,
-      connected: !error,
-      sample: data?.[0] ?? null,
-      error: error?.message ?? null,
-    })
-  }
-)
+  return Response.json({
+    ok: true,
+    connected: !error,
+    sample: data?.[0] ?? null,
+    error: error?.message ?? null,
+  })
+}
