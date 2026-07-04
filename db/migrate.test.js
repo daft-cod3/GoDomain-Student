@@ -7,18 +7,27 @@ const path = require("node:path");
 const { collectMigrations, sanitizeForLogs } = require("./migrate");
 
 test("sanitizeForLogs redacts connection strings", () => {
-  const message = 'connection failed for postgres://user:secret@example.com:5432/db?sslmode=require';
-  assert.equal(sanitizeForLogs(message), 'connection failed for postgresql://<redacted>');
+  const message =
+    "connection failed for postgres://user:secret@example.com:5432/db?sslmode=require";
+  assert.equal(
+    sanitizeForLogs(message),
+    "connection failed for postgresql://<redacted>",
+  );
 });
 
 test("collectMigrations discovers service-scoped migrations in deterministic order", () => {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "godomain-migrations-"));
+  const tempDir = fs.mkdtempSync(
+    path.join(os.tmpdir(), "godomain-migrations-"),
+  );
 
   fs.mkdirSync(path.join(tempDir, "auth"), { recursive: true });
   fs.mkdirSync(path.join(tempDir, "learning"), { recursive: true });
   fs.mkdirSync(path.join(tempDir, "content"), { recursive: true });
 
-  fs.writeFileSync(path.join(tempDir, "learning", "002_second.sql"), "SELECT 2;");
+  fs.writeFileSync(
+    path.join(tempDir, "learning", "002_second.sql"),
+    "SELECT 2;",
+  );
   fs.writeFileSync(path.join(tempDir, "auth", "001_first.sql"), "SELECT 1;");
   fs.writeFileSync(path.join(tempDir, "content", "001_seed.sql"), "SELECT 3;");
 
@@ -26,10 +35,6 @@ test("collectMigrations discovers service-scoped migrations in deterministic ord
 
   assert.deepEqual(
     migrations.map((migration) => migration.relativePath),
-    [
-      "auth/001_first.sql",
-      "content/001_seed.sql",
-      "learning/002_second.sql",
-    ],
+    ["auth/001_first.sql", "content/001_seed.sql", "learning/002_second.sql"],
   );
 });

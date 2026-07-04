@@ -30,7 +30,6 @@ function loadEnvFile() {
     }
     // Always override so we can reliably use the intended local DATABASE_URL.
     process.env[key] = value;
-
   }
 }
 

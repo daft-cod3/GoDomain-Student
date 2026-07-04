@@ -60,7 +60,10 @@ function sanitizeForLogs(value) {
     return value;
   }
 
-  return value.replace(/postgres(?:ql)?:\/\/[^\s"']+/gi, "postgresql://<redacted>");
+  return value.replace(
+    /postgres(?:ql)?:\/\/[^\s"']+/gi,
+    "postgresql://<redacted>",
+  );
 }
 
 function collectMigrations(migrationsDir) {
@@ -87,7 +90,9 @@ function collectMigrations(migrationsDir) {
 
   return [...migrationFiles, ...nestedMigrations].map((migration) => ({
     ...migration,
-    relativePath: path.relative(migrationsDir, migration.absolutePath).replace(/\\/g, "/"),
+    relativePath: path
+      .relative(migrationsDir, migration.absolutePath)
+      .replace(/\\/g, "/"),
   }));
 }
 
