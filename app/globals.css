@@ -1536,10 +1536,26 @@ button {
     background:
       linear-gradient(
         135deg,
-        linear-gradient(135deg, rgba(88, 204, 2, 0.12), rgba(16, 185, 129, 0.08)) 0%,
-        linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(88, 204, 2, 0.06)) 40%,
-        linear-gradient(135deg, rgba(88, 204, 2, 0.08), rgba(16, 185, 129, 0.05)) 70%,
-        linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(88, 204, 2, 0.04)) 100%
+        linear-gradient(
+            135deg,
+            rgba(88, 204, 2, 0.12),
+            rgba(16, 185, 129, 0.08)
+          )
+          0%,
+        linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(88, 204, 2, 0.06))
+          40%,
+        linear-gradient(
+            135deg,
+            rgba(88, 204, 2, 0.08),
+            rgba(16, 185, 129, 0.05)
+          )
+          70%,
+        linear-gradient(
+            135deg,
+            rgba(16, 185, 129, 0.06),
+            rgba(88, 204, 2, 0.04)
+          )
+          100%
       ),
       radial-gradient(
         circle at top right,
@@ -1620,10 +1636,26 @@ button {
     background:
       linear-gradient(
         135deg,
-        linear-gradient(135deg, rgba(88, 204, 2, 0.1), rgba(16, 185, 129, 0.06)) 0%,
-        linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(88, 204, 2, 0.05)) 40%,
-        linear-gradient(135deg, rgba(88, 204, 2, 0.07), rgba(16, 185, 129, 0.04)) 70%,
-        linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(88, 204, 2, 0.03)) 100%
+        linear-gradient(135deg, rgba(88, 204, 2, 0.1), rgba(16, 185, 129, 0.06))
+          0%,
+        linear-gradient(
+            135deg,
+            rgba(16, 185, 129, 0.08),
+            rgba(88, 204, 2, 0.05)
+          )
+          40%,
+        linear-gradient(
+            135deg,
+            rgba(88, 204, 2, 0.07),
+            rgba(16, 185, 129, 0.04)
+          )
+          70%,
+        linear-gradient(
+            135deg,
+            rgba(16, 185, 129, 0.05),
+            rgba(88, 204, 2, 0.03)
+          )
+          100%
       ),
       radial-gradient(
         circle at top right,
@@ -1657,7 +1689,11 @@ button {
     padding: 0.32rem 0.72rem;
     border-radius: 999px;
     border: 1px solid rgba(88, 204, 2, 0.3);
-    background: linear-gradient(135deg, rgba(88, 204, 2, 0.15), rgba(16, 185, 129, 0.1));
+    background: linear-gradient(
+      135deg,
+      rgba(88, 204, 2, 0.15),
+      rgba(16, 185, 129, 0.1)
+    );
     color: rgba(88, 204, 2, 0.95);
     font-size: 0.76rem;
     font-weight: 700;
@@ -1668,7 +1704,11 @@ button {
 
   html[data-theme="dark"] .dash-hero-tag {
     border-color: rgba(88, 204, 2, 0.35);
-    background: linear-gradient(135deg, rgba(88, 204, 2, 0.12), rgba(16, 185, 129, 0.08));
+    background: linear-gradient(
+      135deg,
+      rgba(88, 204, 2, 0.12),
+      rgba(16, 185, 129, 0.08)
+    );
     color: rgba(88, 204, 2, 0.9);
     box-shadow: 0 4px 12px rgba(88, 204, 2, 0.08);
   }
@@ -2377,7 +2417,7 @@ button {
   }
 
   .road-sign-link::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent);
@@ -3408,7 +3448,9 @@ button {
       linear-gradient(135deg, rgba(88, 204, 2, 0.08), rgba(16, 185, 129, 0.05)),
       linear-gradient(135deg, rgba(16, 185, 129, 0.04), rgba(88, 204, 2, 0.02))
     );
-    box-shadow: 0 16px 48px rgba(88, 204, 2, 0.06), inset 0 1px 0 rgba(88, 204, 2, 0.08);
+    box-shadow:
+      0 16px 48px rgba(88, 204, 2, 0.06),
+      inset 0 1px 0 rgba(88, 204, 2, 0.08);
   }
 
   .settings-section:hover,
@@ -3416,14 +3458,18 @@ button {
   .stats-panel-v2:hover {
     transform: translateY(-6px);
     border-color: rgba(88, 204, 2, 0.25);
-    box-shadow: 0 24px 56px rgba(88, 204, 2, 0.12), inset 0 1px 0 rgba(88, 204, 2, 0.1);
+    box-shadow:
+      0 24px 56px rgba(88, 204, 2, 0.12),
+      inset 0 1px 0 rgba(88, 204, 2, 0.1);
   }
 
   html[data-theme="dark"] .settings-section:hover,
   html[data-theme="dark"] .settings-profile-panel:hover,
   html[data-theme="dark"] .stats-panel-v2:hover {
     border-color: rgba(88, 204, 2, 0.3);
-    box-shadow: 0 24px 56px rgba(88, 204, 2, 0.1), inset 0 1px 0 rgba(88, 204, 2, 0.1);
+    box-shadow:
+      0 24px 56px rgba(88, 204, 2, 0.1),
+      inset 0 1px 0 rgba(88, 204, 2, 0.1);
   }
 
   .settings-section,
@@ -3682,7 +3728,9 @@ button {
       linear-gradient(135deg, rgba(88, 204, 2, 0.12), rgba(16, 185, 129, 0.06)),
       linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(88, 204, 2, 0.03))
     );
-    box-shadow: 0 16px 40px rgba(88, 204, 2, 0.12), inset 0 1px 0 rgba(88, 204, 2, 0.12);
+    box-shadow:
+      0 16px 40px rgba(88, 204, 2, 0.12),
+      inset 0 1px 0 rgba(88, 204, 2, 0.12);
   }
 
   html[data-theme="dark"] .settings-preference-item,
@@ -3723,7 +3771,9 @@ button {
       linear-gradient(135deg, rgba(88, 204, 2, 0.14), rgba(16, 185, 129, 0.08)),
       linear-gradient(135deg, rgba(16, 185, 129, 0.07), rgba(88, 204, 2, 0.04))
     );
-    box-shadow: 0 16px 40px rgba(88, 204, 2, 0.1), inset 0 1px 0 rgba(88, 204, 2, 0.1);
+    box-shadow:
+      0 16px 40px rgba(88, 204, 2, 0.1),
+      inset 0 1px 0 rgba(88, 204, 2, 0.1);
   }
 
   .settings-profile-detail-grid,
@@ -3813,9 +3863,15 @@ button {
   .stats-anim-fill {
     display: block;
     height: 100%;
-    background: linear-gradient(90deg, rgba(88, 204, 2, 0.6), rgba(16, 185, 129, 0.8));
+    background: linear-gradient(
+      90deg,
+      rgba(88, 204, 2, 0.6),
+      rgba(16, 185, 129, 0.8)
+    );
     transition: width 520ms cubic-bezier(0.34, 1.15, 0.64, 1);
-    box-shadow: 0 0 12px rgba(88, 204, 2, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow:
+      0 0 12px rgba(88, 204, 2, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
   .ghost-button,
@@ -6158,7 +6214,7 @@ html[data-theme="dark"] .lp-shell {
   border-radius: 16px;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 
+  box-shadow:
     0 12px 32px rgba(88, 204, 2, 0.08),
     inset 0 1px 0 rgba(88, 204, 2, 0.1);
   transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -6171,14 +6227,14 @@ html[data-theme="dark"] .lp-unit {
     rgba(16, 185, 129, 0.06)
   );
   border-color: rgba(88, 204, 2, 0.2);
-  box-shadow: 
+  box-shadow:
     0 12px 32px rgba(88, 204, 2, 0.06),
     inset 0 1px 0 rgba(88, 204, 2, 0.08);
 }
 
 .lp-unit:hover {
   transform: translateY(-12px) scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 32px 64px rgba(88, 204, 2, 0.15),
     inset 0 1px 0 rgba(88, 204, 2, 0.15);
   border-color: rgba(88, 204, 2, 0.3);
@@ -6190,7 +6246,7 @@ html[data-theme="dark"] .lp-unit {
 }
 
 html[data-theme="dark"] .lp-unit:hover {
-  box-shadow: 
+  box-shadow:
     0 32px 64px rgba(88, 204, 2, 0.12),
     inset 0 1px 0 rgba(88, 204, 2, 0.12);
   border-color: rgba(88, 204, 2, 0.35);
@@ -8511,7 +8567,7 @@ html[data-theme="dark"] .prof-tab.active {
 
 .road-sign-card:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 20px 48px rgba(0, 0, 0, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
@@ -10590,7 +10646,7 @@ html[data-theme="dark"] .road-sign-category {
   background:
     linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(10, 18, 30, 0.72)),
     rgba(10, 17, 29, 0.54);
-  box-shadow: 
+  box-shadow:
     0 26px 60px rgba(0, 0, 0, 0.42),
     inset 0 1px 0 rgba(148, 163, 184, 0.08);
   backdrop-filter: blur(20px) saturate(1.1);
@@ -10615,8 +10671,11 @@ html[data-theme="dark"] .road-sign-category::before {
 html[data-theme="dark"] .road-sign-card {
   border-color: rgba(255, 255, 255, 0.12);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.88)),
-    rgba(255, 255, 255, 0.08);
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.95),
+      rgba(255, 255, 255, 0.88)
+    ), rgba(255, 255, 255, 0.08);
   box-shadow: 0 24px 56px rgba(0, 0, 0, 0.44);
   color: #000000;
 }
@@ -16221,7 +16280,9 @@ html[data-theme="dark"] .alw-complete-btn--done {
   );
   backdrop-filter: blur(18px) saturate(1.1);
   -webkit-backdrop-filter: blur(18px) saturate(1.1);
-  box-shadow: 0 28px 80px rgba(88, 204, 2, 0.08), inset 0 1px 0 rgba(88, 204, 2, 0.1);
+  box-shadow:
+    0 28px 80px rgba(88, 204, 2, 0.08),
+    inset 0 1px 0 rgba(88, 204, 2, 0.1);
   min-width: 340px;
   width: min(360px, 100%);
   transition: all 280ms cubic-bezier(0.34, 1.15, 0.64, 1);
@@ -16234,7 +16295,9 @@ html[data-theme="dark"] .alw-complete-btn--done {
 .lc-card:hover {
   transform: translateY(-8px) scale(1.02);
   border-color: rgba(88, 204, 2, 0.28);
-  box-shadow: 0 32px 95px rgba(88, 204, 2, 0.12), inset 0 1px 0 rgba(88, 204, 2, 0.12);
+  box-shadow:
+    0 32px 95px rgba(88, 204, 2, 0.12),
+    inset 0 1px 0 rgba(88, 204, 2, 0.12);
 }
 
 .lc-card-head,
@@ -21229,7 +21292,11 @@ html[data-theme="dark"] .nb2-root {
   padding: 0.26rem 0.52rem;
   border: 1px solid rgba(37, 99, 235, 0.15);
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.02));
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.08),
+    rgba(37, 99, 235, 0.02)
+  );
   backdrop-filter: blur(10px) saturate(1.2);
   text-decoration: none;
   transition: all 280ms cubic-bezier(0.34, 1.15, 0.64, 1);
@@ -21240,8 +21307,14 @@ html[data-theme="dark"] .nb2-root {
 .nb2-stat:hover {
   transform: translateY(-3px);
   border-color: rgba(37, 99, 235, 0.4);
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(37, 99, 235, 0.04));
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.12),
+    rgba(37, 99, 235, 0.04)
+  );
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .nb2-stat-icon {
@@ -21425,7 +21498,9 @@ html[data-theme="dark"] .nb2-root {
     rgba(180, 83, 9, 0.14),
     rgba(251, 191, 36, 0.08)
   );
-  box-shadow: 0 8px 20px rgba(180, 83, 9, 0.15), inset 0 1px 0 rgba(251, 191, 36, 0.1);
+  box-shadow:
+    0 8px 20px rgba(180, 83, 9, 0.15),
+    inset 0 1px 0 rgba(251, 191, 36, 0.1);
 }
 
 html[data-theme="dark"] .nb2-coins {
@@ -21444,7 +21519,9 @@ html[data-theme="dark"] .nb2-coins:hover {
     rgba(217, 119, 6, 0.16),
     rgba(251, 191, 36, 0.08)
   );
-  box-shadow: 0 8px 20px rgba(251, 191, 36, 0.12), inset 0 1px 0 rgba(251, 191, 36, 0.08);
+  box-shadow:
+    0 8px 20px rgba(251, 191, 36, 0.12),
+    inset 0 1px 0 rgba(251, 191, 36, 0.08);
 }
 
 .nb2-coins-icon {
@@ -26124,7 +26201,7 @@ html[data-theme="dark"] .lp-step-icon-note {
 }
 
 .lp-step-node::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), transparent);
@@ -26156,14 +26233,22 @@ html[data-theme="dark"] .lp-step-node {
 }
 
 html[data-theme="dark"] .lp-step-node.done {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.15),
+    rgba(16, 185, 129, 0.08)
+  );
   color: #bbf7d0;
   border-color: rgba(16, 185, 129, 0.3);
 }
 
 .lp-step-node.next {
   border-color: rgba(16, 185, 129, 0.4);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.02));
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.08),
+    rgba(16, 185, 129, 0.02)
+  );
 }
 .lp-step-node-index {
   font-size: 0.92rem;
@@ -26186,7 +26271,11 @@ html[data-theme="dark"] .lp-step-node-index {
   display: grid;
   place-items: center;
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(67, 56, 202, 0.15), rgba(67, 56, 202, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(67, 56, 202, 0.15),
+    rgba(67, 56, 202, 0.08)
+  );
   color: #4338ca;
   border: 1px solid rgba(67, 56, 202, 0.2);
   transition: all 280ms cubic-bezier(0.34, 1.15, 0.64, 1);
@@ -26194,19 +26283,31 @@ html[data-theme="dark"] .lp-step-node-index {
 }
 
 .lp-step-node:hover .lp-step-node-icon {
-  background: linear-gradient(135deg, rgba(67, 56, 202, 0.2), rgba(67, 56, 202, 0.12));
+  background: linear-gradient(
+    135deg,
+    rgba(67, 56, 202, 0.2),
+    rgba(67, 56, 202, 0.12)
+  );
   border-color: rgba(67, 56, 202, 0.35);
   transform: scale(1.15) rotate(-5deg);
   box-shadow: 0 8px 16px rgba(67, 56, 202, 0.15);
 }
 html[data-theme="dark"] .lp-step-node-icon {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.15),
+    rgba(59, 130, 246, 0.08)
+  );
   color: #93c5fd;
   border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
 html[data-theme="dark"] .lp-step-node:hover .lp-step-node-icon {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.12));
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.2),
+    rgba(59, 130, 246, 0.12)
+  );
   border-color: rgba(59, 130, 246, 0.35);
   box-shadow: 0 8px 16px rgba(59, 130, 246, 0.12);
 }
@@ -28532,8 +28633,11 @@ html[data-theme="dark"] .alw-flash-shell {
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 12px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08)),
-    color-mix(in srgb, var(--surface-strong) 16%, transparent);
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.18),
+      rgba(255, 255, 255, 0.08)
+    ), color-mix(in srgb, var(--surface-strong) 16%, transparent);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
     0 22px 42px rgba(15, 23, 42, 0.18);
@@ -28593,7 +28697,9 @@ html[data-theme="dark"] .alw-flash-shell {
   transform: scale(1.03) translateY(-2px);
   background: rgba(255, 255, 255, 0.16);
   border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 20px 40px rgba(37, 99, 235, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 html[data-theme="dark"] .daily-task-item {
@@ -28604,7 +28710,9 @@ html[data-theme="dark"] .daily-task-item {
 html[data-theme="dark"] .daily-task-item:hover {
   background: rgba(96, 165, 250, 0.12);
   border-color: rgba(96, 165, 250, 0.2);
-  box-shadow: 0 20px 40px rgba(96, 165, 250, 0.1), inset 0 1px 0 rgba(96, 165, 250, 0.05);
+  box-shadow:
+    0 20px 40px rgba(96, 165, 250, 0.1),
+    inset 0 1px 0 rgba(96, 165, 250, 0.05);
 }
 
 .daily-task-number {
@@ -28715,12 +28823,11 @@ html[data-theme="dark"] .daily-tasks-card {
   align-items: stretch;
   overflow: hidden;
   border-color: color-mix(in srgb, var(--sign-accent) 24%, var(--line)) !important;
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--surface-strong) 92%, transparent),
-      color-mix(in srgb, var(--surface-soft) 86%, var(--sign-accent-soft))
-    ) !important;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--surface-strong) 92%, transparent),
+    color-mix(in srgb, var(--surface-soft) 86%, var(--sign-accent-soft))
+  ) !important;
   color: var(--foreground);
 }
 
@@ -28774,8 +28881,11 @@ html[data-theme="dark"] .daily-tasks-card {
   min-height: clamp(13rem, 26vw, 19rem) !important;
   border-color: color-mix(in srgb, var(--sign-accent) 24%, var(--line)) !important;
   background:
-    radial-gradient(circle at center, color-mix(in srgb, var(--sign-accent) 14%, transparent), transparent 48%),
-    color-mix(in srgb, var(--surface-strong) 78%, transparent) !important;
+    radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--sign-accent) 14%, transparent),
+      transparent 48%
+    ), color-mix(in srgb, var(--surface-strong) 78%, transparent) !important;
 }
 
 .road-sign-detail-figure .road-sign-graphic {
@@ -28792,12 +28902,11 @@ html[data-theme="dark"] .daily-tasks-card {
 .road-sign-detail-card {
   border-radius: 10px !important;
   border-color: color-mix(in srgb, var(--sign-accent) 16%, var(--line)) !important;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-strong) 90%, transparent),
-      color-mix(in srgb, var(--surface-soft) 86%, transparent)
-    ) !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface-strong) 90%, transparent),
+    color-mix(in srgb, var(--surface-soft) 86%, transparent)
+  ) !important;
   color: var(--foreground);
   transition:
     transform 180ms ease,
@@ -28810,7 +28919,8 @@ html[data-theme="dark"] .daily-tasks-card {
 .road-sign-detail-card:focus-within {
   transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--sign-accent) 36%, var(--line)) !important;
-  box-shadow: 0 18px 40px color-mix(in srgb, var(--sign-accent) 12%, rgba(15, 23, 42, 0.12));
+  box-shadow: 0 18px 40px
+    color-mix(in srgb, var(--sign-accent) 12%, rgba(15, 23, 42, 0.12));
 }
 
 .road-sign-detail-card-title {
@@ -28842,12 +28952,11 @@ html[data-theme="dark"] .road-sign-page {
 }
 
 html[data-theme="dark"] .road-sign-detail-hero {
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--surface-strong) 86%, transparent),
-      color-mix(in srgb, #020617 72%, var(--sign-accent-soft))
-    ) !important;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--surface-strong) 86%, transparent),
+    color-mix(in srgb, #020617 72%, var(--sign-accent-soft))
+  ) !important;
   box-shadow: 0 24px 58px rgba(2, 8, 23, 0.46) !important;
 }
 
@@ -28859,8 +28968,11 @@ html[data-theme="dark"] .road-sign-related-item {
 
 html[data-theme="dark"] .road-sign-detail-figure {
   background:
-    radial-gradient(circle at center, color-mix(in srgb, var(--sign-accent) 20%, transparent), transparent 48%),
-    color-mix(in srgb, var(--surface-elevated) 84%, transparent) !important;
+    radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--sign-accent) 20%, transparent),
+      transparent 48%
+    ), color-mix(in srgb, var(--surface-elevated) 84%, transparent) !important;
 }
 
 @keyframes road-sign-attention {
@@ -29030,7 +29142,10 @@ html[data-theme="dark"] .sb-panel--refined .sb-nav-link.sb-link--active {
 .sb-panel--refined .sb-nav-link.sb-link--active .sb-icon,
 html[data-theme="dark"] .sb-panel--refined .sb-icon,
 html[data-theme="dark"] .sb-panel--refined .sb-nav-link:hover .sb-icon,
-html[data-theme="dark"] .sb-panel--refined .sb-nav-link.sb-link--active .sb-icon {
+html[data-theme="dark"]
+  .sb-panel--refined
+  .sb-nav-link.sb-link--active
+  .sb-icon {
   width: 1.62rem !important;
   height: 1.62rem !important;
   min-width: 1.62rem !important;
@@ -29173,7 +29288,12 @@ html[data-theme="dark"] .daily-tasks-card {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(120deg, transparent 0 35%, rgba(255, 255, 255, 0.16), transparent 65% 100%);
+  background: linear-gradient(
+    120deg,
+    transparent 0 35%,
+    rgba(255, 255, 255, 0.16),
+    transparent 65% 100%
+  );
   opacity: 0;
   transform: translateX(-40%);
   transition:

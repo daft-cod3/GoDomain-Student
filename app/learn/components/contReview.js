@@ -271,11 +271,15 @@ function FeaturedUnitCard({ unit }) {
 
       <div className="review-unit-row-stats">
         <span>
-          <strong>{completedLessons}/{unit.lessons.length}</strong>
+          <strong>
+            {completedLessons}/{unit.lessons.length}
+          </strong>
           lessons
         </span>
         <span>
-          <strong>{unit.completedSubLessons}/{unit.totalSubLessons}</strong>
+          <strong>
+            {unit.completedSubLessons}/{unit.totalSubLessons}
+          </strong>
           steps
         </span>
         <span>

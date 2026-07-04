@@ -156,7 +156,6 @@ function LoginPageInner() {
 
   return (
     <main className="auth-page">
-
       <div className="auth-shell">
         <aside className="auth-aside">
           <span className="auth-side-tag">{t("auth.asideTag")}</span>
@@ -322,7 +321,6 @@ function LoginPageInner() {
   );
 }
 
-
 export default function LoginPage() {
   return (
     <Suspense fallback={<div className="auth-loading" />}>
@@ -330,5 +328,3 @@ export default function LoginPage() {
     </Suspense>
   );
 }
-
-

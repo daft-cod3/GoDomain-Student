@@ -40,13 +40,16 @@ export const TRANSLATIONS = {
       subtitle:
         "Keep track of new uploads, live-class reminders, teacher messages, and deadlines.",
       noticeVideoTitle: "New video uploaded",
-      noticeVideoBody: "Ms. Diaz uploaded Roundabout masterclass to today’s lesson path.",
+      noticeVideoBody:
+        "Ms. Diaz uploaded Roundabout masterclass to today’s lesson path.",
       noticeQuizTitle: "Quiz reminder",
-      noticeQuizBody: "Traffic flow checkpoint opens at 4:00 PM and closes tomorrow.",
+      noticeQuizBody:
+        "Traffic flow checkpoint opens at 4:00 PM and closes tomorrow.",
       noticeLiveTitle: "Live class starts soon",
       noticeLiveBody: "Road sign revision clinic begins in 20 minutes.",
       noticeMessageTitle: "New teacher message",
-      noticeMessageBody: "Mr. Chen sent a note about the updated sign image set.",
+      noticeMessageBody:
+        "Mr. Chen sent a note about the updated sign image set.",
     },
     live: {
       eyebrow: "Live lessons",
@@ -80,7 +83,8 @@ export const TRANSLATIONS = {
         "Register with your email to save progress and activity.",
       sectionReturnCopy:
         "Then return to the dashboard to continue with real data.",
-      heroTitle: "Track your progress, activity, and review items in one place.",
+      heroTitle:
+        "Track your progress, activity, and review items in one place.",
       heroSubtitle:
         "Your learner dashboard now reflects your authenticated local profile and real activity stored in PostgreSQL.",
       primaryAction: "Open learning path",
@@ -90,7 +94,8 @@ export const TRANSLATIONS = {
         "High-value lesson blocks for revision, recall, and progress.",
       teacherUploads: {
         title: "Teacher uploads",
-        subtitle: "Essential revision content grouped as videos, images, and notes.",
+        subtitle:
+          "Essential revision content grouped as videos, images, and notes.",
         unseen: "unseen",
         newLabel: "New",
         seenLabel: "Seen",
@@ -117,18 +122,15 @@ export const TRANSLATIONS = {
             sections: [
               {
                 title: "What is inside",
-                body:
-                  "The pack groups markings into center lines, directional arrows, edge guidance, and stop controls so the learner can compare similar visuals without losing context.",
+                body: "The pack groups markings into center lines, directional arrows, edge guidance, and stop controls so the learner can compare similar visuals without losing context.",
               },
               {
                 title: "How to use it",
-                body:
-                  "Scan the scene, name the marking, then say the safe response before reading the caption. That sequence builds faster recall than reading first.",
+                body: "Scan the scene, name the marking, then say the safe response before reading the caption. That sequence builds faster recall than reading first.",
               },
               {
                 title: "Why it matters",
-                body:
-                  "Road markings are often ignored until the learner is already too close. This wall trains earlier recognition and calmer decisions.",
+                body: "Road markings are often ignored until the learner is already too close. This wall trains earlier recognition and calmer decisions.",
               },
             ],
             nextSteps: [
@@ -140,7 +142,8 @@ export const TRANSLATIONS = {
           "video-upload": {
             title: "Junction decisions breakdown",
             meta: "Mr. Chen / 12 min / Uploaded 2 hours ago",
-            summary: "A clean replay of priority calls, blind checks, and entry timing.",
+            summary:
+              "A clean replay of priority calls, blind checks, and entry timing.",
             action: "Watch breakdown",
             type: "Video",
             intro:
@@ -153,18 +156,15 @@ export const TRANSLATIONS = {
             sections: [
               {
                 title: "Chapter flow",
-                body:
-                  "The video moves from early observation to priority choice, then ends with left-turn and right-turn examples that expose the most common hesitation points.",
+                body: "The video moves from early observation to priority choice, then ends with left-turn and right-turn examples that expose the most common hesitation points.",
               },
               {
                 title: "Recommended routine",
-                body:
-                  "Watch once without stopping, then replay the difficult moments and answer the priority question before the teacher explains it.",
+                body: "Watch once without stopping, then replay the difficult moments and answer the priority question before the teacher explains it.",
               },
               {
                 title: "Expected outcome",
-                body:
-                  "Learners should leave with cleaner junction timing, less rushed entry, and better awareness of hidden risks near the final turn.",
+                body: "Learners should leave with cleaner junction timing, less rushed entry, and better awareness of hidden risks near the final turn.",
               },
             ],
             nextSteps: [
@@ -190,18 +190,15 @@ export const TRANSLATIONS = {
             sections: [
               {
                 title: "Pack structure",
-                body:
-                  "The material starts with sign groups, then narrows into quick visual prompts and short explanations of what the driver must do immediately after recognition.",
+                body: "The material starts with sign groups, then narrows into quick visual prompts and short explanations of what the driver must do immediately after recognition.",
               },
               {
                 title: "Best revision loop",
-                body:
-                  "Study the sign, name the category, state the required action, then move on. Short, repeated cycles are more effective here than one long pass.",
+                body: "Study the sign, name the category, state the required action, then move on. Short, repeated cycles are more effective here than one long pass.",
               },
               {
                 title: "Assessment support",
-                body:
-                  "The pack is designed to strengthen both visual recall and the reasoning behind each sign so exam choices feel less random.",
+                body: "The pack is designed to strengthen both visual recall and the reasoning behind each sign so exam choices feel less random.",
               },
             ],
             nextSteps: [
@@ -223,7 +220,8 @@ export const TRANSLATIONS = {
         imageReview: "Image review",
         imageReviewSubtitle: "Visual reference cards for quick memory recall.",
         notesAndLinks: "Notes and links",
-        notesAndLinksSubtitle: "Compact guidance cards for reference and quick review.",
+        notesAndLinksSubtitle:
+          "Compact guidance cards for reference and quick review.",
         view: "View",
         videoRows: [
           { label: "Priority call review", duration: "3:20" },
@@ -244,17 +242,20 @@ export const TRANSLATIONS = {
           { label: "Safety tips", description: "Fast revision cues" },
         ],
         highlights: "Highlights",
-        highlightsSubtitle: "The key pieces the learner should notice before moving on.",
+        highlightsSubtitle:
+          "The key pieces the learner should notice before moving on.",
         updated: "Updated",
         keyPoint: "Key point",
         uploadWalkthrough: "Upload walkthrough",
-        uploadWalkthroughSubtitle: "A reusable content block that changes with the selected card.",
+        uploadWalkthroughSubtitle:
+          "A reusable content block that changes with the selected card.",
         nextSteps: "Next steps",
-        nextStepsSubtitle: "Use these actions to connect the upload back to lesson progress.",
+        nextStepsSubtitle:
+          "Use these actions to connect the upload back to lesson progress.",
         deliverables: {
-          "Runtime": "Runtime",
-          "Scenes": "Scenes",
-          "Format": "Format",
+          Runtime: "Runtime",
+          Scenes: "Scenes",
+          Format: "Format",
           "Focus area": "Focus area",
           "Best use": "Best use",
         },
@@ -268,7 +269,8 @@ export const TRANSLATIONS = {
         "Recent milestones, sessions, and assessments connected to the learner record.",
       viewReport: "View report",
       activityLoading: "Loading activity…",
-      activityNoRecent: "No recent activity yet. Complete a lesson to start the feed.",
+      activityNoRecent:
+        "No recent activity yet. Complete a lesson to start the feed.",
       progressLabel: "Progress",
       roadHoursLabel: "Road hours",
       nextSessionLabel: "Next session",
@@ -362,7 +364,8 @@ export const TRANSLATIONS = {
       parkTitle: "Park",
       parkDescription: "Keep your account locked until you sign in.",
       reverseTitle: "Reverse",
-      reverseDescription: "Undo old progress trackers and refresh your session.",
+      reverseDescription:
+        "Undo old progress trackers and refresh your session.",
       neutralTitle: "Neutral",
       neutralDescription:
         "Access content in read-only preview mode before logging in.",
@@ -428,7 +431,8 @@ export const TRANSLATIONS = {
       previousLesson: "Previous lesson",
       nextLesson: "Next lesson",
       resultSystem: "Result system",
-      resultSystemSubtitle: "The lesson page now tracks what the user earns and what still needs to be cleared.",
+      resultSystemSubtitle:
+        "The lesson page now tracks what the user earns and what still needs to be cleared.",
       rewardSystem: "Reward system",
       rewardSystemSubtitle:
         "Each topic now shows the outcome, reward value, and what is still pending before payout.",
@@ -436,7 +440,8 @@ export const TRANSLATIONS = {
       calloutFinishAdd:
         "to lock in the full reward and add the lesson to dashboard review.",
       teacherSupport: "Teacher support",
-      teacherSupportSubtitle: "Use the tools below when you need more guidance.",
+      teacherSupportSubtitle:
+        "Use the tools below when you need more guidance.",
       liveClassRoom: "Live class room",
       liveClassRoomSubtitle: "Join today's session or waiting room.",
       messageTeacher: "Message teacher",
@@ -466,8 +471,7 @@ export const TRANSLATIONS = {
         "This is the next best step if you want to finish the topic efficiently.",
       returnToChecklist: "Return to the lesson checklist",
       nextTopicSameLesson: "Next topic inside the same lesson.",
-      allTopicsCovered:
-        "All lesson topics are now covered on this page set.",
+      allTopicsCovered: "All lesson topics are now covered on this page set.",
       activeLessonWorkspace: {
         title: "Active lesson workspace",
         subtitle: "A focused practice view for the current lesson.",
@@ -509,9 +513,11 @@ export const TRANSLATIONS = {
       pts: "pts",
       topics: "topics",
       noUnitActivity: "No unit activity yet.",
-      noUnitActivityHint: "Start a lesson and the unit snapshot will appear here.",
+      noUnitActivityHint:
+        "Start a lesson and the unit snapshot will appear here.",
       noReviewCards: "No review cards yet.",
-      noReviewCardsHint: "Finish all sub-lessons in any lesson to unlock a review card.",
+      noReviewCardsHint:
+        "Finish all sub-lessons in any lesson to unlock a review card.",
       resourceNotes: "Notes",
       resourceNotesAction: "Open notes",
       resourceNotesSummary: "Condensed notes and checkpoints for",
@@ -520,58 +526,184 @@ export const TRANSLATIONS = {
       resourceVideoSummary: "Replay the short walkthrough for",
       resourceImages: "Images",
       resourceImagesAction: "View pack",
-      resourceImagesSummary: "Open the visual pack for signs, markings, and boards.",
+      resourceImagesSummary:
+        "Open the visual pack for signs, markings, and boards.",
       resourceResources: "Resources",
       resourceResourcesAction: "More resources",
-      resourceResourcesSummary: "Jump back into the path and browse related revision material.",
+      resourceResourcesSummary:
+        "Jump back into the path and browse related revision material.",
     },
     roadSigns: {
       title: "Road Signs Reference",
-      subtitle: "Master traffic signs with a fast, swipeable visual guide built for quick recall and focused revision.",
+      subtitle:
+        "Master traffic signs with a fast, swipeable visual guide built for quick recall and focused revision.",
       swipeNote: "Swipe each row to browse faster",
       openSignGuide: "Open sign guide",
       signsCount: "signs",
       groupsCount: "groups",
       categories: {
-        regulatory: { title: "Regulatory", description: "Mandatory instructions and right-of-way rules used on active roads." },
-        warning: { title: "Warning", description: "Advance notice of hazards, changes in alignment, and risk points." },
-        informative: { title: "Informative", description: "Signs that point out services, facilities, and travel support." },
+        regulatory: {
+          title: "Regulatory",
+          description:
+            "Mandatory instructions and right-of-way rules used on active roads.",
+        },
+        warning: {
+          title: "Warning",
+          description:
+            "Advance notice of hazards, changes in alignment, and risk points.",
+        },
+        informative: {
+          title: "Informative",
+          description:
+            "Signs that point out services, facilities, and travel support.",
+        },
       },
       groups: {
-        priority: { title: "Priority", description: "Signs that control right of way at junctions and conflict points." },
-        prohibitory: { title: "Prohibitory", description: "Mandatory restrictions on movement, speed, and access." },
-        "warning-core": { title: "Warning signs", description: "Hazard signs that require a slower and more observant approach." },
-        "informative-core": { title: "Informative signs", description: "Service and direction support for smooth route decisions." },
+        priority: {
+          title: "Priority",
+          description:
+            "Signs that control right of way at junctions and conflict points.",
+        },
+        prohibitory: {
+          title: "Prohibitory",
+          description: "Mandatory restrictions on movement, speed, and access.",
+        },
+        "warning-core": {
+          title: "Warning signs",
+          description:
+            "Hazard signs that require a slower and more observant approach.",
+        },
+        "informative-core": {
+          title: "Informative signs",
+          description:
+            "Service and direction support for smooth route decisions.",
+        },
       },
       signs: {
-        stop: { label: "Stop", caption: "Come to a complete stop before moving through the junction." },
-        "give-way": { label: "Give way", caption: "Yield to road users already on the priority road." },
-        "priority-road": { label: "Priority road", caption: "Traffic on this road has right of way at upcoming intersections." },
-        "end-priority-road": { label: "End priority", caption: "The priority section ends and the next junction needs extra caution." },
-        "priority-over-oncoming": { label: "Priority over oncoming", caption: "You may pass the narrow section first while oncoming traffic waits." },
-        "give-priority-to-oncoming": { label: "Give priority to oncoming", caption: "Oncoming traffic has the right to pass first through the narrow section." },
-        "no-entry": { label: "No entry", caption: "Entry is forbidden from this direction." },
-        "no-parking": { label: "No parking", caption: "Parking is not allowed within the marked stretch." },
-        "no-stopping": { label: "No stopping", caption: "Do not stop, wait, or park in this area." },
-        "speed-limit-50": { label: "50 km/h", caption: "Maximum legal speed is fifty kilometres per hour." },
-        "no-u-turn": { label: "No U-turn", caption: "Do not reverse direction at this point." },
-        "no-overtaking": { label: "No overtaking", caption: "Passing another moving vehicle is prohibited here." },
-        "no-left-turn": { label: "No left turn", caption: "Turning left is not allowed at the junction ahead." },
-        "no-horns": { label: "No horns", caption: "Use of the horn is restricted in this area." },
-        "sharp-bend-left": { label: "Sharp bend", caption: "A strong bend appears ahead and needs early speed reduction." },
-        "crossroad-ahead": { label: "Crossroad ahead", caption: "An intersection is approaching and cross traffic may appear." },
-        "school-ahead": { label: "School ahead", caption: "Expect children, school patrols, and sudden crossing movement." },
-        "slippery-road": { label: "Slippery road", caption: "Surface grip may reduce, especially in rain or loose material." },
-        "pedestrian-crossing": { label: "Pedestrian crossing", caption: "A marked crossing is near and people may step onto the road." },
-        "steep-descent": { label: "Steep descent", caption: "A downhill section ahead may quickly increase vehicle speed." },
-        "narrow-bridge": { label: "Narrow bridge", caption: "The bridge ahead restricts lane width and side clearance." },
-        parking: { label: "Parking", caption: "A legal parking area is available ahead or beside the road." },
-        hospital: { label: "Hospital", caption: "Hospital services are available nearby." },
-        "bus-stop": { label: "Bus stop", caption: "Public transport stops here or just ahead." },
-        "fuel-station": { label: "Fuel station", caption: "Fuel and basic service support are available nearby." },
-        "one-way": { label: "One way", caption: "Traffic on this road moves in a single direction." },
-        "first-aid": { label: "First aid", caption: "Basic medical assistance is available nearby." },
-        "pedestrian-subway": { label: "Pedestrian subway", caption: "A pedestrian underpass is provided nearby." },
+        stop: {
+          label: "Stop",
+          caption:
+            "Come to a complete stop before moving through the junction.",
+        },
+        "give-way": {
+          label: "Give way",
+          caption: "Yield to road users already on the priority road.",
+        },
+        "priority-road": {
+          label: "Priority road",
+          caption:
+            "Traffic on this road has right of way at upcoming intersections.",
+        },
+        "end-priority-road": {
+          label: "End priority",
+          caption:
+            "The priority section ends and the next junction needs extra caution.",
+        },
+        "priority-over-oncoming": {
+          label: "Priority over oncoming",
+          caption:
+            "You may pass the narrow section first while oncoming traffic waits.",
+        },
+        "give-priority-to-oncoming": {
+          label: "Give priority to oncoming",
+          caption:
+            "Oncoming traffic has the right to pass first through the narrow section.",
+        },
+        "no-entry": {
+          label: "No entry",
+          caption: "Entry is forbidden from this direction.",
+        },
+        "no-parking": {
+          label: "No parking",
+          caption: "Parking is not allowed within the marked stretch.",
+        },
+        "no-stopping": {
+          label: "No stopping",
+          caption: "Do not stop, wait, or park in this area.",
+        },
+        "speed-limit-50": {
+          label: "50 km/h",
+          caption: "Maximum legal speed is fifty kilometres per hour.",
+        },
+        "no-u-turn": {
+          label: "No U-turn",
+          caption: "Do not reverse direction at this point.",
+        },
+        "no-overtaking": {
+          label: "No overtaking",
+          caption: "Passing another moving vehicle is prohibited here.",
+        },
+        "no-left-turn": {
+          label: "No left turn",
+          caption: "Turning left is not allowed at the junction ahead.",
+        },
+        "no-horns": {
+          label: "No horns",
+          caption: "Use of the horn is restricted in this area.",
+        },
+        "sharp-bend-left": {
+          label: "Sharp bend",
+          caption:
+            "A strong bend appears ahead and needs early speed reduction.",
+        },
+        "crossroad-ahead": {
+          label: "Crossroad ahead",
+          caption:
+            "An intersection is approaching and cross traffic may appear.",
+        },
+        "school-ahead": {
+          label: "School ahead",
+          caption:
+            "Expect children, school patrols, and sudden crossing movement.",
+        },
+        "slippery-road": {
+          label: "Slippery road",
+          caption:
+            "Surface grip may reduce, especially in rain or loose material.",
+        },
+        "pedestrian-crossing": {
+          label: "Pedestrian crossing",
+          caption:
+            "A marked crossing is near and people may step onto the road.",
+        },
+        "steep-descent": {
+          label: "Steep descent",
+          caption:
+            "A downhill section ahead may quickly increase vehicle speed.",
+        },
+        "narrow-bridge": {
+          label: "Narrow bridge",
+          caption: "The bridge ahead restricts lane width and side clearance.",
+        },
+        parking: {
+          label: "Parking",
+          caption:
+            "A legal parking area is available ahead or beside the road.",
+        },
+        hospital: {
+          label: "Hospital",
+          caption: "Hospital services are available nearby.",
+        },
+        "bus-stop": {
+          label: "Bus stop",
+          caption: "Public transport stops here or just ahead.",
+        },
+        "fuel-station": {
+          label: "Fuel station",
+          caption: "Fuel and basic service support are available nearby.",
+        },
+        "one-way": {
+          label: "One way",
+          caption: "Traffic on this road moves in a single direction.",
+        },
+        "first-aid": {
+          label: "First aid",
+          caption: "Basic medical assistance is available nearby.",
+        },
+        "pedestrian-subway": {
+          label: "Pedestrian subway",
+          caption: "A pedestrian underpass is provided nearby.",
+        },
       },
     },
     learningPath: {
@@ -661,9 +793,11 @@ export const TRANSLATIONS = {
       subtitle:
         "Dhi gi wabiro mag kar, nyal loso maro, neno mag joma tich, kod nyiso mar dak.",
       noticeVideoTitle: "Video maduong' okelo",
-      noticeVideoBody: "Ms. Diaz okelo Roundabout masterclass e loso mar chieng' ma omedo.",
+      noticeVideoBody:
+        "Ms. Diaz okelo Roundabout masterclass e loso mar chieng' ma omedo.",
       noticeQuizTitle: "Neno mar quiz",
-      noticeQuizBody: "Checkpoint mar wendo mar tuywa biro timo e 4:00 PM kendo biro ng'ato.",
+      noticeQuizBody:
+        "Checkpoint mar wendo mar tuywa biro timo e 4:00 PM kendo biro ng'ato.",
       noticeLiveTitle: "Loso mar chieng' biro otimo",
       noticeLiveBody: "Road sign revision clinic biro timo e 20 minuto.",
       noticeMessageTitle: "Neno mar joma tich maduong'",
@@ -682,7 +816,8 @@ export const TRANSLATIONS = {
     },
     dashboard: {
       heroTag: "Dasibod mar loso",
-      heroTitleUnauthorized: "Dhi gi loso mondo onge ng'ato mar chieng' mar loso.",
+      heroTitleUnauthorized:
+        "Dhi gi loso mondo onge ng'ato mar chieng' mar loso.",
       heroSubtitleUnauthorized:
         "Neno gi wang' gi loso mar an kendo timo wang' mar dashboard mondo ogende e PostgreSQL.",
       heroSignInNow: "Dhi gi lo",
@@ -691,7 +826,8 @@ export const TRANSLATIONS = {
         "Yudo email mar an mondo jopuonj ngima kod timo loso.",
       sectionReturnCopy:
         "Koro dhi gi dashboard mondo obed gi ngima mar yore e dal.",
-      heroTitle: "Neno ngima, ngima mar loso, kendo ng'ato mar rayana e winyo mak moko.",
+      heroTitle:
+        "Neno ngima, ngima mar loso, kendo ng'ato mar rayana e winyo mak moko.",
       heroSubtitle:
         "Dashboard mar loso biro yudo wang' gi loso mar an ne kendo ngima mar yore mar loso ma ogende e PostgreSQL.",
       primaryAction: "Dhi gi loso mar jami",
@@ -728,18 +864,15 @@ export const TRANSLATIONS = {
             sections: [
               {
                 title: "Gin e bedo",
-                body:
-                  "Pak ma ogi loso mar markings gi center lines, directional arrows, edge guidance, kod stop controls mondo loso nyiso yore ma kichamo kaka loso ni gi context.",
+                body: "Pak ma ogi loso mar markings gi center lines, directional arrows, edge guidance, kod stop controls mondo loso nyiso yore ma kichamo kaka loso ni gi context.",
               },
               {
                 title: "Nitie gi",
-                body:
-                  "Royal scene, ni loso winjo, kendo neno teko mar loso mangi e tich kane mondo loso nyiso nyalo winjo mbaka okro.",
+                body: "Royal scene, ni loso winjo, kendo neno teko mar loso mangi e tich kane mondo loso nyiso nyalo winjo mbaka okro.",
               },
               {
                 title: "Ang'eyo ni dong' gi",
-                body:
-                  "Winjo mar road ok gin podo mondo okonyore gi ka loso peko, to tikadh ma nyalo iseto ok onyiso mondo oyudo loso mar winjo ma nyal to.",
+                body: "Winjo mar road ok gin podo mondo okonyore gi ka loso peko, to tikadh ma nyalo iseto ok onyiso mondo oyudo loso mar winjo ma nyal to.",
               },
             ],
             nextSteps: [
@@ -751,7 +884,8 @@ export const TRANSLATIONS = {
           "video-upload": {
             title: "Nyang' mar tjukony gi junction",
             meta: "Mr. Chen / 12 minuto / Okelo e 2 ngima maduong'",
-            summary: "Replay mar chuny priority calls, blind checks, kod timing mar dhi.",
+            summary:
+              "Replay mar chuny priority calls, blind checks, kod timing mar dhi.",
             action: "Neno replay",
             type: "Video",
             intro:
@@ -764,18 +898,15 @@ export const TRANSLATIONS = {
             sections: [
               {
                 title: "Chuo mar chapter",
-                body:
-                  "Video biro nengo gi chuny mar manyalo nyiso kendo priority choice, kendo biro duo gi left-turn kod right-turn examples ma okelo gi hesitations madongo.",
+                body: "Video biro nengo gi chuny mar manyalo nyiso kendo priority choice, kendo biro duo gi left-turn kod right-turn examples ma okelo gi hesitations madongo.",
               },
               {
                 title: "Routino man e yo",
-                body:
-                  "Neno gi chwoko kanyo to ok iyo, kendo nyal replay ma gweth chok ma tedo gidwaro ma teacher ne oyudo.",
+                body: "Neno gi chwoko kanyo to ok iyo, kendo nyal replay ma gweth chok ma tedo gidwaro ma teacher ne oyudo.",
               },
               {
                 title: "Neno mar to moro",
-                body:
-                  "Losore nyalo bedo gi junction timing manenore, ka nying' moko mondo okwath kamano, kendo nyiso mar risk madongo.",
+                body: "Losore nyalo bedo gi junction timing manenore, ka nying' moko mondo okwath kamano, kendo nyiso mar risk madongo.",
               },
             ],
             nextSteps: [
@@ -801,18 +932,15 @@ export const TRANSLATIONS = {
             sections: [
               {
                 title: "Chuo mar pack",
-                body:
-                  "Kik ma ochung' gi sign groups, kendo to iye gi visual prompts manok kod nyiso mar tigo mondo loso ni teko ma yudo.",
+                body: "Kik ma ochung' gi sign groups, kendo to iye gi visual prompts manok kod nyiso mar tigo mondo loso ni teko ma yudo.",
               },
               {
                 title: "Routino mar revision ma nyalo opuonj",
-                body:
-                  "Loso sign, kendo neno category mar sign, to neno teko ma loso e ngo. Chalo ma timo mar nyiso ma otho.",
+                body: "Loso sign, kendo neno category mar sign, to neno teko ma loso e ngo. Chalo ma timo mar nyiso ma otho.",
               },
               {
                 title: "Wang' mar assessment",
-                body:
-                  "Pak ni obiro yudo mondo timo konyo loso gi visual recall kendo nyiso ma oketho ni exam choices ok nyalo kaka rach.",
+                body: "Pak ni obiro yudo mondo timo konyo loso gi visual recall kendo nyiso ma oketho ni exam choices ok nyalo kaka rach.",
               },
             ],
             nextSteps: [
@@ -829,12 +957,14 @@ export const TRANSLATIONS = {
         openRelatedLessonTitle: "Dhi gi loso maneno",
         startRelatedLesson: "Dhi gi loso maneno",
         videoGuideRows: "Ng'ato mar video",
-        videoGuideRowsSubtitle: "Video mar timo gi lweny mar anyiso e chunyruok.",
+        videoGuideRowsSubtitle:
+          "Video mar timo gi lweny mar anyiso e chunyruok.",
         play: "Dhi",
         imageReview: "Tweyo winjo",
         imageReviewSubtitle: "Card mar winjo mondo ogoyo loso gi chunyruok.",
         notesAndLinks: "Nyiso gi winjo",
-        notesAndLinksSubtitle: "Card mar nyiso mar tigo mondo ogoyo gi loso gi chunyruok.",
+        notesAndLinksSubtitle:
+          "Card mar nyiso mar tigo mondo ogoyo gi loso gi chunyruok.",
         view: "Neno",
         videoRows: [
           { label: "Neno mar priority call", duration: "3:20" },
@@ -859,13 +989,15 @@ export const TRANSLATIONS = {
         updated: "Okelo",
         keyPoint: "Ng'ato mag yore",
         uploadWalkthrough: "Nyer tich mag upload",
-        uploadWalkthroughSubtitle: "Wach man oko e yo mondo gi puonj ma ogendene gi card ma ginyo.",
+        uploadWalkthroughSubtitle:
+          "Wach man oko e yo mondo gi puonj ma ogendene gi card ma ginyo.",
         nextSteps: "Ng'ato mar ndalo",
-        nextStepsSubtitle: "Timo ng'ato maneno mondo gin'eyo upload gi ngima mar loso.",
+        nextStepsSubtitle:
+          "Timo ng'ato maneno mondo gin'eyo upload gi ngima mar loso.",
         deliverables: {
-          "Runtime": "Waktu",
-          "Scenes": "Ng'ato",
-          "Format": "Moko",
+          Runtime: "Waktu",
+          Scenes: "Ng'ato",
+          Format: "Moko",
           "Focus area": "Ng'ato mar gi ngima",
           "Best use": "Teko mar yore",
         },
@@ -967,7 +1099,8 @@ export const TRANSLATIONS = {
       parkTitle: "Park",
       parkDescription: "Miyo wang' gi timo ka okonyore.",
       reverseTitle: "Reverse",
-      reverseDescription: "Timo ka ng'ato bedo mageyo mar loso kendo jopuonj loso mar wang'.",
+      reverseDescription:
+        "Timo ka ng'ato bedo mageyo mar loso kendo jopuonj loso mar wang'.",
       neutralTitle: "Neutral",
       neutralDescription:
         "Dhi gi wach mar tiyo gi yore e dala mondo okonyore ka okonyo.",
@@ -1033,7 +1166,8 @@ export const TRANSLATIONS = {
       previousLesson: "Loso ma mokogi",
       nextLesson: "Loso ma maluwo",
       resultSystem: "Sistem mar neno",
-      resultSystemSubtitle: "Loso mar iye ni piny, tero, kendo mano ma oket biro bedo e ringo.",
+      resultSystemSubtitle:
+        "Loso mar iye ni piny, tero, kendo mano ma oket biro bedo e ringo.",
       rewardSystem: "Sistem mar tero",
       rewardSystemSubtitle:
         "Loso mondo yudo neno mar piny, tero mar ma biro timo, kendo mano ma oket biro timo.",
@@ -1046,7 +1180,8 @@ export const TRANSLATIONS = {
       liveClassRoomSubtitle: "Dhi gi loso ma omedo ka ma yudo wait-room.",
       messageTeacher: "Neno gi jomotino",
       messageTeacherSubtitle: "Neno ka in yudo feedback kata nyiso mag timo.",
-      notificationsSubtitle: "Neno wabiro mag upload, reminders, kendo nyiso mag duok.",
+      notificationsSubtitle:
+        "Neno wabiro mag upload, reminders, kendo nyiso mag duok.",
       progressSnapshot: "Ng'ato mar ngima",
       stepsComplete: "ng'ato duok",
       stepsRemaining: "ng'ato manie pi",
@@ -1056,8 +1191,7 @@ export const TRANSLATIONS = {
       statusLive: "In gi chieng'",
       lessonLockedDetail:
         "Tame loso manie mondo loso okwong' gi unit mar ber e yo.",
-      lessonLiveDetail:
-        "Loso ni in gi e path mondo idhi kama ni oketo.",
+      lessonLiveDetail: "Loso ni in gi e path mondo idhi kama ni oketo.",
       openLiveLesson: "Yag loso gi chieng'",
       sendTeacherMessage: "Neno gi jomotino",
       currentResult: "Neno mar iye",
@@ -1066,7 +1200,8 @@ export const TRANSLATIONS = {
       recommendedFocus: "Teko mar tich",
       lessonResultNote:
         "Neno mar loso biro bedo e ringo ka theory, board, signs, kendo quiz loso biro duok.",
-      stepScoreNote: "Ng'ato moko mar tich biro bedo mar timo kaka giwinje gi loso.",
+      stepScoreNote:
+        "Ng'ato moko mar tich biro bedo mar timo kaka giwinje gi loso.",
       dashboardRewardNote:
         "Koro loso mag bedo e duok biro yie loso e dashboard content review.",
       recommendedFocusNote:
@@ -1127,60 +1262,176 @@ export const TRANSLATIONS = {
       resourceVideoSummary: "Chak kendo walkthrough mar",
       resourceImages: "Picha",
       resourceImagesAction: "Nen pak",
-      resourceImagesSummary: "Yab pak mar picha mar signs, markings, kod boards.",
+      resourceImagesSummary:
+        "Yab pak mar picha mar signs, markings, kod boards.",
       resourceResources: "Gik moko",
       resourceResourcesAction: "Gik moko",
       resourceResourcesSummary: "Dok e yoo kendo nono wach mar twero manie.",
     },
     roadSigns: {
       title: "Nyiso mar Alambi mag Yoo",
-      subtitle: "Puonj alambi mag yoo gi yore mapiyo ma nyalo wipenyo mondo icham gi ngʼwin.",
+      subtitle:
+        "Puonj alambi mag yoo gi yore mapiyo ma nyalo wipenyo mondo icham gi ngʼwin.",
       swipeNote: "Sweip kor moro mondo inene mapiyo",
       openSignGuide: "Yab tich mar alambi",
       signsCount: "alambi",
       groupsCount: "oganda",
       categories: {
-        regulatory: { title: "Regulatory", description: "Mandatory instructions and right-of-way rules used on active roads." },
-        warning: { title: "Warning", description: "Advance notice of hazards, changes in alignment, and risk points." },
-        informative: { title: "Informative", description: "Signs that point out services, facilities, and travel support." },
+        regulatory: {
+          title: "Regulatory",
+          description:
+            "Mandatory instructions and right-of-way rules used on active roads.",
+        },
+        warning: {
+          title: "Warning",
+          description:
+            "Advance notice of hazards, changes in alignment, and risk points.",
+        },
+        informative: {
+          title: "Informative",
+          description:
+            "Signs that point out services, facilities, and travel support.",
+        },
       },
       groups: {
-        priority: { title: "Teko Mar Dhiye", description: "Alambi ma loso teko mar dhiye e aora kod kama gidhi romoro." },
-        prohibitory: { title: "Ogeyo", description: "Chike matek ma ogeyo wuoth, teko mar ngʼato, kod dongruok." },
-        "warning-core": { title: "Warning signs", description: "Hazard signs that require a slower and more observant approach." },
-        "informative-core": { title: "Informative signs", description: "Service and direction support for smooth route decisions." },
+        priority: {
+          title: "Teko Mar Dhiye",
+          description:
+            "Alambi ma loso teko mar dhiye e aora kod kama gidhi romoro.",
+        },
+        prohibitory: {
+          title: "Ogeyo",
+          description:
+            "Chike matek ma ogeyo wuoth, teko mar ngʼato, kod dongruok.",
+        },
+        "warning-core": {
+          title: "Warning signs",
+          description:
+            "Hazard signs that require a slower and more observant approach.",
+        },
+        "informative-core": {
+          title: "Informative signs",
+          description:
+            "Service and direction support for smooth route decisions.",
+        },
       },
       signs: {
         stop: { label: "Stop", caption: "Chung' motegno kapok idhi e aora." },
-        "give-way": { label: "Give way", description: "Yie joma ni e yoo ma nigi teko kadhi motelo." },
-        "give-way": { label: "Give way", caption: "Yie joma ni e yoo ma nigi teko kadhi motelo." },
-        "priority-road": { label: "Priority road", caption: "Joma ni e yoo ma ni nigi teko e aora mabiro." },
-        "end-priority-road": { label: "End priority", caption: "Chuny mar teko orumo kendo aora mabiro dwaro neno matek." },
-        "priority-over-oncoming": { label: "Priority over oncoming", caption: "Iryom kadhi e chuny manok kapok joma biro." },
-        "give-priority-to-oncoming": { label: "Give priority to oncoming", caption: "Joma biro nigi teko mar kadhi mokwongo e chuny manok." },
-        "no-entry": { label: "No entry", caption: "Ok otimo donj koa e lieto ma ni." },
-        "no-parking": { label: "No parking", caption: "Ok irag gari e kama otemogi." },
-        "no-stopping": { label: "No stopping", caption: "Ok ichung', rito, kata rag gari e kama ma ni." },
-        "speed-limit-50": { label: "50 km/h", caption: "Teko machielo ma chik yie en kilomita piero abich e sa achiel." },
-        "no-u-turn": { label: "No U-turn", caption: "Ok ilok yo e kama ma ni." },
-        "no-overtaking": { label: "No overtaking", caption: "Ok otimo wuoth e nyim gari moro e kama ma ni." },
-        "no-left": { label: "No left turn", caption: "Ok otimo loko korachwich e aora mabiro." },
-        "no-left-turn": { label: "No left turn", caption: "Ok otimo loko korachwich e aora mabiro." },
-        "no-horns": { label: "No horns", caption: "Kok gogo oriegni e kama ma ni." },
-        "sharp-bend-left": { label: "Sharp bend", caption: "Bend matek ni e nyima kendo dwaro iriemb teko mokwongo." },
-        "crossroad-ahead": { label: "Crossroad ahead", caption: "Aora achiel ni e nyima kendo gari moko nyalo biro." },
-        "school-ahead": { label: "School ahead", caption: "Yot nyithindo, joma rit yoo, kod loko mapiyo e nyima." },
-        "slippery-road": { label: "Slippery road", caption: "Teko mar yoo nyalo lor, moloyo ka pula owuoyo kata gige moko." },
-        "pedestrian-crossing": { label: "Pedestrian crossing", caption: "Lowo ma otemogi ni machiegni kendo joo nyalo donj e yoo." },
-        "steep-descent": { label: "Steep descent", caption: "Chuny mar lor e nyima nyalo medho teko mar gari mapiyo." },
-        "narrow-bridge": { label: "Narrow bridge", caption: "Aunda mabiro oriegni boro mar yoo kod chuny." },
-        parking: { label: "Parking", caption: "Kama rag gari ma chik yie ni e nyima kata e but yoo." },
+        "give-way": {
+          label: "Give way",
+          description: "Yie joma ni e yoo ma nigi teko kadhi motelo.",
+        },
+        "give-way": {
+          label: "Give way",
+          caption: "Yie joma ni e yoo ma nigi teko kadhi motelo.",
+        },
+        "priority-road": {
+          label: "Priority road",
+          caption: "Joma ni e yoo ma ni nigi teko e aora mabiro.",
+        },
+        "end-priority-road": {
+          label: "End priority",
+          caption: "Chuny mar teko orumo kendo aora mabiro dwaro neno matek.",
+        },
+        "priority-over-oncoming": {
+          label: "Priority over oncoming",
+          caption: "Iryom kadhi e chuny manok kapok joma biro.",
+        },
+        "give-priority-to-oncoming": {
+          label: "Give priority to oncoming",
+          caption: "Joma biro nigi teko mar kadhi mokwongo e chuny manok.",
+        },
+        "no-entry": {
+          label: "No entry",
+          caption: "Ok otimo donj koa e lieto ma ni.",
+        },
+        "no-parking": {
+          label: "No parking",
+          caption: "Ok irag gari e kama otemogi.",
+        },
+        "no-stopping": {
+          label: "No stopping",
+          caption: "Ok ichung', rito, kata rag gari e kama ma ni.",
+        },
+        "speed-limit-50": {
+          label: "50 km/h",
+          caption:
+            "Teko machielo ma chik yie en kilomita piero abich e sa achiel.",
+        },
+        "no-u-turn": {
+          label: "No U-turn",
+          caption: "Ok ilok yo e kama ma ni.",
+        },
+        "no-overtaking": {
+          label: "No overtaking",
+          caption: "Ok otimo wuoth e nyim gari moro e kama ma ni.",
+        },
+        "no-left": {
+          label: "No left turn",
+          caption: "Ok otimo loko korachwich e aora mabiro.",
+        },
+        "no-left-turn": {
+          label: "No left turn",
+          caption: "Ok otimo loko korachwich e aora mabiro.",
+        },
+        "no-horns": {
+          label: "No horns",
+          caption: "Kok gogo oriegni e kama ma ni.",
+        },
+        "sharp-bend-left": {
+          label: "Sharp bend",
+          caption: "Bend matek ni e nyima kendo dwaro iriemb teko mokwongo.",
+        },
+        "crossroad-ahead": {
+          label: "Crossroad ahead",
+          caption: "Aora achiel ni e nyima kendo gari moko nyalo biro.",
+        },
+        "school-ahead": {
+          label: "School ahead",
+          caption: "Yot nyithindo, joma rit yoo, kod loko mapiyo e nyima.",
+        },
+        "slippery-road": {
+          label: "Slippery road",
+          caption:
+            "Teko mar yoo nyalo lor, moloyo ka pula owuoyo kata gige moko.",
+        },
+        "pedestrian-crossing": {
+          label: "Pedestrian crossing",
+          caption: "Lowo ma otemogi ni machiegni kendo joo nyalo donj e yoo.",
+        },
+        "steep-descent": {
+          label: "Steep descent",
+          caption: "Chuny mar lor e nyima nyalo medho teko mar gari mapiyo.",
+        },
+        "narrow-bridge": {
+          label: "Narrow bridge",
+          caption: "Aunda mabiro oriegni boro mar yoo kod chuny.",
+        },
+        parking: {
+          label: "Parking",
+          caption: "Kama rag gari ma chik yie ni e nyima kata e but yoo.",
+        },
         hospital: { label: "Hospital", caption: "Tiend osiptal ni machiegni." },
-        "bus-stop": { label: "Bus stop", caption: "Bus mag oganda ochung' kae kata machiegni." },
-        "fuel-station": { label: "Fuel station", caption: "Petrol kod kony mar tiend tich ni machiegni." },
-        "one-way": { label: "One way", caption: "Gari e yoo ma ni gidhiye e lieto achiel kende." },
-        "first-aid": { label: "First aid", caption: "Kony mar thuolo man machiegni." },
-        "pedestrian-subway": { label: "Pedestrian subway", caption: "Yoo mar piny mar joo wuotho ni machiegni." },
+        "bus-stop": {
+          label: "Bus stop",
+          caption: "Bus mag oganda ochung' kae kata machiegni.",
+        },
+        "fuel-station": {
+          label: "Fuel station",
+          caption: "Petrol kod kony mar tiend tich ni machiegni.",
+        },
+        "one-way": {
+          label: "One way",
+          caption: "Gari e yoo ma ni gidhiye e lieto achiel kende.",
+        },
+        "first-aid": {
+          label: "First aid",
+          caption: "Kony mar thuolo man machiegni.",
+        },
+        "pedestrian-subway": {
+          label: "Pedestrian subway",
+          caption: "Yoo mar piny mar joo wuotho ni machiegni.",
+        },
       },
     },
     learningPath: {

@@ -116,20 +116,23 @@ export default function DashboardLive() {
 
   const t = useTranslation();
 
-  const heroMetrics = useMemo(() => [
-    {
-      label: t("dashboard.progressLabel"),
-      value: profile ? `${profile.progress}%` : "—",
-    },
-    {
-      label: t("dashboard.roadHoursLabel"),
-      value: profile ? profile.roadHours : "—",
-    },
-    {
-      label: t("dashboard.nextSessionLabel"),
-      value: profile ? profile.nextSession : "—",
-    },
-  ], [profile, t]);
+  const heroMetrics = useMemo(
+    () => [
+      {
+        label: t("dashboard.progressLabel"),
+        value: profile ? `${profile.progress}%` : "—",
+      },
+      {
+        label: t("dashboard.roadHoursLabel"),
+        value: profile ? profile.roadHours : "—",
+      },
+      {
+        label: t("dashboard.nextSessionLabel"),
+        value: profile ? profile.nextSession : "—",
+      },
+    ],
+    [profile, t],
+  );
 
   if (status === "unauthorized") {
     return (
@@ -138,7 +141,9 @@ export default function DashboardLive() {
           <section className="dash-hero">
             <div className="dash-hero-content">
               <div className="dash-hero-tag">{t("dashboard.heroTag")}</div>
-              <h1 className="dash-hero-title">{t("dashboard.heroTitleUnauthorized")}</h1>
+              <h1 className="dash-hero-title">
+                {t("dashboard.heroTitleUnauthorized")}
+              </h1>
               <p className="dash-hero-subtitle">
                 {t("dashboard.heroSubtitleUnauthorized")}
               </p>
@@ -154,7 +159,9 @@ export default function DashboardLive() {
               <section className="dash-section">
                 <div className="dash-section-head">
                   <div>
-                    <div className="dash-section-title">{t("dashboard.sectionNeedAccount")}</div>
+                    <div className="dash-section-title">
+                      {t("dashboard.sectionNeedAccount")}
+                    </div>
                     <div className="dash-section-subtitle">
                       {t("dashboard.sectionRegisterCopy")}
                     </div>
@@ -177,12 +184,8 @@ export default function DashboardLive() {
         <section className="dash-hero">
           <div className="dash-hero-content">
             <div className="dash-hero-tag">{t("dashboard.heroTag")}</div>
-            <h1 className="dash-hero-title">
-              {t("dashboard.heroTitle")}
-            </h1>
-            <p className="dash-hero-subtitle">
-              {t("dashboard.heroSubtitle")}
-            </p>
+            <h1 className="dash-hero-title">{t("dashboard.heroTitle")}</h1>
+            <p className="dash-hero-subtitle">{t("dashboard.heroSubtitle")}</p>
             <div className="dash-hero-actions">
               <Link className="dash-hero-button primary" href="/content">
                 {t("dashboard.primaryAction")}
@@ -230,7 +233,9 @@ export default function DashboardLive() {
             <section className="dash-section">
               <div className="dash-section-head">
                 <div>
-                  <div className="dash-section-title">{t("dashboard.recommendedLessonsTitle")}</div>
+                  <div className="dash-section-title">
+                    {t("dashboard.recommendedLessonsTitle")}
+                  </div>
                   <div className="dash-section-subtitle">
                     {t("dashboard.recommendedLessonsSubtitle")}
                   </div>
@@ -285,7 +290,8 @@ export default function DashboardLive() {
                   <div key={item.id} className="dash-activity-item">
                     <div className="dash-activity-icon-wrapper">
                       <span className="dash-activity-icon">
-                        {activityTypeIcons[item.type] || activityTypeIcons.default}
+                        {activityTypeIcons[item.type] ||
+                          activityTypeIcons.default}
                       </span>
                     </div>
                     <div className="dash-activity-content">

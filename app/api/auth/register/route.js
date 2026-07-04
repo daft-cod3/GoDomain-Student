@@ -5,7 +5,11 @@ export async function POST(request) {
   const body = await request.json();
   const email = (body.email || "").trim().toLowerCase();
   const password = body.password || "";
-  const displayName = (body.displayName || email.split("@")[0] || "Learner").trim();
+  const displayName = (
+    body.displayName ||
+    email.split("@")[0] ||
+    "Learner"
+  ).trim();
 
   if (!email || !password) {
     return Response.json(

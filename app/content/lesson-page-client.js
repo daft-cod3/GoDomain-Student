@@ -32,27 +32,28 @@ export default function LessonPageClient({
               {t("lessonPage.backToLearningPath")}
             </Link>
             <span className="lesson-hero-pill">
-              {lesson.unitLabel} / {lesson.label} / {progress}% {t("lessonPage.complete")}
+              {lesson.unitLabel} / {lesson.label} / {progress}%{" "}
+              {t("lessonPage.complete")}
             </span>
             <h1 className="lesson-page-title">{lesson.title}</h1>
             <p className="lesson-page-subtitle">{lesson.subtitle}</p>
             <div className="lesson-hero-actions">
-              {previousDay ? (
-                <Link
-                  className="lesson-secondary-link"
-                  href={getLearningDayHref(previousDay.id)}
-                >
-                  {t("lessonPage.previousLesson")}
-                </Link>
-              ) : null}
-              {nextDay ? (
-                <Link
-                  className="lesson-primary-link"
-                  href={getLearningDayHref(nextDay.id)}
-                >
-                  {t("lessonPage.nextLesson")}
-                </Link>
-              ) : null}
+              {previousDay
+                ? <Link
+                    className="lesson-secondary-link"
+                    href={getLearningDayHref(previousDay.id)}
+                  >
+                    {t("lessonPage.previousLesson")}
+                  </Link>
+                : null}
+              {nextDay
+                ? <Link
+                    className="lesson-primary-link"
+                    href={getLearningDayHref(nextDay.id)}
+                  >
+                    {t("lessonPage.nextLesson")}
+                  </Link>
+                : null}
             </div>
           </div>
 
@@ -92,17 +93,20 @@ export default function LessonPageClient({
                       {String(index + 1).padStart(2, "0")}
                     </div>
                     <div className="lesson-step-node-icon">
-                      <span aria-hidden="true" className={`lesson-step-node-icon-${entry.kind}`} />
+                      <span
+                        aria-hidden="true"
+                        className={`lesson-step-node-icon-${entry.kind}`}
+                      />
                     </div>
-                    {entry.completed ? (
-                      <span className="lesson-step-node-status">
-                        {t("lessonPage.doneStatus")}
-                      </span>
-                    ) : entry.id === nextIncompleteStep?.id ? (
-                      <span className="lesson-step-node-status">
-                        {t("lessonPage.nextStatus")}
-                      </span>
-                    ) : null}
+                    {entry.completed
+                      ? <span className="lesson-step-node-status">
+                          {t("lessonPage.doneStatus")}
+                        </span>
+                      : entry.id === nextIncompleteStep?.id
+                        ? <span className="lesson-step-node-status">
+                            {t("lessonPage.nextStatus")}
+                          </span>
+                        : null}
                   </Link>
                 ))}
               </div>
@@ -287,7 +291,8 @@ export default function LessonPageClient({
                     {completedLessons} {t("lessonPage.stepsComplete")}
                   </strong>
                   <span>
-                    {totalLessons - completedLessons} {t("lessonPage.stepsRemaining")}
+                    {totalLessons - completedLessons}{" "}
+                    {t("lessonPage.stepsRemaining")}
                   </span>
                 </div>
               </div>

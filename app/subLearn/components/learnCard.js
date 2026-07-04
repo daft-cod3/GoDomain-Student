@@ -115,8 +115,7 @@ export default function LearnCard({ lesson, currentStepId }) {
   const total = safeLessons.length;
   const progress = total ? Math.round((completedCount / total) * 100) : 0;
 
-  const nextStep =
-    safeLessons.find((s) => !s?.completed) ?? safeLessons[0];
+  const nextStep = safeLessons.find((s) => !s?.completed) ?? safeLessons[0];
   const activeStepId = currentStepId ?? nextStep?.id;
 
   const ctaStepId = nextStep?.id ?? safeLessons[0]?.id;

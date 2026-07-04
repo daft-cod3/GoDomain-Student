@@ -4,7 +4,10 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "./translations";
 import { learningUnits } from "../learn";
-import { hydrateLearningProgress, deriveLearningProgress } from "../learn/progress-store";
+import {
+  hydrateLearningProgress,
+  deriveLearningProgress,
+} from "../learn/progress-store";
 import { getLearningDayHref } from "../learn";
 
 const PROFILE_IMAGE_KEY = "godomain-profile-image";
@@ -23,25 +26,36 @@ function cloneUnits(units) {
 function getUnitRows(units) {
   return units.map((unit) => {
     const done = unit.lessons.reduce(
-      (sum, lesson) => sum + lesson.lessons.filter((entry) => entry.completed).length,
+      (sum, lesson) =>
+        sum + lesson.lessons.filter((entry) => entry.completed).length,
       0,
     );
-    const total = unit.lessons.reduce((sum, lesson) => sum + lesson.lessons.length, 0);
+    const total = unit.lessons.reduce(
+      (sum, lesson) => sum + lesson.lessons.length,
+      0,
+    );
     return {
       id: unit.id,
       label: unit.label,
       title: unit.title,
       progress: total ? Math.round((done / total) * 100) : 0,
-      completedLessons: unit.lessons.filter((lesson) => lesson.lessons.every((entry) => entry.completed)).length,
+      completedLessons: unit.lessons.filter((lesson) =>
+        lesson.lessons.every((entry) => entry.completed),
+      ).length,
       totalLessons: unit.lessons.length,
-      unlocked: unit.lessons.some((lesson) => lesson.progress > 0 || !lesson.isLocked),
+      unlocked: unit.lessons.some(
+        (lesson) => lesson.progress > 0 || !lesson.isLocked,
+      ),
     };
   });
 }
 
 function applyRemoteProgress(units, progressRows) {
   const progressMap = new Map(
-    progressRows.map((row) => [row.lesson_id, new Set(row.completed_step_ids || [])]),
+    progressRows.map((row) => [
+      row.lesson_id,
+      new Set(row.completed_step_ids || []),
+    ]),
   );
 
   return cloneUnits(units).map((unit) => ({
@@ -74,7 +88,10 @@ function Bar({ pct, color, delay = 0 }) {
   }, [pct, delay]);
   return (
     <div className="prof-bar-track">
-      <div className="prof-bar-fill" style={{ width: `${width}%`, background: color }} />
+      <div
+        className="prof-bar-fill"
+        style={{ width: `${width}%`, background: color }}
+      />
     </div>
   );
 }
@@ -87,11 +104,23 @@ function StatPill({ label, value, capacity, color, icon }) {
       <div className="prof-stat-pill-body">
         <strong>{capacity ? `${value}/${capacity}` : value}</strong>
         <span>{label}</span>
-        {capacity ? (
-          <div className="prof-stat-progress" role="progressbar" aria-label={`${label} progress`} aria-valuemin="0" aria-valuemax={capacity} aria-valuenow={value}>
-            <i style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 58%, #ffffff))` }} />
-          </div>
-        ) : null}
+        {capacity
+          ? <div
+              className="prof-stat-progress"
+              role="progressbar"
+              aria-label={`${label} progress`}
+              aria-valuemin="0"
+              aria-valuemax={capacity}
+              aria-valuenow={value}
+            >
+              <i
+                style={{
+                  width: `${pct}%`,
+                  background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 58%, #ffffff))`,
+                }}
+              />
+            </div>
+          : null}
       </div>
     </div>
   );
@@ -99,7 +128,13 @@ function StatPill({ label, value, capacity, color, icon }) {
 
 function Tab({ id, label, active, onClick }) {
   return (
-    <button type="button" className={`prof-tab${active ? " active" : ""}`} onClick={() => onClick(id)} role="tab" aria-selected={active}>
+    <button
+      type="button"
+      className={`prof-tab${active ? " active" : ""}`}
+      onClick={() => onClick(id)}
+      role="tab"
+      aria-selected={active}
+    >
       {label}
     </button>
   );
@@ -117,18 +152,31 @@ function InfoRow({ label, value }) {
 function UnitBar({ unit, index }) {
   const t = useTranslation();
   return (
-    <div className="prof-unit-row" style={{ animationDelay: `${index * 60}ms` }}>
+    <div
+      className="prof-unit-row"
+      style={{ animationDelay: `${index * 60}ms` }}
+    >
       <div className="prof-unit-row-head">
         <div className="prof-unit-row-copy">
           <span className="prof-unit-row-label">{unit.label}</span>
           <span className="prof-unit-row-title">{unit.title}</span>
         </div>
-        <span className={`prof-unit-badge${unit.unlocked ? " open" : ""}`}>{unit.progress}%</span>
+        <span className={`prof-unit-badge${unit.unlocked ? " open" : ""}`}>
+          {unit.progress}%
+        </span>
       </div>
-      <Bar pct={unit.progress} color="linear-gradient(90deg,#2f8bff,#6fe51f)" delay={index * 60} />
+      <Bar
+        pct={unit.progress}
+        color="linear-gradient(90deg,#2f8bff,#6fe51f)"
+        delay={index * 60}
+      />
       <div className="prof-unit-row-foot">
-        <span>{unit.completedLessons}/{unit.totalLessons} lessons</span>
-        <span>{unit.unlocked ? t("stats.openText") : t("stats.lockedText")}</span>
+        <span>
+          {unit.completedLessons}/{unit.totalLessons} lessons
+        </span>
+        <span>
+          {unit.unlocked ? t("stats.openText") : t("stats.lockedText")}
+        </span>
       </div>
     </div>
   );
@@ -136,7 +184,10 @@ function UnitBar({ unit, index }) {
 
 function AchBadge({ a, index }) {
   return (
-    <div className={`prof-ach${a.unlocked ? " unlocked" : ""}`} style={{ animationDelay: `${index * 50}ms` }}>
+    <div
+      className={`prof-ach${a.unlocked ? " unlocked" : ""}`}
+      style={{ animationDelay: `${index * 50}ms` }}
+    >
       <span className="prof-ach-icon">{a.icon}</span>
       <span className="prof-ach-title">{a.title}</span>
       <span className="prof-ach-state">{a.unlocked ? "✓" : "🔒"}</span>
@@ -162,7 +213,13 @@ function StreakButtons() {
       </div>
       <div className="prof-streak-days">
         {days.map((day) => (
-          <button key={day.label} type="button" className={`prof-streak-day${day.done ? " done" : ""}${selected === day.label ? " active" : ""}`} onClick={() => setSelected(day.label)} aria-pressed={selected === day.label}>
+          <button
+            key={day.label}
+            type="button"
+            className={`prof-streak-day${day.done ? " done" : ""}${selected === day.label ? " active" : ""}`}
+            onClick={() => setSelected(day.label)}
+            aria-pressed={selected === day.label}
+          >
             {day.label}
           </button>
         ))}
@@ -182,7 +239,9 @@ const ACHIEVEMENTS = [
 
 export default function StatsLive() {
   const [profile, setProfile] = useState(null);
-  const [units, setUnits] = useState(() => getUnitRows(hydrateLearningProgress(learningUnits)));
+  const [units, setUnits] = useState(() =>
+    getUnitRows(hydrateLearningProgress(learningUnits)),
+  );
   const [tab, setTab] = useState("overview");
   const [visible, setVisible] = useState(false);
   const [status, setStatus] = useState("loading");
@@ -202,7 +261,10 @@ export default function StatsLive() {
 
     async function load() {
       try {
-        const [profileRes, progressRes] = await Promise.all([fetch("/api/profile"), fetch("/api/progress")]);
+        const [profileRes, progressRes] = await Promise.all([
+          fetch("/api/profile"),
+          fetch("/api/progress"),
+        ]);
 
         if (profileRes.status === 401 || progressRes.status === 401) {
           if (!cancelled) {
@@ -216,7 +278,10 @@ export default function StatsLive() {
           throw new Error(message || "Unable to load stats.");
         }
 
-        const [profileData, progressData] = await Promise.all([profileRes.json(), progressRes.json()]);
+        const [profileData, progressData] = await Promise.all([
+          profileRes.json(),
+          progressRes.json(),
+        ]);
         if (cancelled) return;
 
         setProfile(profileData);
@@ -266,51 +331,148 @@ export default function StatsLive() {
   }
 
   const heroMetrics = [
-    { label: t("stats.heroMetricLearningProgress"), value: profile ? `${profile.progress}%` : "—" },
-    { label: t("stats.heroMetricLessonsComplete"), value: profile ? profile.lessonsComplete : "—" },
-    { label: t("stats.heroMetricAttendance"), value: profile ? profile.attendance : "—" },
+    {
+      label: t("stats.heroMetricLearningProgress"),
+      value: profile ? `${profile.progress}%` : "—",
+    },
+    {
+      label: t("stats.heroMetricLessonsComplete"),
+      value: profile ? profile.lessonsComplete : "—",
+    },
+    {
+      label: t("stats.heroMetricAttendance"),
+      value: profile ? profile.attendance : "—",
+    },
   ];
 
   const STAT_PILLS = [
-    { id: "hp", label: t("stats.statPillHP"), value: profile?.hp ?? 0, capacity: profile?.hpCapacity ?? 100, color: "#e05c7a", icon: "HP" },
-    { id: "energy", label: t("stats.statPillEnergy"), value: profile?.energy ?? 0, capacity: profile?.energyCapacity ?? 100, color: "#22c55e", icon: "EN" },
-    { id: "coins", label: t("stats.statPillCoins"), value: profile?.coins ?? 0, capacity: profile?.coinCapacity ?? 100, color: "#f59f00", icon: "$" },
-    { id: "streak", label: t("stats.statPillStreak"), value: profile ? `${profile.streak ?? 7} days` : "—", color: "#267cff", icon: "ST" },
+    {
+      id: "hp",
+      label: t("stats.statPillHP"),
+      value: profile?.hp ?? 0,
+      capacity: profile?.hpCapacity ?? 100,
+      color: "#e05c7a",
+      icon: "HP",
+    },
+    {
+      id: "energy",
+      label: t("stats.statPillEnergy"),
+      value: profile?.energy ?? 0,
+      capacity: profile?.energyCapacity ?? 100,
+      color: "#22c55e",
+      icon: "EN",
+    },
+    {
+      id: "coins",
+      label: t("stats.statPillCoins"),
+      value: profile?.coins ?? 0,
+      capacity: profile?.coinCapacity ?? 100,
+      color: "#f59f00",
+      icon: "$",
+    },
+    {
+      id: "streak",
+      label: t("stats.statPillStreak"),
+      value: profile ? `${profile.streak ?? 7} days` : "—",
+      color: "#267cff",
+      icon: "ST",
+    },
   ];
 
   const profileDetails = [
-    { label: t("stats.profileDetailIndexNumber"), value: profile?.indexNumber ?? "—" },
+    {
+      label: t("stats.profileDetailIndexNumber"),
+      value: profile?.indexNumber ?? "—",
+    },
     { label: t("stats.profileDetailFullName"), value: profile?.name ?? "—" },
-    { label: t("stats.profileDetailPhoneNumber"), value: profile?.phoneNumber ?? "—" },
+    {
+      label: t("stats.profileDetailPhoneNumber"),
+      value: profile?.phoneNumber ?? "—",
+    },
     { label: t("stats.profileDetailCounty"), value: profile?.county ?? "—" },
-    { label: t("stats.profileDetailDrivingSchool"), value: profile?.drivingSchool ?? "—" },
+    {
+      label: t("stats.profileDetailDrivingSchool"),
+      value: profile?.drivingSchool ?? "—",
+    },
     { label: t("stats.profileDetailAge"), value: profile?.age ?? "—" },
   ];
 
   const profilePerformanceCards = [
-    { label: t("stats.profilePerformanceTheoryAccuracy"), value: profile?.quizAccuracy ?? "92%", meta: t("stats.profilePerformanceTheoryAccuracyMeta") },
-    { label: t("stats.profilePerformanceLiveHours"), value: profile?.liveHours ?? "14.5h", meta: t("stats.profilePerformanceLiveHoursMeta") },
-    { label: t("stats.profilePerformanceFocusRate"), value: profile?.focusRate ?? "81%", meta: t("stats.profilePerformanceFocusRateMeta") },
-    { label: t("stats.profilePerformanceBadges"), value: profile?.badgesCount ?? 12, meta: t("stats.profilePerformanceBadgesMeta") },
+    {
+      label: t("stats.profilePerformanceTheoryAccuracy"),
+      value: profile?.quizAccuracy ?? "92%",
+      meta: t("stats.profilePerformanceTheoryAccuracyMeta"),
+    },
+    {
+      label: t("stats.profilePerformanceLiveHours"),
+      value: profile?.liveHours ?? "14.5h",
+      meta: t("stats.profilePerformanceLiveHoursMeta"),
+    },
+    {
+      label: t("stats.profilePerformanceFocusRate"),
+      value: profile?.focusRate ?? "81%",
+      meta: t("stats.profilePerformanceFocusRateMeta"),
+    },
+    {
+      label: t("stats.profilePerformanceBadges"),
+      value: profile?.badgesCount ?? 12,
+      meta: t("stats.profilePerformanceBadgesMeta"),
+    },
   ];
 
   const completedUnits = units.filter((u) => u.progress === 100).length;
-  const overallPct = units.length ? Math.round(units.reduce((sum, u) => sum + u.progress, 0) / units.length) : 0;
+  const overallPct = units.length
+    ? Math.round(units.reduce((sum, u) => sum + u.progress, 0) / units.length)
+    : 0;
 
   return (
     <div className={`prof-shell${visible ? " visible" : ""}`}>
       <div className="prof-hero">
         <div className="prof-avatar-wrap">
           <div className="prof-avatar-ring">
-            <Image src={img} alt={profile?.name ?? "Learner"} width={96} height={96} unoptimized className="prof-avatar-img" />
+            <Image
+              src={img}
+              alt={profile?.name ?? "Learner"}
+              width={96}
+              height={96}
+              unoptimized
+              className="prof-avatar-img"
+            />
           </div>
-          <button type="button" className="prof-avatar-btn" onClick={() => fileRef.current?.click()}>
-            <svg viewBox="0 0 16 16" fill="none" width="11" height="11" aria-hidden="true">
-              <path d="M8 2v8M4 6l4-4 4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M2 13h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <button
+            type="button"
+            className="prof-avatar-btn"
+            onClick={() => fileRef.current?.click()}
+          >
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              width="11"
+              height="11"
+              aria-hidden="true"
+            >
+              <path
+                d="M8 2v8M4 6l4-4 4 4"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M2 13h12"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
             </svg>
           </button>
-          <input ref={fileRef} type="file" accept="image/*" className="sr-only" onChange={handleFile} />
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            onChange={handleFile}
+          />
         </div>
 
         <div className="prof-identity">
@@ -324,7 +486,9 @@ export default function StatsLive() {
             </div>
             <div className="prof-chips">
               <span className="prof-chip">{profile?.level ?? "Level 01"}</span>
-              <span className="prof-chip">{profile?.drivingClass ?? "Learner"}</span>
+              <span className="prof-chip">
+                {profile?.drivingClass ?? "Learner"}
+              </span>
               <span className="prof-chip green">Online</span>
             </div>
           </div>
@@ -369,7 +533,13 @@ export default function StatsLive() {
           { id: "details", label: t("stats.tabDetails") },
           { id: "badges", label: t("stats.tabBadges") },
         ].map((tabButton) => (
-          <Tab key={tabButton.id} id={tabButton.id} label={tabButton.label} active={tab === tabButton.id} onClick={setTab} />
+          <Tab
+            key={tabButton.id}
+            id={tabButton.id}
+            label={tabButton.label}
+            active={tab === tabButton.id}
+            onClick={setTab}
+          />
         ))}
       </div>
 
@@ -384,8 +554,12 @@ export default function StatsLive() {
               </div>
             ))}
             <div className="prof-focus-card">
-              <span className="prof-focus-kicker">{t("dashboard.nextSessionLabel")}</span>
-              <strong className="prof-focus-title">{profile?.nextSession ?? "—"}</strong>
+              <span className="prof-focus-kicker">
+                {t("dashboard.nextSessionLabel")}
+              </span>
+              <strong className="prof-focus-title">
+                {profile?.nextSession ?? "—"}
+              </strong>
               <div className="prof-focus-row">
                 <span>{t("stats.mentorLabel")}</span>
                 <strong>{profile?.mentor ?? "—"}</strong>
@@ -413,7 +587,11 @@ export default function StatsLive() {
         {tab === "details" && (
           <div className="prof-details-list">
             {profileDetails.map((detail) => (
-              <InfoRow key={detail.label} label={detail.label} value={detail.value} />
+              <InfoRow
+                key={detail.label}
+                label={detail.label}
+                value={detail.value}
+              />
             ))}
           </div>
         )}

@@ -2,7 +2,13 @@
 import { createClient } from "../../../lib/server.js";
 import { getLearningDay } from "../../learn/index.js";
 
-async function upsertProgress(supabase, userId, lessonId, completedStepIds, progressPercent) {
+async function upsertProgress(
+  supabase,
+  userId,
+  lessonId,
+  completedStepIds,
+  progressPercent,
+) {
   const { data: existing, error: existingError } = await supabase
     .from("learning_progress")
     .select("progress_percent")
@@ -74,7 +80,10 @@ export async function POST(request) {
   } else {
     const lesson = getLearningDay(lessonId);
     const totalSteps = lesson?.lessons?.length ?? completedStepIds.length;
-    progressPercent = totalSteps > 0 ? Math.round((completedStepIds.length / totalSteps) * 100) : 0;
+    progressPercent =
+      totalSteps > 0
+        ? Math.round((completedStepIds.length / totalSteps) * 100)
+        : 0;
   }
 
   try {

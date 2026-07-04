@@ -70,7 +70,9 @@ export function deriveLearningProgress(units) {
 
     return {
       ...unit,
-      unlocked: lessons.some((lesson) => !lesson.isLocked || lesson.progress > 0),
+      unlocked: lessons.some(
+        (lesson) => !lesson.isLocked || lesson.progress > 0,
+      ),
       isComplete,
       lessons,
       completedLessons,
