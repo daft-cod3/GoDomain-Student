@@ -8,6 +8,7 @@ import {
   deriveLearningProgress,
   hydrateLearningProgress,
   persistLearningProgress,
+  syncProgressFromDB,
 } from "../progress-store";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
@@ -423,15 +424,15 @@ export default function LearningPathShell() {
   const currentLesson = getCurrentLesson(units);
 
   useEffect(() => {
-    const h = hydrateLearningProgress(learningUnits);
-    const cur = getCurrentLesson(h);
-    setUnits(h);
-    // Default to Unit 1 for new users; otherwise go to the unit with the current lesson
-    const unitIndex = h.findIndex((unit) =>
-      unit.lessons.some((lesson) => lesson.id === cur?.id),
-    );
-    setActiveUnitIndex(Math.max(0, unitIndex));
-    setHydrated(true);
+    syncProgressFromDB(learningUnits).then((h) => {
+      const cur = getCurrentLesson(h);
+      setUnits(h);
+      const unitIndex = h.findIndex((unit) =>
+        unit.lessons.some((lesson) => lesson.id === cur?.id),
+      );
+      setActiveUnitIndex(Math.max(0, unitIndex));
+      setHydrated(true);
+    });
   }, []);
 
   useEffect(() => {

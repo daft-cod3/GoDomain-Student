@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   getLearningDay,
   getLearningDayHref,
@@ -12,7 +12,6 @@ import {
 import { JourneyIcon, LessonIcon } from "../../../learn/icons";
 import {
   LEARNING_PROGRESS_KEY,
-  persistLearningProgress,
 } from "../../../learn/progress-store";
 import TwoDModel from "../../components/2dmodel";
 import ThreeDModel from "../../components/3dmodel";
@@ -158,11 +157,13 @@ export default function SubLessonPage() {
   const [completedIds, setCompletedIds] = useState(() => new Set());
   const [viewMode, setViewMode] = useState("2d"); // "2d" | "3d" | "notes"
   const [justCompleted, setJustCompleted] = useState(false);
+  const completedIdsRef = useRef(completedIds);
+  completedIdsRef.current = completedIds;
 
   useEffect(() => {
     if (!lesson) return;
     setCompletedIds(readCompletedIds(lesson.id));
-  }, [lesson]);
+  }, [lesson, safeStepId]);
 
   if (!lesson || !step) {
     return (
@@ -201,95 +202,34 @@ export default function SubLessonPage() {
       ? learningDays[lessonIndex + 1]
       : null;
 
-  async function postProgressToBackend({
-    lessonId,
-    completedStepIds,
-    progressPercent,
-  }) {
-    // Only wire backend on localhost as requested.
-    if (typeof window === "undefined") return { ok: false, reason: "ssr" };
-
-    const hostname = window.location?.hostname;
-    const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
-    if (!isLocalhost) return { ok: false, reason: "non-localhost" };
-
-    const res = await fetch("/api/progress/migrate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        lessons: [
-          {
-            id: lessonId,
-            completedStepIds,
-            progressPercent,
-          },
-        ],
-      }),
-    });
-
-    if (!res.ok) {
-      let msg = "Request failed";
-      try {
-        const data = await res.json();
-        msg = data?.error || data?.message || msg;
-      } catch {
-        // ignore
-      }
-      return { ok: false, reason: msg };
-    }
-
-    return { ok: true };
-  }
-
-  async function markComplete() {
-    if (isDone) return;
+  function markComplete() {
+    const currentIds = completedIdsRef.current;
+    if (currentIds.has(step.id)) return;
     setJustCompleted(true);
     setTimeout(() => setJustCompleted(false), 1400);
 
-    // Optimistic update for immediate UI response.
-    let nextSet;
-    setCompletedIds((prev) => {
-      const next = new Set(prev);
-      next.add(step.id);
-      writeCompletedIds(lesson.id, next);
+    const nextSet = new Set(currentIds);
+    nextSet.add(step.id);
+    writeCompletedIds(lesson.id, nextSet);
+    setCompletedIds(nextSet);
 
-      const progressPercent = total ? Math.round((next.size / total) * 100) : 0;
-
-      // Persist progress locally for non-localhost and for immediate UX.
-      persistLearningProgress([
-        {
-          id: lesson.id,
-          lessons: lesson.lessons.map((entry) => ({
-            id: entry.id,
-            completed: next.has(entry.id),
-          })),
-        },
-      ]);
-
-      nextSet = next;
-      void progressPercent;
-      return next;
-    });
-
-    // Backend sync only on localhost.
-    const completedStepIds = Array.from(nextSet ?? completedIds).concat(
-      nextSet?.has(step.id) ? [] : [step.id],
-    );
-    const uniqueCompletedStepIds = Array.from(new Set(completedStepIds));
+    const completedStepIds = Array.from(nextSet);
     const progressPercent = total
-      ? Math.round((uniqueCompletedStepIds.length / total) * 100)
+      ? Math.round((completedStepIds.length / total) * 100)
       : 0;
 
-    const r = await postProgressToBackend({
-      lessonId: lesson.id,
-      completedStepIds: uniqueCompletedStepIds,
-      progressPercent,
-    });
+    // Fire-and-forget backend sync
+    fetch("/api/progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lessonId: lesson.id, completedStepIds, progressPercent }),
+    }).catch(() => {});
 
-    // If backend succeeded, re-hydrate UI from localStorage to match backend.
-    // (Backend also computed progressPercent; localStorage is our current client-side mirror.)
-    if (r?.ok) {
-      setCompletedIds(readCompletedIds(lesson.id));
+    // Navigate immediately after marking complete
+    if (nextStep) {
+      router.push(getSubLessonHref(lesson.id, nextStep.id));
+    } else if (progressPercent === 100) {
+      router.push(getLearningDayHref(lesson.id));
     }
   }
 

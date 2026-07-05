@@ -9,7 +9,10 @@ import {
   studentProfile,
 } from "../data/student-profile";
 import { learningUnits } from "../learn";
-import { hydrateLearningProgress } from "../learn/progress-store";
+import {
+  hydrateLearningProgress,
+  syncProgressFromDB,
+} from "../learn/progress-store";
 
 const PROFILE_IMAGE_KEY = "godomain-profile-image";
 const DEFAULT_PROFILE_IMAGE = "/student-profile-avatar.svg";
@@ -459,7 +462,9 @@ export default function Stats() {
   const fileRef = useRef(null);
 
   useEffect(() => {
-    setUnits(getUnitRows(hydrateLearningProgress(learningUnits)));
+    syncProgressFromDB(learningUnits).then((hydratedUnits) => {
+      setUnits(getUnitRows(hydratedUnits));
+    });
     const stored = window.localStorage.getItem(PROFILE_IMAGE_KEY);
     if (stored) setImg(stored);
     const t = setTimeout(() => setVisible(true), 50);
