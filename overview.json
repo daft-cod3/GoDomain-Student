@@ -293,15 +293,11 @@
   "filesPerLanguage": {
     "JavaScript": 74
   },
-  "projectTypes": [
-    "JavaScript/Node.js"
-  ],
+  "projectTypes": ["JavaScript/Node.js"],
   "frameworks": [],
   "entryPoints": [],
   "ciCdTools": [],
-  "packageManagers": [
-    "npm/yarn"
-  ],
+  "packageManagers": ["npm/yarn"],
   "topLevelDirectories": [
     {
       "name": "app",
@@ -660,9 +656,7 @@
     "serviceArchitecture": {
       "microservices": [],
       "monoliths": [],
-      "libraries": [
-        "lib"
-      ]
+      "libraries": ["lib"]
     },
     "layeredArchitecture": {
       "presentation": [],
@@ -673,12 +667,7 @@
   },
   "largeFiles": [],
   "dependencies": {
-    "production": [
-      "next",
-      "pg",
-      "react",
-      "react-dom"
-    ],
+    "production": ["next", "pg", "react", "react-dom"],
     "development": [
       "@biomejs/biome",
       "@tailwindcss/postcss",
@@ -698,8 +687,6 @@
     "totalCommits": 32,
     "numContributors": 0,
     "currentBranch": "main",
-    "remoteUrls": [
-      "https://github.com/daft-cod3/GoDomain-Student.git"
-    ]
+    "remoteUrls": ["https://github.com/daft-cod3/GoDomain-Student.git"]
   }
 }

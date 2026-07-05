@@ -68,19 +68,31 @@ const nextConfig = {
       {
         source: "/public/(.*)",
         headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
         ],
       },
-      {
-        source: "/_next/static/(.*)",
-        headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
-        ],
-      },
+      // Let Next.js manage cache headers for its own static assets in dev.
+      // Overriding these can break development behavior.
+      // {
+      //   source: "/_next/static/(.*)",
+      //   headers: [
+      //     {
+      //       key: "Cache-Control",
+      //       value: "public, max-age=31536000, immutable",
+      //     },
+      //   ],
+      // },
+
       {
         source: "/api/learn-content/:lessonId/:stepId",
         headers: [
-          { key: "Cache-Control", value: "public, s-maxage=300, stale-while-revalidate=600" },
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=300, stale-while-revalidate=600",
+          },
         ],
       },
     ];
