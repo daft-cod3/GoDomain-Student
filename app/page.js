@@ -5,8 +5,6 @@ import TeacherUploadsSection from "./components/teacher-uploads-section";
 import { getLearningDayHref } from "./learn";
 import ContentReview from "./learn/components/contReview";
 
-export const dynamic = "force-dynamic";
-
 const dailyTaskPool = [
   {
     title: "Open today's flashcards",

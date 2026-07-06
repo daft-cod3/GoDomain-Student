@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getLearningDayHref, learningUnits } from "..";
 import { JourneyIcon } from "../icons";
 import {
@@ -362,19 +362,7 @@ function loadReviewData() {
 }
 
 export default function ContentReview() {
-  const [reviewData, setReviewData] = useState({
-    averageScore: 0,
-    completedLessons: [],
-    activeLessons: [],
-    featuredUnit: null,
-    featuredUnitStreak: 0,
-    totalTopicsCovered: 0,
-    unitSummaries: [],
-  });
-
-  useEffect(() => {
-    setReviewData(loadReviewData());
-  }, []);
+  const [reviewData, setReviewData] = useState(() => loadReviewData());
 
   const { averageScore, completedLessons, featuredUnit, totalTopicsCovered } =
     reviewData;

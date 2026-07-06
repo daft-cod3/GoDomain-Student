@@ -16,9 +16,9 @@ async function upsertProgress(
     .eq("lesson_id", lessonId)
     .maybeSingle();
 
-  if (existingError) {
-    throw existingError;
-  }
+  if (existingError) throw existingError;
+
+  const previousPercent = existing?.progress_percent ?? 0;
 
   const { error } = await supabase.from("learning_progress").upsert(
     {
@@ -31,11 +31,9 @@ async function upsertProgress(
     { onConflict: "user_id,lesson_id" },
   );
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 
-  return existing?.progress_percent ?? 0;
+  return previousPercent;
 }
 
 export async function GET() {

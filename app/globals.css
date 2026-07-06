@@ -29452,3 +29452,121 @@ html[data-theme="dark"] .daily-task-item:focus-within {
     transition-duration: 1ms !important;
   }
 }
+
+
+/* ═══════════════════════════════════════════
+   PERFORMANCE OPTIMIZATIONS
+   Reduces GPU/CPU load in Docker & software-rendered environments
+═══════════════════════════════════════════ */
+
+/* Promote animated elements to their own compositor layer */
+.dash-hero::before,
+.dash-hero-art::after,
+.lp-node--current,
+.duo-node.current,
+.lp-node-ring,
+.duo-node-orbit,
+.stats-orb,
+.book,
+.floating-badge,
+.lp-topbar-fill::after {
+  will-change: transform;
+}
+
+/* Slow down concurrent float animations — halves frame pressure */
+.book {
+  animation-duration: 12s !important;
+}
+.book-one,
+.book-three,
+.book-five {
+  animation-duration: 14s !important;
+}
+.book-two,
+.book-four {
+  animation-duration: 11s !important;
+}
+.floating-badge {
+  animation-duration: 11s !important;
+}
+.dash-hero-art::after {
+  animation-duration: 12s !important;
+}
+.stats-orb {
+  animation-duration: 18s !important;
+}
+.lp-stars {
+  animation-duration: 9s !important;
+}
+
+/* Replace animated blur on pseudo-elements with static opacity — blur on
+   animating pseudo-elements forces a full repaint every frame in Docker */
+.dash-hero::before {
+  filter: none !important;
+  opacity: 0.55;
+}
+.dash-hero-art::after {
+  filter: none !important;
+  opacity: 0.45;
+}
+.teacher-card::after {
+  filter: none !important;
+  opacity: 0.55;
+}
+
+/* Reduce backdrop-filter blur on non-critical / many-instance elements.
+   backdrop-filter is the single most expensive CSS property in Docker. */
+.dash-section,
+.road-sign-detail-card,
+.upload-detail-card,
+.review-section,
+.road-sign-category,
+.road-sign-group,
+.model-town-block {
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+}
+
+.road-sign-card {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.lp-node {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.lp-node:hover:not(:disabled),
+.lp-node:active:not(:disabled),
+.lp-node--current,
+.lp-node--current:hover,
+.lp-node--done:hover:not(:disabled) {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Reduce orbit animation speed — 3s linear is very CPU-heavy */
+.lp-node-ring {
+  animation-duration: 6s !important;
+}
+.duo-node-orbit {
+  animation-duration: 6s !important;
+}
+
+/* Shimmer on progress bar — reduce to single pass */
+.lp-topbar-fill::after {
+  animation-duration: 3s !important;
+}
+
+/* Respect user's reduced-motion preference — kills all animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    will-change: auto !important;
+  }
+}

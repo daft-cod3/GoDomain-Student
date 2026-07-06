@@ -74,17 +74,21 @@ const nextConfig = {
           },
         ],
       },
-      // Let Next.js manage cache headers for its own static assets in dev.
-      // Overriding these can break development behavior.
-      // {
-      //   source: "/_next/static/(.*)",
-      //   headers: [
-      //     {
-      //       key: "Cache-Control",
-      //       value: "public, max-age=31536000, immutable",
-      //     },
-      //   ],
-      // },
+      // Only set immutable cache headers in production.
+      // In dev, Next.js manages these itself to keep HMR working.
+      ...(!isDev
+        ? [
+            {
+              source: "/_next/static/(.*)",
+              headers: [
+                {
+                  key: "Cache-Control",
+                  value: "public, max-age=31536000, immutable",
+                },
+              ],
+            },
+          ]
+        : []),
 
       {
         source: "/api/learn-content/:lessonId/:stepId",
