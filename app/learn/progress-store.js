@@ -70,9 +70,7 @@ export function deriveLearningProgress(units) {
 
     return {
       ...unit,
-      unlocked: lessons.some(
-        (lesson) => !lesson.isLocked || lesson.progress > 0,
-      ),
+      unlocked: lessons.some((lesson) => !lesson.isLocked || lesson.progress > 0),
       isComplete,
       lessons,
       completedLessons,
@@ -81,23 +79,6 @@ export function deriveLearningProgress(units) {
       progress,
     };
   });
-}
-
-function applyProgressMap(units, progressMap) {
-  return units.map((unit) => ({
-    ...unit,
-    lessons: unit.lessons.map((lesson) => {
-      const completedStepIds = progressMap.get(lesson.id);
-      if (!completedStepIds) return lesson;
-      return {
-        ...lesson,
-        lessons: lesson.lessons.map((entry) => ({
-          ...entry,
-          completed: completedStepIds.has(entry.id),
-        })),
-      };
-    }),
-  }));
 }
 
 export function hydrateLearningProgress(units) {
@@ -109,7 +90,10 @@ export function hydrateLearningProgress(units) {
 
   try {
     const stored = window.localStorage.getItem(LEARNING_PROGRESS_KEY);
-    if (!stored) return deriveLearningProgress(clonedUnits);
+
+    if (!stored) {
+      return deriveLearningProgress(clonedUnits);
+    }
 
     const payload = JSON.parse(stored);
     const progressMap = new Map(
@@ -121,33 +105,28 @@ export function hydrateLearningProgress(units) {
         : [],
     );
 
-    return deriveLearningProgress(applyProgressMap(clonedUnits, progressMap));
+    return deriveLearningProgress(
+      clonedUnits.map((unit) => ({
+        ...unit,
+        lessons: unit.lessons.map((lesson) => {
+          const completedStepIds = progressMap.get(lesson.id);
+
+          if (!completedStepIds) {
+            return lesson;
+          }
+
+          return {
+            ...lesson,
+            lessons: lesson.lessons.map((entry) => ({
+              ...entry,
+              completed: completedStepIds.has(entry.id),
+            })),
+          };
+        }),
+      })),
+    );
   } catch {
     return deriveLearningProgress(clonedUnits);
-  }
-}
-
-export async function syncProgressFromDB(units) {
-  try {
-    const res = await fetch("/api/progress");
-    if (!res.ok) return hydrateLearningProgress(units);
-    const data = await res.json();
-    if (!Array.isArray(data) || data.length === 0) return hydrateLearningProgress(units);
-
-    const progressMap = new Map(
-      data.map((row) => [
-        row.lesson_id,
-        new Set(Array.isArray(row.completed_step_ids) ? row.completed_step_ids : []),
-      ]),
-    );
-
-    // Merge DB into localStorage so future hydrations are fast
-    const payload = { lessons: data.map((row) => ({ id: row.lesson_id, completedStepIds: row.completed_step_ids ?? [] })) };
-    window.localStorage.setItem(LEARNING_PROGRESS_KEY, JSON.stringify(payload));
-
-    return deriveLearningProgress(applyProgressMap(cloneUnits(units), progressMap));
-  } catch {
-    return hydrateLearningProgress(units);
   }
 }
 

@@ -1,34 +1,5 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Supabase Database
-
-Copy `.env.example` to `.env.local`, then fill in your Supabase project values.
-
-Use the Supabase Postgres connection string for `DATABASE_URL`. It is available in Supabase under Project Settings > Database > Connection string. Keep `?sslmode=require` on the URL.
-
-After setting `.env.local`, apply the schema and seed lesson content:
-
-```bash
-npm run db:migrate
-npm run db:seed
-```
-
-The project now uses Supabase CLI migrations for schema changes. New database changes should be created with `npm run db:new <name>` and stored under `supabase/migrations/`. The legacy SQL dump in `db/schema.sql` is kept only as a reference snapshot and should not be used as the long-term source of truth for incremental changes.
-
-Useful commands:
-
-```bash
-npm install
-npx supabase login
-npx supabase link --project-ref <your-project-ref>
-npm run db:new add_profile_indexes
-npm run db:status
-npm run db:migrate
-npm run db:push
-npm run db:reset
-```
-
-If you are using the existing Supabase connection string from `.env.local`, `npm run db:push` will use it directly. Replace the placeholder password in `.env.local` before running it.
 ## Getting Started
 
 First, run the development server:

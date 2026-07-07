@@ -2,39 +2,22 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "NEXT_PRIVATE_DIR='.next-local' NEXT_TURBOPACK_CACHE_DIR='.next-local/turbopack' TMPDIR='.next-local/tmp' next dev --hostname 0.0.0.0 --port 3001",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write",
-    "db:schema": "node db/migrate.js",
-    "db:seed": "node db/seed-content.js",
-    "db:migrate": "npx supabase db push",
-    "db:new": "npx supabase migration new",
-    "db:push": "npx supabase db push",
-    "db:status": "npx supabase migration list",
-    "db:reset": "npx supabase db reset",
-    "test:db": "node --test db/migrate.test.js"
+    "format": "biome format --write"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.6.1",
-    "@supabase/supabase-js": "^2.49.4",
-    "i18next": "^26.0.10",
-    "next": "^16.2.5",
-    "pg": "^8.13.3",
+    "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "react-i18next": "^17.0.7"
+    "react-dom": "19.2.3"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",
     "tailwindcss": "^4"
-  },
-  "overrides": {
-    "postcss": "8.5.12"
   }
 }

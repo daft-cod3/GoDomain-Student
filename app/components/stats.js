@@ -1,708 +1,321 @@
-"use client";
-
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import {
-  heroMetrics,
-  profileDetails,
-  profilePerformanceCards,
-  studentProfile,
-} from "../data/student-profile";
-import { learningUnits } from "../learn";
-import {
-  hydrateLearningProgress,
-  syncProgressFromDB,
-} from "../learn/progress-store";
-
-const PROFILE_IMAGE_KEY = "godomain-profile-image";
-const DEFAULT_PROFILE_IMAGE = "/student-profile-avatar.svg";
-
-function getUnitRows(units) {
-  return units.map((unit) => {
-    const done = unit.lessons.reduce(
-      (s, l) => s + l.lessons.filter((e) => e.completed).length,
-      0,
-    );
-    const total = unit.lessons.reduce((s, l) => s + l.lessons.length, 0);
+export default function Stats() {
+  const leaderboardMaxPoints = 1500;
+  const leaderboard = [
+    { name: "Amira K.", initials: "AM", points: 1420, variant: "" },
+    { name: "Jules R.", initials: "JR", points: 1280, variant: "alt" },
+    { name: "Lena S.", initials: "LS", points: 1210, variant: "mint" },
+    { name: "Ari Rowe", initials: "AR", points: 1140, variant: "peach" },
+  ];
+  const currentLevel = 8;
+  const currentLevelProgress = 62;
+  const levels = Array.from({ length: currentLevel }, (_, index) => {
+    const level = index + 1;
+    const isCurrent = level === currentLevel;
     return {
-      id: unit.id,
-      label: unit.label,
-      title: unit.title,
-      progress: total ? Math.round((done / total) * 100) : 0,
-      completedLessons: unit.lessons.filter((l) =>
-        l.lessons.every((e) => e.completed),
-      ).length,
-      totalLessons: unit.lessons.length,
-      unlocked: unit.unlocked,
+      level,
+      progress: isCurrent ? currentLevelProgress : 100,
+      status: isCurrent ? "current" : "passed",
     };
   });
-}
-
-function Bar({ pct, color, delay = 0 }) {
-  const [w, setW] = useState(0);
-  useEffect(() => {
-    const t = setTimeout(() => setW(pct), 100 + delay);
-    return () => clearTimeout(t);
-  }, [pct, delay]);
-  return (
-    <div className="prof-bar-track">
-      <div
-        className="prof-bar-fill"
-        style={{ width: `${w}%`, background: color }}
-      />
-    </div>
-  );
-}
-
-function getPercent(value, capacity) {
-  if (!capacity) return 0;
-  return Math.max(0, Math.min(100, Math.round((value / capacity) * 100)));
-}
-
-function StatPill({ label, value, capacity, color, icon }) {
-  const pct = getPercent(value, capacity);
+  const formatPoints = (value) => value.toLocaleString("en-US");
 
   return (
-    <div
-      className="prof-stat-pill"
-      style={{ "--pill-color": color, "--pill-pct": `${pct}%` }}
-    >
-      <span className="prof-stat-pill-icon">{icon}</span>
-      <div className="prof-stat-pill-body">
-        <strong>{capacity ? `${value}/${capacity}` : value}</strong>
-        <span>{label}</span>
-        {capacity
-          ? <div
-              className="prof-stat-progress"
-              role="progressbar"
-              aria-label={`${label} progress`}
-              aria-valuemin="0"
-              aria-valuemax={capacity}
-              aria-valuenow={value}
-            >
-              <i
-                style={{
-                  height: `${pct}%`,
-                  background: `linear-gradient(180deg, color-mix(in srgb, ${color} 58%, #ffffff), ${color})`,
-                }}
-              />
-            </div>
-          : null}
-      </div>
-    </div>
-  );
-}
-
-function Tab({ id, label, active, onClick }) {
-  return (
-    <button
-      type="button"
-      className={`prof-tab${active ? " active" : ""}`}
-      onClick={() => onClick(id)}
-      role="tab"
-      aria-selected={active}
-    >
-      {label}
-    </button>
-  );
-}
-
-function InfoRow({ label, value }) {
-  return (
-    <div className="prof-info-row">
-      <span className="prof-info-label">{label}</span>
-      <span className="prof-info-value">{value}</span>
-    </div>
-  );
-}
-
-function UnitBar({ unit, index }) {
-  return (
-    <div
-      className="prof-unit-row"
-      style={{ animationDelay: `${index * 60}ms` }}
-    >
-      <div className="prof-unit-row-head">
-        <div className="prof-unit-row-copy">
-          <span className="prof-unit-row-label">{unit.label}</span>
-          <span className="prof-unit-row-title">{unit.title}</span>
+    <div className="stats-shell">
+      <header className="stats-header">
+        <div>
+          <div className="stats-eyebrow">Student analytics</div>
+          <h1 className="stats-title">Progress and performance</h1>
+          <p className="stats-subtitle">
+            Track leaderboards, learning trends, achievements, and streaks.
+          </p>
         </div>
-        <span className={`prof-unit-badge${unit.unlocked ? " open" : ""}`}>
-          {unit.progress}%
-        </span>
-      </div>
-      <Bar
-        pct={unit.progress}
-        color="linear-gradient(90deg,#2f8bff,#6fe51f)"
-        delay={index * 60}
-      />
-      <div className="prof-unit-row-foot">
-        <span>
-          {unit.completedLessons}/{unit.totalLessons} lessons
-        </span>
-        <span>{unit.unlocked ? "Open" : "Locked"}</span>
-      </div>
-    </div>
-  );
-}
+        <button className="stats-action" type="button">
+          Export report
+        </button>
+      </header>
 
-function BadgeIcon({ name }) {
-  const common = {
-    fill: "none",
-    stroke: "currentColor",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: "2",
-  };
-  const icons = {
-    route: (
-      <>
-        <path {...common} d="M6 18c3-6 9 0 12-6" />
-        <circle {...common} cx="5" cy="19" r="2" />
-        <circle {...common} cx="19" cy="11" r="2" />
-      </>
-    ),
-    flame: (
-      <path
-        {...common}
-        d="M12 21c3.5-1.2 6-3.9 6-7.2 0-2.6-1.4-4.7-4.2-6.8.1 2.2-.8 3.4-2 4.2.2-2.6-.8-4.9-3.3-6.2.1 4.1-2.5 5.7-2.5 8.7C6 17.3 8.5 19.9 12 21Z"
-      />
-    ),
-    trophy: (
-      <>
-        <path {...common} d="M8 4h8v5a4 4 0 0 1-8 0V4Z" />
-        <path {...common} d="M8 6H5a3 3 0 0 0 3 4" />
-        <path {...common} d="M16 6h3a3 3 0 0 1-3 4" />
-        <path {...common} d="M12 13v4" />
-        <path {...common} d="M9 21h6" />
-      </>
-    ),
-    road: (
-      <>
-        <path {...common} d="M8 21 11 3" />
-        <path {...common} d="m16 21-3-18" />
-        <path {...common} d="M12 8v2" />
-        <path {...common} d="M12 14v2" />
-      </>
-    ),
-    target: (
-      <>
-        <circle {...common} cx="12" cy="12" r="8" />
-        <circle {...common} cx="12" cy="12" r="4" />
-        <circle fill="currentColor" cx="12" cy="12" r="1.5" />
-      </>
-    ),
-    mentor: (
-      <>
-        <circle {...common} cx="9" cy="8" r="3" />
-        <path {...common} d="M3.5 20a5.5 5.5 0 0 1 11 0" />
-        <path {...common} d="M16 9h4" />
-        <path {...common} d="M18 7v4" />
-      </>
-    ),
-    mirror: (
-      <>
-        <path {...common} d="M5 12a7 7 0 0 1 14 0v5H5v-5Z" />
-        <path {...common} d="M9 17v3" />
-        <path {...common} d="M15 17v3" />
-      </>
-    ),
-    signal: (
-      <>
-        <path {...common} d="M4 12h13" />
-        <path {...common} d="m12 7 5 5-5 5" />
-        <path {...common} d="M4 6h5" />
-        <path {...common} d="M4 18h5" />
-      </>
-    ),
-    parking: (
-      <>
-        <path {...common} d="M7 21V3h6a5 5 0 0 1 0 10H7" />
-        <path {...common} d="M7 13h6" />
-      </>
-    ),
-    junction: (
-      <>
-        <path {...common} d="M12 21V3" />
-        <path {...common} d="M12 11h6l3-3" />
-        <path {...common} d="M12 13H6l-3 3" />
-      </>
-    ),
-    hill: (
-      <>
-        <path {...common} d="M3 18h18" />
-        <path {...common} d="m5 18 7-10 7 10" />
-        <path {...common} d="M9 18v-3h6v3" />
-      </>
-    ),
-    night: (
-      <path
-        {...common}
-        d="M19 15.5A7.5 7.5 0 0 1 8.5 5a7.5 7.5 0 1 0 10.5 10.5Z"
-      />
-    ),
-    hazard: (
-      <>
-        <path {...common} d="m12 3 9 16H3L12 3Z" />
-        <path {...common} d="M12 9v4" />
-        <path {...common} d="M12 17h.01" />
-      </>
-    ),
-    lane: (
-      <>
-        <path {...common} d="M5 21 9 3" />
-        <path {...common} d="m19 21-4-18" />
-        <path {...common} d="M12 6v3" />
-        <path {...common} d="M12 13v3" />
-      </>
-    ),
-    timer: (
-      <>
-        <circle {...common} cx="12" cy="13" r="7" />
-        <path {...common} d="M9 2h6" />
-        <path {...common} d="M12 13l3-3" />
-      </>
-    ),
-    signs: (
-      <>
-        <path {...common} d="M12 2 4 6v8l8 8 8-8V6l-8-4Z" />
-        <path {...common} d="M9 12h6" />
-      </>
-    ),
-  };
-  const aliases = {
-    "First Steps": "route",
-    "Streak Master": "flame",
-    "Unit Champion": "trophy",
-    "Road Warrior": "road",
-    "Perfect Score": "target",
-    "Mentor Meeting": "mentor",
-    "Mirror Master": "mirror",
-    "Signal Pro": "signal",
-    "Parking Ace": "parking",
-    "Junction Expert": "junction",
-    "Hill Start Hero": "hill",
-    "Night Ready": "night",
-    "Hazard Scout": "hazard",
-    "Lane Keeper": "lane",
-    "Quiz Sprinter": "timer",
-    "Road Sign Guru": "signs",
-  };
-
-  return (
-    <svg viewBox="0 0 24 24" className="prof-ach-svg" aria-hidden="true">
-      {icons[name] ?? icons[aliases[name]] ?? icons.route}
-    </svg>
-  );
-}
-
-function AchBadge({ a, index, active, onSelect }) {
-  return (
-    <button
-      type="button"
-      className={`prof-ach${a.unlocked ? " unlocked" : ""}${active ? " active" : ""}`}
-      style={{ animationDelay: `${index * 50}ms` }}
-      onClick={onSelect}
-      aria-pressed={active}
-    >
-      <span className="prof-ach-icon">
-        <BadgeIcon name={a.title} />
-      </span>
-      <span className="prof-ach-title">{a.title}</span>
-      <span className="prof-ach-state">
-        {a.unlocked ? "Unlocked" : "Locked"}
-      </span>
-    </button>
-  );
-}
-
-function StreakStar({ done }) {
-  return (
-    <svg viewBox="0 0 32 32" className="prof-streak-star" aria-hidden="true">
-      <path d="M16 3.5l3.85 7.8 8.65 1.25-6.25 6.08 1.48 8.6L16 23.18l-7.73 4.05 1.48-8.6-6.25-6.08 8.65-1.25z" />
-      {done
-        ? <path
-            d="M11.2 16.4l3.05 3.05 6.65-7.1"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2.3"
-          />
-        : null}
-    </svg>
-  );
-}
-
-function StreakButtons() {
-  const [selected, setSelected] = useState("Thu");
-  const days = [
-    { label: "Mon", done: true },
-    { label: "Tue", done: true },
-    { label: "Wed", done: true },
-    { label: "Thu", done: true },
-    { label: "Fri", done: false },
-  ];
-
-  return (
-    <fieldset className="prof-streak-card" aria-label="Five day streak tracker">
-      <div className="prof-streak-head">
-        <span>Week streak</span>
-        <strong>{days.filter((d) => d.done).length}/5</strong>
-      </div>
-      <div className="prof-streak-days">
-        {days.map((day) => (
-          <button
-            key={day.label}
-            type="button"
-            className={`prof-streak-day${day.done ? " done" : ""}${selected === day.label ? " active" : ""}`}
-            onClick={() => setSelected(day.label)}
-            aria-pressed={selected === day.label}
-            aria-label={`${day.label} streak day ${day.done ? "completed" : "locked"}`}
-          >
-            <StreakStar done={day.done} />
-          </button>
-        ))}
-      </div>
-    </fieldset>
-  );
-}
-
-const ACHIEVEMENTS = [
-  { title: "First Steps", icon: "🚗", unlocked: true },
-  { title: "Streak Master", icon: "🔥", unlocked: true },
-  { title: "Unit Champion", icon: "🏆", unlocked: true },
-  { title: "Road Warrior", icon: "🛣️", unlocked: true },
-  { title: "Perfect Score", icon: "💯", unlocked: true },
-  { title: "Mentor Meeting", icon: "👨🏫", unlocked: true },
-  { title: "Mirror Master", icon: "MM", unlocked: true },
-  { title: "Signal Pro", icon: "SP", unlocked: true },
-  { title: "Parking Ace", icon: "PA", unlocked: true },
-  { title: "Junction Expert", icon: "JE", unlocked: true },
-  { title: "Hill Start Hero", icon: "HS", unlocked: true },
-  { title: "Night Ready", icon: "NR", unlocked: true },
-  { title: "Hazard Scout", icon: "HZ", unlocked: true },
-  { title: "Lane Keeper", icon: "LK", unlocked: true },
-  { title: "Quiz Sprinter", icon: "QS", unlocked: true },
-  { title: "Road Sign Guru", icon: "RS", unlocked: true },
-];
-
-const STAT_PILLS = [
-  {
-    id: "hp",
-    label: "HP",
-    value: studentProfile.hp,
-    capacity: studentProfile.hpCapacity,
-    color: "#e05c7a",
-    icon: "HP",
-  },
-  {
-    id: "energy",
-    label: "Energy",
-    value: studentProfile.energy,
-    capacity: studentProfile.energyCapacity,
-    color: "#22c55e",
-    icon: "EN",
-  },
-  {
-    id: "coins",
-    label: "Coins",
-    value: studentProfile.coins,
-    capacity: studentProfile.coinCapacity,
-    color: "#f59f00",
-    icon: "$",
-  },
-];
-
-const LEADERBOARD = [
-  {
-    id: studentProfile.indexNumber,
-    name: studentProfile.name,
-    school: studentProfile.drivingSchool,
-    hp: studentProfile.hp,
-    level: studentProfile.level,
-    current: true,
-  },
-  {
-    id: "GDS-2031",
-    name: "Brian Otieno",
-    school: "GoDomain Driving School",
-    hp: 96,
-    level: "Advanced",
-  },
-  {
-    id: "GDS-1988",
-    name: "Amina Wanjiku",
-    school: "GoDomain Driving School",
-    hp: 91,
-    level: "Advanced",
-  },
-  {
-    id: "GDS-2104",
-    name: "Kevin Mwangi",
-    school: "GoDomain Driving School",
-    hp: 88,
-    level: "Intermediate",
-  },
-  {
-    id: "GDS-2072",
-    name: "Faith Njeri",
-    school: "GoDomain Driving School",
-    hp: 76,
-    level: "Intermediate",
-  },
-].sort((a, b) => b.hp - a.hp);
-
-export default function Stats() {
-  const [units, setUnits] = useState(() => getUnitRows(learningUnits));
-  const [img, setImg] = useState(DEFAULT_PROFILE_IMAGE);
-  const [tab, setTab] = useState("overview");
-  const [selectedBadge, setSelectedBadge] = useState(ACHIEVEMENTS[0].title);
-  const [visible, setVisible] = useState(false);
-  const fileRef = useRef(null);
-
-  useEffect(() => {
-    syncProgressFromDB(learningUnits).then((hydratedUnits) => {
-      setUnits(getUnitRows(hydratedUnits));
-    });
-    const stored = window.localStorage.getItem(PROFILE_IMAGE_KEY);
-    if (stored) setImg(stored);
-    const t = setTimeout(() => setVisible(true), 50);
-    return () => clearTimeout(t);
-  }, []);
-
-  function handleFile(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result !== "string") return;
-      setImg(reader.result);
-      window.localStorage.setItem(PROFILE_IMAGE_KEY, reader.result);
-    };
-    reader.readAsDataURL(file);
-    e.target.value = "";
-  }
-
-  const completedUnits = units.filter((u) => u.progress === 100).length;
-  const overallPct = units.length
-    ? Math.round(units.reduce((s, u) => s + u.progress, 0) / units.length)
-    : 0;
-
-  return (
-    <div className={`prof-shell${visible ? " visible" : ""}`}>
-      <div className="prof-hero">
-        <div className="prof-avatar-wrap">
-          <div className="prof-avatar-ring">
-            <Image
-              src={img}
-              alt={studentProfile.name}
-              width={96}
-              height={96}
-              unoptimized
-              className="prof-avatar-img"
-            />
-          </div>
-          <button
-            type="button"
-            className="prof-avatar-btn"
-            onClick={() => fileRef.current?.click()}
-          >
-            <svg
-              viewBox="0 0 16 16"
-              fill="none"
-              width="11"
-              height="11"
-              aria-hidden="true"
-            >
-              <path
-                d="M8 2v8M4 6l4-4 4 4"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M2 13h12"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            className="sr-only"
-            onChange={handleFile}
-          />
+      <section className="stats-section">
+        <div className="stats-section-head">
+          <div className="stats-section-title">Leaderboard</div>
+          <div className="stats-section-subtitle">Top learners this week</div>
         </div>
-
-        <div className="prof-identity">
-          <div className="prof-identity-top">
-            <div>
-              <p className="prof-eyebrow">Profile</p>
-              <h1 className="prof-name">{studentProfile.name}</h1>
-              <p className="prof-sub">
-                {studentProfile.indexNumber} · {studentProfile.drivingSchool}
-              </p>
-            </div>
-            <div className="prof-chips">
-              <span className="prof-chip">{studentProfile.level}</span>
-              <span className="prof-chip">{studentProfile.drivingClass}</span>
-              <span className="prof-chip green">Online</span>
-            </div>
-          </div>
-
-          <div className="prof-metrics-row">
-            {heroMetrics.map((m) => (
-              <div key={m.label} className="prof-metric">
-                <strong>{m.value}</strong>
-                <span>{m.label}</span>
-              </div>
-            ))}
-            <div className="prof-metric">
-              <strong>
-                {completedUnits}/{units.length}
-              </strong>
-              <span>Units done</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="prof-vitals-streak-row">
-        <fieldset className="prof-pills-row" aria-label="Learner balances">
-          {STAT_PILLS.map((p) => (
-            <StatPill key={p.id} {...p} />
-          ))}
-        </fieldset>
-
-        <StreakButtons />
-      </div>
-
-      <div className="prof-overall">
-        <div className="prof-overall-head">
-          <span>Overall progress</span>
-          <strong>{overallPct}%</strong>
-        </div>
-        <Bar pct={overallPct} color="linear-gradient(90deg,#2563eb,#58cc02)" />
-      </div>
-
-      <div className="prof-tabs" role="tablist">
-        {[
-          { id: "overview", label: "Overview" },
-          { id: "units", label: "Units" },
-          { id: "details", label: "Details" },
-          { id: "badges", label: "Badges" },
-          { id: "leaderboard", label: "Leaderboard" },
-        ].map((t) => (
-          <Tab
-            key={t.id}
-            id={t.id}
-            label={t.label}
-            active={tab === t.id}
-            onClick={setTab}
-          />
-        ))}
-      </div>
-
-      <div className="prof-panel">
-        {tab === "overview" && (
-          <div className="prof-overview-grid">
-            {profilePerformanceCards.map((c) => (
-              <div key={c.label} className="prof-perf-card">
-                <strong className="prof-perf-value">{c.value}</strong>
-                <span className="prof-perf-label">{c.label}</span>
-                <span className="prof-perf-meta">{c.meta}</span>
-              </div>
-            ))}
-
-            <div className="prof-focus-card">
-              <span className="prof-focus-kicker">Next session</span>
-              <strong className="prof-focus-title">
-                {studentProfile.nextSession}
-              </strong>
-              <div className="prof-focus-row">
-                <span>Mentor</span>
-                <strong>{studentProfile.mentor}</strong>
-              </div>
-              <div className="prof-focus-row">
-                <span>Road hours</span>
-                <strong>{studentProfile.roadHours}</strong>
-              </div>
-              <div className="prof-focus-row">
-                <span>Attendance</span>
-                <strong>{studentProfile.attendance}</strong>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {tab === "units" && (
-          <div className="prof-units-list">
-            {units.map((u, i) => (
-              <UnitBar key={u.id} unit={u} index={i} />
-            ))}
-          </div>
-        )}
-
-        {tab === "details" && (
-          <div className="prof-details-list">
-            {profileDetails.map((d) => (
-              <InfoRow key={d.label} label={d.label} value={d.value} />
-            ))}
-          </div>
-        )}
-
-        {tab === "badges" && (
-          <div className="prof-badges-panel">
-            <div className="prof-ach-grid">
-              {ACHIEVEMENTS.map((a, i) => (
-                <AchBadge
-                  key={a.title}
-                  a={a}
-                  index={i}
-                  active={selectedBadge === a.title}
-                  onSelect={() => setSelectedBadge(a.title)}
-                />
-              ))}
-            </div>
-            <div className="prof-badge-detail" aria-live="polite">
-              <BadgeIcon name={selectedBadge} />
-              <div>
-                <span>Selected badge</span>
-                <strong>{selectedBadge}</strong>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {tab === "leaderboard" && (
-          <div className="prof-leaderboard-list">
-            {LEADERBOARD.map((student, index) => (
-              <article
-                key={student.id}
-                className={`prof-leader-row${student.current ? " current" : ""}`}
+        <ol className="leaderboard-grid">
+          {leaderboard.map((student, index) => {
+            const progress = Math.min(
+              100,
+              Math.round((student.points / leaderboardMaxPoints) * 100),
+            );
+            const avatarClass = ["student-avatar", student.variant]
+              .filter(Boolean)
+              .join(" ");
+            return (
+              <li
+                key={student.name}
+                className="student-card"
+                style={{ "--progress": `${progress}%` }}
+                tabIndex={0}
+                aria-label={`${student.name} ${formatPoints(
+                  student.points,
+                )} out of ${formatPoints(leaderboardMaxPoints)} points`}
               >
-                <div className="prof-leader-rank">
-                  {String(index + 1).padStart(2, "0")}
+                <div className={avatarClass}>{student.initials}</div>
+                <div className="student-body">
+                  <div className="student-row">
+                    <div className="student-name">{student.name}</div>
+                    <div className="student-rank">#{index + 1}</div>
+                  </div>
+                  <div className="student-meta">
+                    {formatPoints(student.points)} /{" "}
+                    {formatPoints(leaderboardMaxPoints)} pts
+                  </div>
+                  <div
+                    className="student-progress"
+                    role="progressbar"
+                    aria-valuenow={student.points}
+                    aria-valuemin={0}
+                    aria-valuemax={leaderboardMaxPoints}
+                  >
+                    <span />
+                  </div>
                 </div>
-                <div className="prof-leader-copy">
-                  <strong>{student.name}</strong>
-                  <span>{student.school}</span>
-                </div>
-                <span className="prof-leader-level">{student.level}</span>
-                <div className="prof-leader-hp">
-                  <strong>{student.hp}</strong>
-                  <span>HP</span>
-                </div>
-              </article>
-            ))}
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+
+      <section className="stats-section">
+        <div className="stats-section-head">
+          <div className="stats-section-title">
+            Learning progress infographs
           </div>
-        )}
-      </div>
+          <div className="stats-section-subtitle">
+            Current level and all levels passed
+          </div>
+        </div>
+        <ol className="infograph-grid">
+          {levels.map((level) => (
+            <li
+              key={level.level}
+              className={`infograph-card ${level.status}`}
+            >
+              <div
+                className="progress-ring"
+                style={{ "--progress": `${level.progress}%` }}
+              >
+                <span>L{level.level}</span>
+              </div>
+              <div className="infograph-label">
+                Level {level.level}
+                <span className={`infograph-tag ${level.status}`}>
+                  {level.status === "current" ? "Current" : "Passed"}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="stats-section">
+        <div className="stats-section-head">
+          <div className="stats-section-title">Achievements</div>
+          <div className="stats-section-subtitle">
+            Recent badges earned by your cohort
+          </div>
+        </div>
+        <ol className="achievement-grid">
+          <li className="achievement-card">
+            <div className="achievement-badge">A+</div>
+            <div className="achievement-title">Consistency</div>
+            <div className="achievement-meta">5 study days in a row</div>
+          </li>
+          <li className="achievement-card">
+            <div className="achievement-badge">XP</div>
+            <div className="achievement-title">Fast learner</div>
+            <div className="achievement-meta">1000 points in a week</div>
+          </li>
+          <li className="achievement-card">
+            <div className="achievement-badge">Pro</div>
+            <div className="achievement-title">Quiz master</div>
+            <div className="achievement-meta">90% on 3 quizzes</div>
+          </li>
+        </ol>
+      </section>
+
+      <section className="stats-section">
+        <div className="stats-section-head">
+          <div className="stats-section-title">Streak</div>
+          <div className="stats-section-subtitle">Based on your practice log</div>
+        </div>
+        <div className="stats-streak-card">
+          <div className="stats-streak-top">
+            <button
+              className="stats-streak-icon close"
+              type="button"
+              aria-label="Close streak"
+            >
+              +
+            </button>
+            <div className="stats-streak-title">Streak</div>
+            <button
+              className="stats-streak-icon share"
+              type="button"
+              aria-label="Share streak"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M14 4H20V10"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M20 4L12 12"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M20 14V20H4V4H10"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div className="stats-streak-tabs">
+            <button className="stats-streak-tab active" type="button">
+              Personal
+            </button>
+            <button className="stats-streak-tab" type="button">
+              Friends
+            </button>
+          </div>
+
+          <div className="stats-streak-hero">
+            <div className="stats-streak-hero-copy">
+              <span className="stats-streak-badge">Streak Society</span>
+              <div className="stats-streak-count">1095</div>
+              <div className="stats-streak-text">day streak!</div>
+            </div>
+            <div className="stats-streak-mascot" aria-hidden="true">
+              <svg viewBox="0 0 120 120">
+                <defs>
+                  <linearGradient id="streakGlow" x1="0" x2="1">
+                    <stop offset="0%" stopColor="#ffe08a" />
+                    <stop offset="100%" stopColor="#ffc14d" />
+                  </linearGradient>
+                </defs>
+                <circle cx="60" cy="60" r="40" fill="url(#streakGlow)" />
+                <path
+                  d="M34 50C40 40 50 34 60 34C70 34 80 40 86 50"
+                  stroke="#8a4d00"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M40 72C46 78 53 82 60 82C67 82 74 78 80 72"
+                  stroke="#8a4d00"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                />
+                <circle cx="46" cy="56" r="6" fill="#8a4d00" />
+                <circle cx="74" cy="56" r="6" fill="#8a4d00" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="stats-streak-callout">
+            <span className="stats-streak-callout-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 3C9 6 7 9 7 12C7 16 9.5 19 12 19C14.5 19 17 16 17 12C17 9 15 6 12 3Z"
+                  fill="#ffcf66"
+                />
+              </svg>
+            </span>
+            <div className="stats-streak-callout-text">
+              Keep your <strong>Perfect Streak</strong> flame by doing a lesson
+              every day!
+            </div>
+          </div>
+
+          <div className="stats-streak-month">
+            <div className="stats-streak-month-title">July 2025</div>
+            <div className="stats-streak-month-actions">
+              <button
+                className="stats-streak-nav"
+                type="button"
+                aria-label="Previous month"
+              >
+                {"<"}
+              </button>
+              <button
+                className="stats-streak-nav"
+                type="button"
+                aria-label="Next month"
+              >
+                {">"}
+              </button>
+            </div>
+          </div>
+
+          <div className="stats-streak-stats">
+            <div className="stats-streak-stat active">
+              <span className="stats-streak-stat-icon flame" />
+              <div>
+                <div className="stats-streak-stat-value">8</div>
+                <div className="stats-streak-stat-label">Days practiced</div>
+              </div>
+              <span className="stats-streak-chip">Perfect</span>
+            </div>
+            <div className="stats-streak-stat">
+              <span className="stats-streak-stat-icon snow" />
+              <div>
+                <div className="stats-streak-stat-value">0</div>
+                <div className="stats-streak-stat-label">Freezes used</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="stats-streak-calendar">
+            <div className="stats-streak-weekdays">
+              <span>Su</span>
+              <span>Mo</span>
+              <span>Tu</span>
+              <span>We</span>
+              <span>Th</span>
+              <span>Fr</span>
+              <span>Sa</span>
+            </div>
+            <div className="stats-streak-days">
+              <span className="stats-streak-day active">1</span>
+              <span className="stats-streak-day active">2</span>
+              <span className="stats-streak-day active">3</span>
+              <span className="stats-streak-day active">4</span>
+              <span className="stats-streak-day active">5</span>
+              <span className="stats-streak-day active">6</span>
+              <span className="stats-streak-day active">7</span>
+              <span className="stats-streak-day active">8</span>
+              <span className="stats-streak-day">9</span>
+              <span className="stats-streak-day">10</span>
+              <span className="stats-streak-day">11</span>
+              <span className="stats-streak-day">12</span>
+              <span className="stats-streak-day">13</span>
+              <span className="stats-streak-day">14</span>
+              <span className="stats-streak-day">15</span>
+              <span className="stats-streak-day">16</span>
+              <span className="stats-streak-day">17</span>
+              <span className="stats-streak-day">18</span>
+              <span className="stats-streak-day">19</span>
+              <span className="stats-streak-day">20</span>
+              <span className="stats-streak-day">21</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

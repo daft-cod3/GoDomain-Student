@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getLearningDayHref, learningUnits } from "..";
 import { JourneyIcon } from "../icons";
 import {
@@ -271,15 +271,11 @@ function FeaturedUnitCard({ unit }) {
 
       <div className="review-unit-row-stats">
         <span>
-          <strong>
-            {completedLessons}/{unit.lessons.length}
-          </strong>
+          <strong>{completedLessons}/{unit.lessons.length}</strong>
           lessons
         </span>
         <span>
-          <strong>
-            {unit.completedSubLessons}/{unit.totalSubLessons}
-          </strong>
+          <strong>{unit.completedSubLessons}/{unit.totalSubLessons}</strong>
           steps
         </span>
         <span>
@@ -362,7 +358,19 @@ function loadReviewData() {
 }
 
 export default function ContentReview() {
-  const [reviewData, setReviewData] = useState(() => loadReviewData());
+  const [reviewData, setReviewData] = useState({
+    averageScore: 0,
+    completedLessons: [],
+    activeLessons: [],
+    featuredUnit: null,
+    featuredUnitStreak: 0,
+    totalTopicsCovered: 0,
+    unitSummaries: [],
+  });
+
+  useEffect(() => {
+    setReviewData(loadReviewData());
+  }, []);
 
   const { averageScore, completedLessons, featuredUnit, totalTopicsCovered } =
     reviewData;
