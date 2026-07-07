@@ -2,43 +2,26 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { Pool } from "pg";
+import { createClient } from "@supabase/supabase-js";
 import { learningUnits } from "../app/learn/index.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function loadEnvFile() {
   const envPath = path.join(__dirname, "..", ".env.local");
   if (!fs.existsSync(envPath)) return;
-
-  const text = fs.readFileSync(envPath, "utf8");
-  for (const line of text.split(/\r?\n/)) {
+  for (const line of fs.readFileSync(envPath, "utf8").split(/\r?\n/)) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) continue;
-
     const eq = trimmed.indexOf("=");
     if (eq === -1) continue;
-
     const key = trimmed.slice(0, eq).trim();
     let value = trimmed.slice(eq + 1).trim();
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
       value = value.slice(1, -1);
     }
-    // Always override so we can reliably use the intended local DATABASE_URL.
     process.env[key] = value;
   }
-}
-
-function requiresSsl(connectionString = "") {
-  return (
-    connectionString.includes("supabase.co") ||
-    connectionString.includes("pooler.supabase.com") ||
-    connectionString.includes("sslmode=require")
-  );
 }
 
 function env(name) {
@@ -49,128 +32,93 @@ function env(name) {
 
 loadEnvFile();
 
+const PK = {
+  learning_units: "unit_id",
+  lessons: "lesson_id",
+  lesson_steps: "step_id",
+  lesson_overview_topics: "step_id",
+};
+
+async function upsert(supabase, table, rows) {
+  const { error } = await supabase.from(table).upsert(rows, { onConflict: PK[table] });
+  if (error) throw new Error(`upsert ${table}: ${error.message}`);
+}
+
 async function main() {
-  const DATABASE_URL = env("DATABASE_URL");
-  const pool = new Pool({
-    connectionString: DATABASE_URL,
-    ssl: requiresSsl(DATABASE_URL) ? { rejectUnauthorized: false } : undefined,
-  });
+  const supabase = createClient(env("SUPABASE_URL"), env("SUPABASE_SECRET_KEY"));
 
-  const clients = await pool.connect();
-  try {
-    await clients.query("BEGIN");
+  const units = learningUnits.map((u) => ({
+    unit_id: u.id,
+    unit_number: u.number,
+    label: u.label,
+    title: u.title,
+    summary: u.summary,
+    unlocked: !!u.unlocked,
+  }));
+  await upsert(supabase, "learning_units", units);
+  console.log(`  learning_units: ${units.length} rows`);
 
-    for (const u of learningUnits) {
-      await clients.query(
-        `INSERT INTO learning_units (unit_id, unit_number, label, title, summary, unlocked)
-         VALUES ($1,$2,$3,$4,$5,$6)
-         ON CONFLICT (unit_id) DO UPDATE
-         SET unit_number = EXCLUDED.unit_number,
-             label = EXCLUDED.label,
-             title = EXCLUDED.title,
-             summary = EXCLUDED.summary,
-             unlocked = EXCLUDED.unlocked`,
-        [u.id, u.number, u.label, u.title, u.summary, !!u.unlocked],
-      );
-    }
+  const lessons = [];
+  const steps = [];
+  const topics = [];
 
-    for (const unit of learningUnits) {
-      for (const lesson of unit.lessons) {
-        await clients.query(
-          `INSERT INTO lessons (
-              lesson_id, unit_id, unit_number, unit_label,
-              lesson_number, label, title, subtitle, icon,
-              is_locked, overview_title, overview_summary
-           ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
-           ON CONFLICT (lesson_id) DO UPDATE SET
-              unit_id = EXCLUDED.unit_id,
-              unit_number = EXCLUDED.unit_number,
-              unit_label = EXCLUDED.unit_label,
-              lesson_number = EXCLUDED.lesson_number,
-              label = EXCLUDED.label,
-              title = EXCLUDED.title,
-              subtitle = EXCLUDED.subtitle,
-              icon = EXCLUDED.icon,
-              is_locked = EXCLUDED.is_locked,
-              overview_title = EXCLUDED.overview_title,
-              overview_summary = EXCLUDED.overview_summary`,
-          [
-            lesson.id,
-            unit.id,
-            unit.number,
-            unit.label,
-            lesson.lessonNumber,
-            lesson.label,
-            lesson.title,
-            lesson.subtitle,
-            lesson.icon,
-            !!lesson.isLocked,
-            lesson.overviewTitle,
-            lesson.overviewSummary,
-          ],
-        );
+  for (const unit of learningUnits) {
+    for (const lesson of unit.lessons) {
+      lessons.push({
+        lesson_id: lesson.id,
+        unit_id: unit.id,
+        unit_number: unit.number,
+        unit_label: unit.label,
+        lesson_number: lesson.lessonNumber,
+        label: lesson.label,
+        title: lesson.title,
+        subtitle: lesson.subtitle,
+        icon: lesson.icon,
+        is_locked: !!lesson.isLocked,
+        overview_title: lesson.overviewTitle,
+        overview_summary: lesson.overviewSummary,
+      });
 
-        for (
-          let stepIndex = 0;
-          stepIndex < lesson.lessons.length;
-          stepIndex++
-        ) {
-          const step = lesson.lessons[stepIndex];
+      for (let i = 0; i < lesson.lessons.length; i++) {
+        const step = lesson.lessons[i];
+        steps.push({
+          lesson_id: lesson.id,
+          step_id: step.id,
+          step_number: i + 1,
+          kind: step.kind,
+          title: step.title,
+          duration: step.duration,
+          detail: step.detail,
+        });
 
-          await clients.query(
-            `INSERT INTO lesson_steps (
-                lesson_id, step_id, step_number, kind, title, duration, detail
-             ) VALUES ($1,$2,$3,$4,$5,$6,$7)
-             ON CONFLICT (step_id) DO UPDATE SET
-                lesson_id = EXCLUDED.lesson_id,
-                step_number = EXCLUDED.step_number,
-                kind = EXCLUDED.kind,
-                title = EXCLUDED.title,
-                duration = EXCLUDED.duration,
-                detail = EXCLUDED.detail`,
-            [
-              lesson.id,
-              step.id,
-              stepIndex + 1,
-              step.kind,
-              step.title,
-              step.duration,
-              step.detail,
-            ],
-          );
-
-          const overviewTopic = lesson.overviewTopics?.[stepIndex] ?? null;
-          if (overviewTopic) {
-            await clients.query(
-              `INSERT INTO lesson_overview_topics (
-                  step_id, step_number, topic_title, topic_points
-               ) VALUES ($1,$2,$3,$4)
-               ON CONFLICT (step_id) DO UPDATE SET
-                  step_number = EXCLUDED.step_number,
-                  topic_title = EXCLUDED.topic_title,
-                  topic_points = EXCLUDED.topic_points`,
-              [
-                step.id,
-                stepIndex + 1,
-                overviewTopic.title ?? null,
-                Array.isArray(overviewTopic.points) ? overviewTopic.points : [],
-              ],
-            );
-          }
+        const topic = lesson.overviewTopics?.[i] ?? null;
+        if (topic) {
+          topics.push({
+            step_id: step.id,
+            step_number: i + 1,
+            topic_title: topic.title ?? null,
+            topic_points: Array.isArray(topic.points) ? topic.points : [],
+          });
         }
       }
     }
-
-    await clients.query("COMMIT");
-    console.log("Seed complete: lesson content inserted/updated.");
-  } catch (e) {
-    await clients.query("ROLLBACK");
-    console.error("Seed failed:", e);
-    process.exitCode = 1;
-  } finally {
-    clients.release();
-    await pool.end();
   }
+
+  await upsert(supabase, "lessons", lessons);
+  console.log(`  lessons: ${lessons.length} rows`);
+
+  await upsert(supabase, "lesson_steps", steps);
+  console.log(`  lesson_steps: ${steps.length} rows`);
+
+  if (topics.length > 0) {
+    await upsert(supabase, "lesson_overview_topics", topics);
+    console.log(`  lesson_overview_topics: ${topics.length} rows`);
+  }
+
+  console.log("Seed complete.");
 }
 
-main();
+main().catch((e) => {
+  console.error("Seed failed:", e.message);
+  process.exitCode = 1;
+});
