@@ -1257,7 +1257,12 @@ export function getLearningDayHref(dayId) {
   return `/content/${dayId}`;
 }
 
+export function getSubLessonHref(lessonId, stepId) {
+  return `/subLearn/${lessonId}/${stepId}`;
+}
+
 export function getLearningStep(dayId, stepId) {
+
   const lesson = getLearningDay(dayId);
 
   if (!lesson) {
@@ -1275,8 +1280,4 @@ export function getLearningStep(dayId, stepId) {
 
 export function getLearningStepHref(dayId, stepId) {
   return `/content/${dayId}/steps/${stepId}`;
-}
-
-export function getSubLessonHref(lessonId, stepId) {
-  return `/subLearn/${lessonId}/${stepId}`;
 }

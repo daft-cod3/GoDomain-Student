@@ -1,318 +1,63 @@
-import Link from "next/link";
-import RoadSign from "./components/roadSign";
-import DashboardSidebar from "./components/sidebar";
-import TeacherUploadsSection from "./components/teacher-uploads-section";
-import { getLearningDayHref } from "./learn";
-import ContentReview from "./learn/components/contReview";
+import Image from "next/image";
 
-const dailyTaskPool = [
-  {
-    title: "Open today's flashcards",
-    detail: "Complete one lesson card set before moving to revision.",
-    href: getLearningDayHref("unit-1-lesson-1"),
-    action: "Start cards",
-  },
-  {
-    title: "Review three road signs",
-    detail: "Name the sign, placement, and safest driver response.",
-    href: "/dashboard",
-    action: "Open signs",
-  },
-  {
-    title: "Practise junction priority",
-    detail: "Check who moves first, when to wait, and where to stop.",
-    href: getLearningDayHref("unit-1-lesson-4"),
-    action: "Practise",
-  },
-  {
-    title: "Run a hazard scan drill",
-    detail: "Look far, near, mirrors, and back ahead in a steady loop.",
-    href: getLearningDayHref("unit-1-lesson-5"),
-    action: "Begin drill",
-  },
-  {
-    title: "Repeat one weak topic",
-    detail: "Choose the lowest-confidence card and complete it twice.",
-    href: "/content",
-    action: "Find topic",
-  },
-  {
-    title: "Check lane markings",
-    detail: "Match center lines, arrows, and stop boxes to the right action.",
-    href: getLearningDayHref("unit-1-lesson-3"),
-    action: "Review",
-  },
-];
-
-const popularLessons = [
-  {
-    id: "controls",
-    title: "Vehicle controls",
-    meta: "4 sub-lessons / Foundation setup",
-    tag: "Popular",
-    href: getLearningDayHref("unit-1-lesson-1"),
-    art: "art-lilac",
-  },
-  {
-    id: "signs",
-    title: "Traffic signs",
-    meta: "4 sub-lessons / Fast recall drill",
-    tag: "Revision",
-    href: getLearningDayHref("unit-1-lesson-2"),
-    art: "art-peach",
-  },
-  {
-    id: "junctions",
-    title: "Junction rules",
-    meta: "4 sub-lessons / Risk-heavy topic",
-    tag: "Priority",
-    href: getLearningDayHref("unit-1-lesson-4"),
-    art: "art-mint",
-  },
-  {
-    id: "hazard",
-    title: "Hazard awareness",
-    meta: "4 sub-lessons / Scan discipline",
-    tag: "Focus",
-    href: getLearningDayHref("unit-1-lesson-5"),
-    art: "art-sky",
-  },
-];
-
-const recentActivity = [
-  {
-    title: "Completed Unit 1",
-    body: "Finished all lessons in Unit 1 with 95% accuracy.",
-    time: "2 hours ago",
-    tag: "Achievement",
-    short: "U1",
-  },
-  {
-    title: "Mentor session",
-    body: "Reviewed current progress and next parking drill with Priya Singh.",
-    time: "1 day ago",
-    tag: "Session",
-    short: "MS",
-  },
-  {
-    title: "Badge unlocked",
-    body: "Earned the Streak Master badge after seven active days.",
-    time: "3 days ago",
-    tag: "Badge",
-    short: "BD",
-  },
-  {
-    title: "Quiz completed",
-    body: "Scored 88% on the Traffic Signs checkpoint.",
-    time: "5 days ago",
-    tag: "Quiz",
-    short: "QZ",
-  },
-];
-
-function DashboardIcon({ name }) {
-  const props = {
-    viewBox: "0 0 20 20",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.7",
-    "aria-hidden": "true",
-  };
-
-  if (name === "path") {
-    return (
-      <svg {...props}>
-        <title>Learning path</title>
-        <path
-          d="M3.5 14.5C6.7 14.5 6.8 5.5 10 5.5C13.2 5.5 13.3 14.5 16.5 14.5"
-          strokeLinecap="round"
+export default function Home() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+        <Image
+          className="dark:invert"
+          src="/next.svg"
+          alt="Next.js logo"
+          width={100}
+          height={20}
+          priority
         />
-        <circle cx="3.5" cy="14.5" r="1.4" fill="currentColor" stroke="none" />
-        <circle cx="10" cy="5.5" r="1.4" fill="currentColor" stroke="none" />
-        <circle cx="16.5" cy="14.5" r="1.4" fill="currentColor" stroke="none" />
-      </svg>
-    );
-  }
-
-  if (name === "stats") {
-    return (
-      <svg {...props}>
-        <title>Learner profile</title>
-        <path
-          d="M4.5 15.5V9.5M10 15.5V4.5M15.5 15.5V11.5"
-          strokeLinecap="round"
-        />
-        <path d="M4 15.5H16" strokeLinecap="round" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg {...props}>
-      <title>Dashboard icon</title>
-      <circle cx="10" cy="10" r="4" />
-    </svg>
-  );
-}
-
-function getDailyTasks() {
-  const startOfYear = new Date(new Date().getFullYear(), 0, 0);
-  const today = new Date();
-  const dayOfYear = Math.floor((today - startOfYear) / 86400000);
-
-  return Array.from({ length: 3 }, (_, index) => {
-    const task = dailyTaskPool[(dayOfYear + index * 2) % dailyTaskPool.length];
-
-    return {
-      ...task,
-      number: String(index + 1).padStart(2, "0"),
-    };
-  });
-}
-
-function DailyTasks() {
-  const tasks = getDailyTasks();
-
-  return (
-    <aside className="daily-tasks-card" aria-labelledby="daily-tasks-title">
-      <div className="daily-tasks-head">
-        <span className="daily-tasks-kicker">Updated daily</span>
-        <h2 id="daily-tasks-title">Daily tasks</h2>
-      </div>
-      <ul className="daily-tasks-list">
-        {tasks.map((task) => (
-          <li key={task.title} className="daily-task-item">
-            <span className="daily-task-number">{task.number}</span>
-            <span className="daily-task-status">Ready</span>
-            <div className="daily-task-copy">
-              <strong>{task.title}</strong>
-              <p>{task.detail}</p>
-            </div>
-            <Link className="daily-task-link" href={task.href}>
-              <span className="daily-task-link-label">{task.action}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </aside>
-  );
-}
-
-export default function HomePage() {
-  return (
-    <div className="app-shell">
-      <DashboardSidebar active="dashboard" />
-      <main className="main-content">
-        <div className="dashboard-shell">
-          <div className="dashboard-panel">
-            <section className="dash-hero">
-              <div className="dash-hero-content">
-                <div className="dash-hero-tag">Learner dashboard</div>
-                <h1 className="dash-hero-title">
-                  A focused overview for lessons, uploads, and live driving
-                  progress.
-                </h1>
-                <p className="dash-hero-subtitle">
-                  Keep revision, instructor uploads, current unit momentum, and
-                  recent milestones in one clear workspace designed for steady
-                  practice and quick review.
-                </p>
-                <div className="dash-hero-actions">
-                  <Link className="dash-hero-button primary" href="/content">
-                    <DashboardIcon name="path" />
-                    Open learning path
-                  </Link>
-                  <Link className="dash-hero-button secondary" href="/stats">
-                    <DashboardIcon name="stats" />
-                    View learner profile
-                  </Link>
-                </div>
-              </div>
-
-              <DailyTasks />
-            </section>
-
-            <div className="dash-body">
-              <div className="dash-main">
-                <TeacherUploadsSection />
-
-                <ContentReview />
-
-                <section className="dash-section">
-                  <div className="dash-section-head">
-                    <div>
-                      <div className="dash-section-title">
-                        Recommended lessons
-                      </div>
-                      <div className="dash-section-subtitle">
-                        High-value lesson blocks for revision, recall, and
-                        continued progress this week.
-                      </div>
-                    </div>
-                    <Link className="dash-link" href="/content">
-                      Browse all
-                      <DashboardIcon name="path" />
-                    </Link>
-                  </div>
-                  <div className="dash-card-grid">
-                    {popularLessons.map((lesson) => (
-                      <Link
-                        key={lesson.id}
-                        className="dash-course-card"
-                        href={lesson.href}
-                      >
-                        <div className={`dash-card-art ${lesson.art}`} />
-                        <div className="dash-card-row">
-                          <div className="dash-card-title">{lesson.title}</div>
-                          <span className="dash-card-tag">{lesson.tag}</span>
-                        </div>
-                        <div className="dash-card-meta">{lesson.meta}</div>
-                      </Link>
-                    ))}
-                  </div>
-                </section>
-
-                <section className="dash-section">
-                  <div className="dash-section-head">
-                    <div>
-                      <div className="dash-section-title">Recent activity</div>
-                      <div className="dash-section-subtitle">
-                        Recent milestones, sessions, and assessments connected
-                        to the learner record.
-                      </div>
-                    </div>
-                    <Link className="dash-link" href="/stats">
-                      View report
-                      <DashboardIcon name="stats" />
-                    </Link>
-                  </div>
-                  <div className="dash-activity-list">
-                    {recentActivity.map((item) => (
-                      <div key={item.title} className="dash-activity-item">
-                        <div className="dash-activity-icon-wrapper">
-                          <span className="dash-activity-icon">
-                            {item.short}
-                          </span>
-                        </div>
-                        <div className="dash-activity-content">
-                          <div className="dash-activity-copy">
-                            <strong>{item.title}</strong>
-                            <p>{item.body}</p>
-                          </div>
-                          <span className="dash-activity-time">
-                            {item.time}
-                          </span>
-                        </div>
-                        <div className="dash-activity-badge">{item.tag}</div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              </div>
-            </div>
-
-            <RoadSign />
-          </div>
+        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
+          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+            To get started, edit the page.js file.
+          </h1>
+          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+            Looking for a starting point or more instructions? Head over to{" "}
+            <a
+              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              className="font-medium text-zinc-950 dark:text-zinc-50"
+            >
+              Templates
+            </a>{" "}
+            or the{" "}
+            <a
+              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              className="font-medium text-zinc-950 dark:text-zinc-50"
+            >
+              Learning
+            </a>{" "}
+            center.
+          </p>
+        </div>
+        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+          <a
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
+            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              className="dark:invert"
+              src="/vercel.svg"
+              alt="Vercel logomark"
+              width={16}
+              height={16}
+            />
+            Deploy Now
+          </a>
+          <a
+            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
+            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Documentation
+          </a>
         </div>
       </main>
     </div>
