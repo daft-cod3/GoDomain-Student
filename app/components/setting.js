@@ -81,24 +81,21 @@ export default function Setting() {
   const preferenceControls = [
     {
       title: "Lesson reminders",
-      description:
-        "Receive updates for upcoming sessions, reviews, and instructor uploads.",
+      description: "Receive updates for upcoming sessions, reviews, and instructor uploads.",
       active: lessonReminders,
       onToggle: () => setLessonReminders((prev) => !prev),
       icon: "🔔",
     },
     {
       title: "Mentor sharing",
-      description:
-        "Allow your instructor to monitor your learner dashboard and feedback trail.",
+      description: "Allow your instructor to monitor your learner dashboard and feedback trail.",
       active: mentorSharing,
       onToggle: () => setMentorSharing((prev) => !prev),
       icon: "👥",
     },
     {
       title: "Auto-save progress",
-      description:
-        "Keep lesson state, profile actions, and revision activity saved as you work.",
+      description: "Keep lesson state, profile actions, and revision activity saved as you work.",
       active: autoSave,
       onToggle: () => setAutoSave((prev) => !prev),
       icon: "💾",
@@ -149,6 +146,7 @@ export default function Setting() {
 
   return (
     <section className="settings-page-v2">
+      
       <div className="settings-page-hero">
         <div className="settings-page-hero-copy">
           <span className="settings-page-eyebrow">Configuration</span>
@@ -159,13 +157,12 @@ export default function Setting() {
         </div>
         <div className="settings-page-hero-chips">
           {workspaceChips.map((chip) => (
-            <span key={chip} className="settings-hero-chip">
-              {chip}
-            </span>
+            <span key={chip} className="settings-hero-chip">{chip}</span>
           ))}
         </div>
       </div>
 
+      
       <div className="settings-tab-bar" role="tablist">
         {tabs.map((tab) => (
           <button
@@ -177,15 +174,15 @@ export default function Setting() {
             aria-selected={activeTab === tab.id}
           >
             {tab.label}
-            {activeTab === tab.id && (
-              <span className="settings-tab-indicator" />
-            )}
+            {activeTab === tab.id && <span className="settings-tab-indicator" />}
           </button>
         ))}
       </div>
 
+      
       {activeTab === "workspace" && (
         <div className="settings-tab-content settings-enhanced">
+          
           <GlassCard className="settings-theme-block">
             <div className="settings-theme-row">
               <div className="settings-theme-icon-wrap">
@@ -203,13 +200,10 @@ export default function Setting() {
             </div>
           </GlassCard>
 
+        
           <div className="settings-prefs-grid">
             {preferenceControls.map((item, i) => (
-              <GlassCard
-                key={item.title}
-                className="settings-pref-card"
-                style={{ "--delay": `${i * 60}ms` }}
-              >
+              <GlassCard key={item.title} className="settings-pref-card" style={{ "--delay": `${i * 60}ms` }}>
                 <div className="settings-pref-icon">{item.icon}</div>
                 <div className="settings-pref-body">
                   <div className="settings-pref-title">{item.title}</div>
@@ -226,6 +220,7 @@ export default function Setting() {
         </div>
       )}
 
+    
       {activeTab === "preferences" && (
         <div className="settings-tab-content settings-enhanced">
           <div className="settings-detail-grid">
@@ -254,6 +249,7 @@ export default function Setting() {
         </div>
       )}
 
+    
       {activeTab === "modules" && (
         <div className="settings-tab-content settings-enhanced">
           <GlassCard className="settings-modules-card" hover={false}>
@@ -266,9 +262,7 @@ export default function Setting() {
                   style={{ "--delay": `${i * 50}ms` }}
                 >
                   <div className="settings-module-row-head">
-                    <span className="settings-module-label">
-                      {module.label}
-                    </span>
+                    <span className="settings-module-label">{module.label}</span>
                     <span className="settings-module-pct">{module.value}%</span>
                   </div>
                   <div className="settings-module-track">
@@ -284,6 +278,7 @@ export default function Setting() {
         </div>
       )}
 
+      
       {activeTab === "tools" && (
         <div className="settings-tab-content settings-enhanced">
           <div className="settings-tools-grid">

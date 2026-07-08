@@ -3,6 +3,27 @@
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../i18n/language-provider";
 
+function LanguageIcon() {
+  return (
+    <svg
+      className="top-navbar-language-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3.6 9h16.8" />
+      <path d="M3.6 15h16.8" />
+      <path d="M12 3c2.15 2.42 3.25 5.42 3.25 9s-1.1 6.58-3.25 9" />
+      <path d="M12 3c-2.15 2.42-3.25 5.42-3.25 9s1.1 6.58 3.25 9" />
+    </svg>
+  );
+}
+
 export default function LanguageToggle() {
   const { language, languages, setLanguage } = useLanguage();
   const [open, setOpen] = useState(false);
@@ -52,6 +73,7 @@ export default function LanguageToggle() {
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
+        <LanguageIcon />
         <span className="top-navbar-language-code" style={{ display: "none" }}>
           {currentLanguage.shortLabel}
         </span>

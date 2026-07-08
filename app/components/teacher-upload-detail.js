@@ -84,9 +84,7 @@ export default function TeacherUploadDetail({ upload }) {
           <section className="upload-detail-card upload-detail-media-card">
             <div className="upload-detail-section-head">
               <div>
-                <div className="upload-detail-section-title">
-                  Video guide rows
-                </div>
+                <div className="upload-detail-section-title">Video guide rows</div>
                 <div className="upload-detail-section-subtitle">
                   Labelled video segments to review in order.
                 </div>
@@ -122,10 +120,7 @@ export default function TeacherUploadDetail({ upload }) {
                   key={item.label}
                   className={`upload-detail-image-card ${item.tone}`}
                 >
-                  <span
-                    className="upload-detail-image-thumb"
-                    aria-hidden="true"
-                  />
+                  <span className="upload-detail-image-thumb" aria-hidden="true" />
                   <div>
                     <strong>{item.label}</strong>
                     <p>{item.caption}</p>
@@ -140,9 +135,7 @@ export default function TeacherUploadDetail({ upload }) {
           <section className="upload-detail-card upload-detail-media-card">
             <div className="upload-detail-section-head">
               <div>
-                <div className="upload-detail-section-title">
-                  Notes and links
-                </div>
+                <div className="upload-detail-section-title">Notes and links</div>
                 <div className="upload-detail-section-subtitle">
                   Compact guidance cards for reference and quick review.
                 </div>

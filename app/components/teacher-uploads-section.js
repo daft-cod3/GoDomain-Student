@@ -22,9 +22,24 @@ function persistUnseenMap(nextMap) {
 }
 
 const DASHBOARD_UPLOAD_CATEGORIES = [
-  { id: "video", accent: "violet" },
-  { id: "image", accent: "mint" },
-  { id: "link", accent: "rose" },
+  {
+    id: "video",
+    label: "Videos",
+    description: "Teacher walkthroughs and replay clips.",
+    accent: "violet",
+  },
+  {
+    id: "image",
+    label: "Images",
+    description: "Visual walls, markings, and reference sets.",
+    accent: "mint",
+  },
+  {
+    id: "link",
+    label: "Links",
+    description: "Notes, quizzes, and revision resources.",
+    accent: "rose",
+  },
 ];
 
 function getRecentUploadsByCategory(categoryId) {
@@ -41,6 +56,17 @@ function UploadCard({ category, uploads, unseen, onMarkSeen }) {
         unseen ? " is-unseen" : " is-seen"
       }`}
     >
+      <Link
+        className="teacher-category-link"
+        href={`/dashboard/uploads#${category.id}`}
+      >
+        <span className={`teacher-icon ${category.id}`} aria-hidden="true" />
+        <span>
+          <strong>{category.label}</strong>
+          <small>{category.description}</small>
+        </span>
+      </Link>
+
       <div className="teacher-recent-list">
         {uploads.map((upload) => (
           <Link
@@ -137,6 +163,9 @@ export default function TeacherUploadsSection() {
           </div>
         </div>
         <div className="teacher-uploads-summary">
+          <Link className="teacher-summary-link" href="/dashboard/uploads">
+            Open all
+          </Link>
           <span className="teacher-summary-pill">
             {Object.values(optimisticUnseenMap).filter((value) => value).length}{" "}
             unseen
