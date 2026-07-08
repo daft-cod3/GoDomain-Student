@@ -38,6 +38,7 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  allowedDevOrigins: ["172.20.192.1"],
   reactCompiler: true,
   turbopack: {
     root: projectRoot,

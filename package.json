@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "NEXT_PRIVATE_DIR='.next-local' NEXT_TURBOPACK_CACHE_DIR='.next-local/turbopack' TMPDIR='.next-local/tmp' next dev --hostname 0.0.0.0 --port 3001",
+    "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
