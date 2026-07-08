@@ -8,9 +8,13 @@ import { learningUnits } from "../app/learn/index.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function loadEnvFile() {
-  const envPath = path.join(__dirname, "..", ".env.local");
+  const projectRoot = path.normalize(path.resolve(__dirname, ".."));
+  const envPath = path.normalize(path.resolve(projectRoot, ".env.local"));
+  if (!envPath.startsWith(projectRoot + path.sep)) return;
   if (!fs.existsSync(envPath)) return;
-  for (const line of fs.readFileSync(envPath, "utf8").split(/\r?\n/)) {
+  const safe = path.normalize(envPath);
+  if (!safe.startsWith(projectRoot + path.sep)) return;
+  for (const line of fs.readFileSync(safe, "utf8").split(/\r?\n/)) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) continue;
     const eq = trimmed.indexOf("=");
